@@ -1,5 +1,5 @@
 {
- "generated": null,
+ "generated": "2026-10-12T10:08:13+02:00",
  "repo": "mehdiacho/3d-prints",
  "base": "https://raw.githubusercontent.com/mehdiacho/3d-prints/main/",
  "jsdelivr": "https://cdn.jsdelivr.net/gh/mehdiacho/3d-prints@main/",
@@ -11,7 +11,7 @@
    "title": "Laptop charger brace",
    "status": "modelled as v1, ready for a test print",
    "description": "Two printed halves that clamp the barrel plug of an Alienware m15 R7 charger and hook over the laptop's rear bar, so a knock on the cable loads the bar instead of the jack.",
-   "updated": null,
+   "updated": "2026-10-12T10:08:13+02:00",
    "thumbnail": "prints/charger-brace/renders/charger-brace-1.webp",
    "model": "prints/charger-brace/web/charger-brace.glb",
    "models": [
@@ -45,7 +45,7 @@
    "title": "Mazda flip key — replacement remote body",
    "status": "v4 modelled, not yet printed",
    "description": "A printed replacement body for a 2007 Mazda Atenza flip key. The original metal head — blade, rivet and folding mechanism — is reused; the printed part is the plastic shell that closes around its tab, in two halves glued together.",
-   "updated": null,
+   "updated": "2026-10-12T10:08:13+02:00",
    "thumbnail": "prints/key-fob/renders/mazda-flipkey-body-1.webp",
    "model": "prints/key-fob/web/mazda-flipkey-body.glb",
    "models": [
@@ -75,7 +75,7 @@
    "title": "Freezer ice tray rack",
    "status": "modelled as v3, not printed and not fit-tested",
    "description": "A stack of printed bays that hold rigid ice trays in a chest freezer and let you fill them where they stand, instead of carrying full trays across the kitchen.",
-   "updated": null,
+   "updated": "2026-10-12T10:08:13+02:00",
    "thumbnail": null,
    "model": "prints/ice-tray-rack/web/rack-tap.glb",
    "models": [
@@ -145,7 +145,7 @@
    "title": "Vertical laptop stand",
    "status": "drawing only",
    "description": "A pair of printed holders that stand an Alienware m15 R7 on edge — on the desk, or hooked over the desk's side edge so the laptop hangs beside it.",
-   "updated": null,
+   "updated": "2026-10-12T10:08:13+02:00",
    "thumbnail": null,
    "model": null,
    "models": [],
