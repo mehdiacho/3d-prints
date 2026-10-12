@@ -43,15 +43,28 @@ jobs:
 
       - name: Commit it, if it changed
         run: |
-          if git diff --quiet -- prints.json prints/; then
-            echo "prints.json already matches the repo"
-            exit 0
-          fi
           git config user.name  "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add prints.json prints/
-          git commit -m "build: regenerate prints.json"
-          git push
+          # Another push can land while this job runs, and then the push below is rejected.
+          # Rebase onto whatever is on main now and rebuild against that, rather than
+          # pushing a prints.json generated from a tree nobody has any more.
+          for attempt in 1 2 3; do
+            git pull --rebase --autostash --quiet origin main
+            python tools/build_web.py --fix
+            if git diff --quiet -- prints.json prints/; then
+              echo "prints.json already matches the repo"
+              exit 0
+            fi
+            git add prints.json prints/
+            git commit -m "build: regenerate prints.json"
+            if git push; then
+              exit 0
+            fi
+            echo "push rejected, main moved under us; attempt $attempt"
+            git reset --hard HEAD~1
+          done
+          echo "::error::could not push prints.json after 3 attempts"
+          exit 1
 
       - name: Ask jsDelivr to drop its cached copy
         continue-on-error: true
