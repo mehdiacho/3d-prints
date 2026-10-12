@@ -1,0 +1,17 @@
+# Text is stored and checked out with LF. The HTML pages here are served straight off
+# raw.githubusercontent, and a CRLF checkout on Windows would push line endings back into
+# the repository on the next commit for no reason.
+* text=auto eol=lf
+
+# Geometry, print plates and images are binary. Say so explicitly rather than trusting the
+# heuristic: an STL that gets line-ending conversion is a corrupt STL.
+*.stl   binary
+*.glb   binary
+*.3mf   binary
+*.webp  binary
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.pdf   binary
+*.f3d   binary
+*.step  binary

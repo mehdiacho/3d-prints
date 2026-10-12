@@ -1,0 +1,1180 @@
+<title>Laptop Stand Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: Drafting Table sheet. Header band with the sheet numeral, the views on the left as a bento grid of cards (one SVG each; a card rolls out in place when opened),
+   measurement schedule docked on the right, then OPEN box, keyed notes and title block. Stacks on phones.
+   Light = the design system's paper. Dark = the same sheet with ink and paper swapped to warm tones (screen only). */
+:root {
+  --desk: #E9E5DC; --paper: #F7F5F0; --ink: #1C1C1A; --ink2: #6B6862; --rule: #C9C4B8;
+  --struct: #D9D4C9; --struct-tint: #E9E6DE; --shade: #ECEAE5;
+  --alert: #B0453A; --alert-fill: rgba(176, 69, 58, .05); --alert-fill-loud: rgba(176, 69, 58, .09);
+  --link: #2E6F9E; --link-soft: rgba(46, 111, 158, .12);
+  --display: Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; }
+
+* { box-sizing: border-box; border-radius: 0; }
+html, body { height: 100%; }
+body { background: var(--desk); color: var(--ink); font-family: var(--display); font-size: 14px; line-height: 1.35; -webkit-font-smoothing: antialiased; }
+.wrap { padding-inline: 16px; padding-block: 14px 22px; max-width: 1680px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.frame { background: var(--paper); border: 1px solid var(--ink2); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* sheet header: numeral, title, subtitle, right-hand label, closing rule */
+.sh { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 22px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+.sh .num { font: 600 3.4rem/.86 var(--mono); letter-spacing: -.02em; }
+.sh .ttl { flex: 1 1 320px; min-width: 0; }
+.sh h1 { font-weight: 700; font-size: clamp(1rem, 1.9vw, 1.45rem); letter-spacing: .18em; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+.sh .sub { margin: 0; font-size: .78rem; letter-spacing: .18em; color: var(--ink2); }
+.sh .lab { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-left: auto; }
+.sh .lab b { font-size: .86rem; font-weight: 600; letter-spacing: .28em; white-space: nowrap; }
+.sh .lab span { font: 400 .74rem var(--mono); color: var(--ink2); white-space: nowrap; }
+
+main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px; min-height: 0; }
+@media (max-width: 960px) { main { grid-template-columns: minmax(0, 1fr); } }
+
+.sheet { border: 1px solid var(--ink2); display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--ink2); }
+.toolbar .sep { flex: 1; }
+.btn { font: 600 .74rem var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: transparent;
+  border: 1px solid var(--ink2); padding: 6px 9px; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn:focus-visible, .row:focus-visible, .chip:focus-visible, .filter button:focus-visible, .check input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.check { font-size: .78rem; letter-spacing: .06em; color: var(--ink2); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.check input { accent-color: var(--ink); }
+.svgbox { position: relative; flex: 1; min-height: 420px; }
+svg#draw { display: block; width: 100%; height: 100%; min-height: 420px; max-height: calc(100vh - 190px); touch-action: manipulation; background: var(--paper); }
+@media (max-width: 960px) { .svgbox { min-height: 0; } svg#draw { height: auto; aspect-ratio: 3 / 4; min-height: 0; max-height: 78vh; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .76rem; letter-spacing: .06em; color: var(--ink2); align-items: center; padding: 8px 10px; border-top: 1px solid var(--rule); }
+.legend i { display: inline-block; vertical-align: -1px; margin-right: 6px; }
+.lg-pt { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.lg-ed { width: 20px; height: 11px; border: 1px solid var(--ink2); }
+.lg-dim { width: 20px; height: 2px; background: var(--link); vertical-align: 3px !important; }
+.lg-unk { width: 20px; height: 0; border-top: 2px dashed var(--alert); vertical-align: 3px !important; }
+
+/* drawing: ranked ink linework on paper; red only for what is not confirmed */
+.v-title { font: 700 17px var(--display); fill: var(--ink); letter-spacing: .12em; }
+.v-sub { font: 400 12px var(--display); fill: var(--ink2); letter-spacing: .08em; text-transform: uppercase; }
+.face-txt { font: 500 12.5px var(--display); fill: var(--ink2); letter-spacing: .14em; }
+.note { font: 400 11.5px var(--display); fill: var(--ink2); letter-spacing: .02em; }
+.unk-txt { font: 600 12.5px var(--mono); fill: var(--alert); }
+.s-head, .s-gap { fill: var(--paper); stroke: none; }
+.s-blade { fill: var(--shade); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-tab { fill: var(--struct); stroke: none; }
+.s-base, .s-hook { fill: var(--struct-tint); stroke: none; }
+.s-skirt { fill: var(--struct-tint); stroke: var(--ink2); stroke-width: 1.2; }
+.s-win { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; }
+.s-hidden { fill: none; stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-rivet { fill: var(--shade); stroke: var(--alert); stroke-width: 1.6; stroke-dasharray: 20 8 5 8; }
+.s-prov { fill: var(--alert-fill-loud); stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.edge path.vis { fill: none; stroke: var(--ink); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; transition: stroke .15s, stroke-width .15s, opacity .15s; }
+.edge.outline path.vis { stroke-width: 3.2; }
+.edge.dash path.vis { stroke: var(--ink2); stroke-dasharray: 8.6 6.5; stroke-width: 1.2; }
+.edge path.hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; }
+.edge .tag rect { fill: var(--paper); stroke: var(--ink2); stroke-width: 1; }
+.edge .tag text { font: 500 12px var(--mono); fill: var(--ink2); text-anchor: middle; }
+.edge .tag { cursor: pointer; }
+.pt circle { fill: var(--ink); }
+.pt .hitc { fill: transparent; cursor: pointer; }
+.pt text { font: 600 12.5px var(--mono); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 3.5px; stroke-linejoin: round; cursor: pointer; }
+.pt line { stroke: var(--ink2); stroke-width: .6; }
+.labels-off .pt text, .labels-off .pt line, .labels-off .edge .tag { display: none; }
+.labels-off .pt.on text, .labels-off .pt.on line, .labels-off .edge.on .tag { display: inline; }
+
+.has-sel .pt, .has-sel .edge .tag { opacity: .3; }
+.has-sel .edge path.vis { opacity: .6; }
+.has-sel .pt.on, .has-sel .edge.on .tag, .has-sel .edge.on path.vis { opacity: 1; }
+.edge.on path.vis { stroke: var(--link); stroke-width: 4; stroke-dasharray: none; }
+.edge.on .tag rect { stroke: var(--link); fill: var(--link); }
+.edge.on .tag text { fill: var(--paper); }
+.pt.on circle { fill: var(--link); r: 5.5; }
+.pt.on text { fill: var(--link); font-size: 14px; }
+.pt.on line { stroke: var(--link); }
+
+.dim line { stroke: var(--link); stroke-width: 1.8; }
+.dim line.ext { stroke-width: .8; }
+.dim .pill rect { fill: var(--link); }
+.dim .pill text { font: 600 14px var(--mono); fill: var(--paper); text-anchor: middle; }
+.dim.unk line { stroke: var(--alert); } .dim.unk .pill rect { fill: var(--alert); }
+.arrowhead { fill: var(--link); }
+
+/* right column: panels */
+aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+@media (min-width: 961px) { aside { max-height: calc(100vh - 150px); position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); } }
+.panel { border: 1px solid var(--ink2); min-width: 0; }
+.ph { padding: 8px 12px 6px; border-bottom: 1px solid var(--ink2); font-size: .74rem; font-weight: 600; letter-spacing: .22em; color: var(--ink2); }
+.detail { padding: 12px; display: grid; gap: 8px; }
+.detail .top { display: flex; align-items: center; gap: 12px; }
+.badge { font: 700 1.15rem var(--mono); min-width: 46px; height: 46px; padding: 0 6px; display: grid; place-items: center; flex: none; border: 1.5px solid currentColor; }
+.badge.ok { color: var(--ink); } .badge.unk { color: var(--alert); background: var(--alert-fill-loud); } .badge.item { color: var(--link); background: var(--link-soft); font-size: .95rem; }
+.detail h2 { font: 700 1rem/1.2 var(--display); letter-spacing: .02em; margin: 0; text-wrap: balance; }
+.detail .val { font: 600 1.02rem var(--mono); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.detail .val.unk { color: var(--alert); }
+.detail p { margin: 0; font-size: .9rem; }
+.detail .meta { color: var(--ink2); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font: 600 .78rem var(--mono); border: 1px solid var(--ink2); background: transparent; color: var(--ink); padding: 2px 7px; cursor: pointer; }
+.chip.ed-chip { color: var(--ink2); } .chip.m-chip { color: var(--link); border-color: var(--link); }
+.chip:hover { border-color: var(--ink); }
+
+.index { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.filter { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--rule); align-items: center; }
+.filter button { font: 600 .7rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 4px 8px; cursor: pointer; }
+.filter button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.filter .count { color: var(--ink2); font: 500 .76rem var(--mono); margin-left: auto; }
+.list { overflow-y: auto; padding: 2px 0 8px; }
+.group { font-size: .7rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); padding: 10px 12px 4px; margin: 0 0 2px; border-bottom: 1px solid var(--rule); }
+.row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; width: 100%; text-align: left;
+  background: transparent; border: 0; border-left: 3px solid transparent; color: var(--ink); padding: 5px 12px 5px 9px; cursor: pointer; font: inherit; }
+.row:hover { background: var(--link-soft); }
+.row[aria-current="true"] { background: var(--link-soft); border-left-color: var(--link); }
+.row .k { font: 700 .82rem var(--mono); }
+.row .d { font-size: .86rem; min-width: 0; }
+.row .v { font: 600 .82rem var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row.unk .k, .row.unk .v { color: var(--alert); }
+
+/* sheet furniture below the drawing: OPEN box, keyed notes, title block */
+.furniture { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+@media (max-width: 960px) { .furniture { grid-template-columns: minmax(0, 1fr); } }
+.open { border: 1.5px solid var(--alert); background: var(--alert-fill); }
+.open .oh { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 8px 12px 6px; border-bottom: 1px solid var(--alert); }
+.open .oh b { font-size: .8rem; font-weight: 700; letter-spacing: .22em; color: var(--alert); }
+.open .oh span { font-size: .72rem; letter-spacing: .14em; color: var(--ink2); }
+.open .ob, .notes .pb { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; font-size: .86rem; line-height: 1.3; }
+.oi, .kn { display: flex; gap: 12px; align-items: baseline; }
+.oi .ref { font: 700 .82rem var(--mono); color: var(--alert); width: 44px; flex: none; }
+.kn .n { font: 700 .82rem var(--mono); width: 14px; flex: none; }
+.kn i { font-style: normal; color: var(--ink2); }
+.tb { border: 2px solid var(--ink); display: flex; flex-direction: column; }
+.tb > div { border-bottom: 1px solid var(--ink2); padding: 9px 14px; }
+.tb .p { font-size: .82rem; font-weight: 700; letter-spacing: .16em; }
+.tb .t { display: flex; align-items: baseline; gap: 14px; }
+.tb .t .n { font: 600 1.5rem var(--mono); }
+.tb .t .s { font-size: .94rem; font-weight: 600; letter-spacing: .1em; }
+.tb .m { font: 400 .76rem var(--mono); }
+.tb .st { flex: 1; border-bottom: 0; background: var(--struct); font-size: .8rem; font-weight: 700; letter-spacing: .14em; display: flex; align-items: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* charger brace drawing */
+.s-paper, .s-ring { fill: var(--paper); stroke: none; }
+.s-metal { fill: var(--shade); stroke: none; }
+.s-metal-line { fill: var(--shade); stroke: var(--ink); stroke-width: 1.2; }
+.ok-txt { font: 600 12.5px var(--mono); fill: var(--ink); }
+.s-body { fill: var(--struct); stroke: none; }
+.s-relief { fill: var(--struct-tint); stroke: none; }
+.s-relief-line { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-thin { fill: none; stroke: var(--ink); stroke-width: 1.1; }
+.s-fine { fill: none; stroke: var(--ink2); stroke-width: .9; }
+.s-hex { fill: var(--shade); stroke: var(--ink2); stroke-width: .8; }
+.s-pin { fill: var(--ink); stroke: none; }
+.s-centre { fill: none; stroke: var(--ink2); stroke-width: .9; stroke-dasharray: 32 8 8 8; }
+.s-break { fill: none; stroke: var(--ink2); stroke-width: 1.1; }
+.s-socket { fill: var(--paper); stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-provline { fill: none; stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.s-wallhatch { fill: none; stroke: var(--alert); stroke-width: .8; }
+.s-cable { fill: none; stroke: var(--ink); }
+.hatch-line { stroke: var(--ink2); stroke-width: 1.1; }
+.s-brace { fill: url(#hatch); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-brace-plan { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-addon { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
+.s-ghost { fill: var(--shade); stroke: var(--ink2); stroke-width: .9; }
+.s-ghost-ring { fill: var(--paper); stroke: var(--ink2); stroke-width: .9; }
+.s-tie { fill: var(--struct); stroke: var(--ink); stroke-width: 1; }
+.s-window { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.callout circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; }
+.callout line { stroke: var(--ink2); stroke-width: .7; }
+.callout text { font: 700 12.5px var(--mono); fill: var(--ink); text-anchor: middle; }
+.legend-head { font: 700 12.5px var(--display); fill: var(--ink); letter-spacing: .06em; }
+/* pictorial views: flat tones, no gradients */
+.i-top { fill: var(--shade); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.i-side { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.i-dark { fill: var(--struct); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.q-top { fill: var(--shade); stroke: var(--shade); stroke-width: .8; }
+.q-side { fill: var(--struct-tint); stroke: var(--struct-tint); stroke-width: .8; }
+.q-dark { fill: var(--struct); stroke: var(--struct); stroke-width: .8; }
+.q-tie { fill: var(--ink2); stroke: var(--ink2); stroke-width: .8; }
+.i-line { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.i-split { fill: none; stroke: var(--ink2); stroke-width: 1; stroke-dasharray: 8.6 6.5; }
+.i-hole { fill: var(--ink); stroke: var(--ink); stroke-width: 1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .i-hole { fill: var(--desk); } }
+:root[data-theme="dark"] .i-hole { fill: var(--desk); }
+.i-window { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
+.open a, .sh a { color: var(--link); }
+.note.big { font-size: 13.5px; }
+.face-txt.stage { font-weight: 700; font-size: 15px; fill: var(--ink); }
+.s-arrow { stroke: var(--ink); stroke-width: 1.6; }
+.arrowhead-ink { fill: var(--ink); }
+/* Bento grid of view cards, after the Chroma bento: ruled cards with a title strip and a hard offset shadow,
+   the drawing filling the card and running off its edges. Positions are solved in script. */
+.sheet { align-self: start; }
+.bento { position: relative; margin: 14px 9px 9px 14px; transition: height .42s cubic-bezier(.2,.8,.2,1); }
+.card { position: absolute; left: 0; top: 0; border: 1px solid var(--ink); background: var(--paper); display: flex; flex-direction: column; overflow: hidden; cursor: pointer; margin: 0;
+  container: card / inline-size; box-shadow: 4px 4px 0 var(--struct);
+  transition: left .42s cubic-bezier(.2,.8,.2,1), top .42s cubic-bezier(.2,.8,.2,1), width .42s cubic-bezier(.2,.8,.2,1), height .42s cubic-bezier(.2,.8,.2,1), box-shadow .2s, transform .2s, opacity .3s; }
+.bento.no-anim, .bento.no-anim .card { transition: none; }
+.card:not(.open):hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--struct); }
+.card:not(.open):hover .cx { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.card:not(.open):active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--struct); }
+.card.closing { z-index: 4; }
+.card.open { z-index: 5; cursor: default; box-shadow: 0 0 0 1px var(--ink), 8px 8px 0 var(--struct); }
+.bento:has(.card.open) .card:not(.open) { opacity: .4; }
+@keyframes cardin { from { opacity: 0; transform: translateY(12px); } }
+.bento.enter .card { animation: cardin .45s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
+/* title strip: view number, title, how many measurements sit on the view, open / close */
+.ch { display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 6px 0 10px; border-bottom: 1px solid var(--rule); flex: none; }
+.cn { font: 600 1.05rem/1 var(--mono); }
+.ct { font: 700 .72rem var(--display); letter-spacing: .14em; text-transform: uppercase; margin: 0; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct .ts { display: none; }
+.cs { font: 600 .68rem var(--mono); color: var(--ink2); white-space: nowrap; flex: none; }
+.cs.unk { color: var(--alert); }
+.cx { display: inline-flex; align-items: center; gap: 6px; height: 22px; font: 600 .62rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 0 6px 0 7px; cursor: pointer; flex: none; transition: background .15s, color .15s, border-color .15s; }
+.cx:hover, .card.open .cx { border-color: var(--ink); color: var(--ink); }
+.cx:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.cxi { position: relative; width: 9px; height: 9px; flex: none; transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+.cxi::before, .cxi::after { content: ""; position: absolute; background: currentColor; }
+.cxi::before { left: 0; right: 0; top: 4px; height: 1px; }
+.cxi::after { top: 0; bottom: 0; left: 4px; width: 1px; }
+.card.open .cxi { transform: rotate(45deg); }
+/* each card answers to its own width: a narrow card keeps the number, a short title and the open mark */
+@container card (max-width: 330px) { .cxl, .cs { display: none; } .cx { padding: 0 6px; } .ct .tl { display: none; } .ct .ts { display: inline; } }
+/* caption: how the object is held. One line on a large closed card, in full with the scale notes on an open one */
+.cd { flex: none; border-bottom: 1px solid var(--rule); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+.card:not(.open) .cd { display: none; }
+.card.cap:not(.open) .cd { display: block; height: 22px; line-height: 21px; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card:not(.open) .cd :is(.ok-l, .unk-l) { display: none; }
+.card.open .cd, .cd.probe { display: flex; flex-wrap: wrap; gap: 2px 18px; padding: 6px 10px; }
+.cd.probe { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+.cd .ok-l { font: 600 .7rem var(--mono); color: var(--ink); letter-spacing: 0; }
+.cd .unk-l { font: 600 .7rem var(--mono); color: var(--alert); letter-spacing: 0; }
+.cb { min-height: 0; flex: 1; }
+.cb.pan { overflow: auto; scrollbar-width: thin; scrollbar-color: var(--ink2) transparent; }   /* an open drawing too large for the card: drag or scroll it */
+.card svg { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+/* closed cards show the drawing alone: tags, notes and legends appear when the card is open; a small card drops the lettering too */
+.card:not(.open) :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { display: none; }
+.card:not(.open) :is(.pt.on text, .edge.on .tag) { display: inline; }
+.card:not(.open) :is(.out, .callout), .card.bare :is(.face-txt, .unk-txt, .ok-txt) { display: none; }
+@keyframes tagin { 0%, 40% { opacity: 0; } }
+.card.open :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { animation: tagin .55s backwards; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+@media (max-width: 480px) { .sh .lab { align-items: flex-start; margin-left: 0; } .sh .lab span { white-space: normal; } }
+.s-key { fill: var(--paper); stroke: var(--ink2); stroke-width: .7; }
+.s-cable5 { fill: none; stroke: var(--ink); stroke-width: 18; }
+.s-cable5-in { fill: none; stroke: var(--paper); stroke-width: 15; }
+.s-cable-in { fill: none; stroke: var(--paper); }
+.coord { font: 500 12.5px var(--mono); fill: var(--ink); }
+.edge.prov path.vis { stroke: var(--alert); stroke-width: 1.5; stroke-dasharray: 20 8 5 8; }
+.edge .lead { stroke: var(--ink2); stroke-width: .6; }
+.has-sel .edge .lead { opacity: .3; } .labels-off .edge .lead { display: none; }
+</style>
+
+<div class="wrap"><div class="frame">
+  <header class="sh">
+    <div class="num">01</div>
+    <div class="ttl">
+      <h1>LAPTOP STAND — LAPTOP, DESK EDGE AND THREE WAYS TO STAND IT</h1>
+      <p class="sub">ALL DIMS IN mm · LAPTOP FROM THE CHARGER BRACE SHEETS · DESK NOT MEASURED YET · CLICK A MEASUREMENT TO PLACE IT</p>
+    </div>
+    <div class="lab">
+      <b>VERTICAL LAPTOP STAND</b>
+      <span>ALIENWARE m15 R7, NO LID · ON THE DESK OR HOOKED ON ITS EDGE</span>
+      <button class="btn" id="theme" type="button" aria-pressed="false">Dark sheet</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="sheet" aria-label="Drawing">
+      <div class="toolbar" role="toolbar" aria-label="Views">
+        <button class="btn" data-zoom="all" aria-pressed="true">Whole sheet</button>
+        <button class="btn" data-zoom="lap" aria-pressed="false">1 Laptop</button>
+        <button class="btn" data-zoom="prof" aria-pressed="false">2 Side profile</button>
+        <button class="btn" data-zoom="desk" aria-pressed="false">3 Desk edge</button>
+        <button class="btn" data-zoom="optA" aria-pressed="false">4 Option A</button>
+        <button class="btn" data-zoom="optB" aria-pressed="false">5 Option B</button>
+        <button class="btn" data-zoom="optC" aria-pressed="false">6 Option C</button>
+        <button class="btn" data-zoom="part" aria-pressed="false">7 Holder</button>
+        <button class="btn" data-zoom="hang" aria-pressed="false">8 Hooked on</button>
+        <span class="sep"></span>
+        <label class="check"><input type="checkbox" id="autozoom" checked> Open the view on selection</label>
+        <label class="check"><input type="checkbox" id="showlabels" checked> All tags</label>
+      </div>
+      <svg id="defs-svg" width="0" height="0" aria-hidden="true" focusable="false"></svg>
+      <div class="bento" id="bento"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="lg-pt"></i>POINT (N1, K2)</span>
+        <span><i class="lg-ed"></i>EDGE (n3, k2)</span>
+        <span><i class="lg-dim"></i>SELECTED</span>
+        <span><i class="lg-unk"></i>NOT MEASURED / ASSUMED</span>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel"><div class="ph">SELECTED</div><div class="detail" id="detail" aria-live="polite"></div></div>
+      <div class="panel index">
+        <div class="ph">MEASUREMENT SCHEDULE</div>
+        <div class="filter" role="group" aria-label="Filter measurements">
+          <button data-f="all" aria-pressed="true">All</button>
+          <button data-f="unk" aria-pressed="false">Open</button>
+          <button data-f="ok" aria-pressed="false">Confirmed</button>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="list" id="list" role="list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="furniture">
+    <section class="open" aria-label="Open items">
+      <div class="oh"><b>OPEN</b><span>UNRESOLVED ON THIS SHEET</span></div>
+      <div class="ob">
+        <div class="oi"><span class="ref">DESK</span><span>Nothing about the desk is measured: DA, DB and DD are TBD. Views 3 and 8 are drawn to a 25 thick top as a placeholder. Two photos settle the shape: side on, and from underneath.</span></div>
+        <div class="oi"><span class="ref">SC SD</span><span>Thickness away from the rear bar is drawn as 16.4 (23 less the 6.6 drop), which assumes the keyboard deck is level to the front. TBD.</span></div>
+        <div class="oi"><span class="ref">SIDES</span><span>Side vents and side ports: not known. A photo of each side edge is needed. This is what decides option B.</span></div>
+        <div class="oi"><span class="ref">UNDER</span><span>Front foot and intake grille are placed from one photo. SE and SF are TBD.</span></div>
+        <div class="oi"><span class="ref">MASS</span><span>2.5 kg is assumed (no scale). QB to QE move with it.</span></div>
+        <div class="oi"><span class="ref">PART</span><span>Every HA to HL size is a proposal. HA waits for SC; HF waits for DA.</span></div>
+        <div class="oi"><span class="ref">CHOICE</span><span>Which option: A, B or C. Mehdi decides after seeing all three.</span></div>
+      </div>
+    </section>
+    <section class="panel notes" aria-label="Keyed notes">
+      <div class="ph">KEYED NOTES</div>
+      <div class="pb">
+        <div class="kn"><span class="n">1</span><span><b>THE LAPTOP RUNS WHILE IT STANDS.</b> <i>It drives an external screen, so the rear vent, the top vents and the intake underneath must all stay open. That rules the layout more than strength does.</i></span></div>
+        <div class="kn"><span class="n">2</span><span><b>ONE HOLDER DOES BOTH JOBS, THE SAME WAY UP.</b> <i>The slot opens upward. A jaw on one side takes the desk's edge; on the desk, that jaw's lower arm is simply a foot.</i></span></div>
+        <div class="kn"><span class="n">3</span><span><b>TWO SHORT HOLDERS, NOT ONE LONG ONE.</b> <i>The edge is 356 or 273 long and the printer's bed is 220. Two identical 60 long pieces, one near each end.</i></span></div>
+        <div class="kn"><span class="n">4</span><span><b>A TALL THIN THING TIPS EASILY.</b> <i>On the desk about 7 N on the top edge knocks option A over. Hooked on the desk's edge it cannot tip. A wider foot would raise the 7 N.</i></span></div>
+        <div class="kn"><span class="n">5</span><span><b>THE EDGE IN THE SLOT IS PROBABLY THINNER THAN 23.</b> <i>23 is the rear bar. Forward of it the deck sits 6.6 lower, so the front and sides are likely about 16.</i></span></div>
+        <div class="kn"><span class="n">6</span><span><b>EACH HOLDER PRINTS AS ITS CROSS-SECTION.</b> <i>Lying on an end face: no supports, and the layers run round the jaws and walls, the direction they are loaded in.</i></span></div>
+      </div>
+    </section>
+    <section class="tb" aria-label="Title block">
+      <div class="p">3D PRINTS · VERTICAL LAPTOP STAND</div>
+      <div class="t"><span class="n">01</span><span class="s">LAPTOP, DESK AND OPTIONS BLUEPRINT</span></div>
+      <div class="m">INTERACTIVE SHEET · DIMS IN mm · x ALONG THE WIDTH FROM THE VENT CORNER · q FROM THE TOP OF THE REAR FACE TOWARDS THE FRONT · t UP FROM THE UNDERSIDE</div>
+      <div class="m">REV A · 2026-10-06</div>
+      <div class="st">STATUS: THREE OPTIONS FOR REVIEW — DESK AND EDGES TO MEASURE</div>
+    </section>
+  </div>
+</div></div>
+
+<script>
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const bento = document.getElementById("bento");
+// MEASURED on the charger brace blueprint, sheet 01 (mm). The letter is that sheet's measurement.
+const AGW = 356.2, AHD = 272.5;                      // AG, AH: published size, accepted as it is
+const THK = 23, SLOPE = 5, U = 96.75, S = 8.1, V = 8, X = 43.8, Y = 28, RJ = 10.59;   // P, AL, U, S, V, X, Y, R
+const RIDGE = 18.4, AJT = 46.1, CORNER = 27.6, AA = 6.6, AK = 80.67, AB = 48, AC = 4.25, AM = 14, AN = 10;
+const BRACE_OUT = 52.3, FJ = 2.7;                    // the charger brace (proposed, sheet 02) and where the rear face is at jack height
+// NOT MEASURED. Drawing proportions only; do not use these for CAD.
+const VENT1 = 9, HDW = 18, KB2 = 187, KBX = 24, RIBW = 8, FOOT2 = 232, INT1 = 58, INT2 = 150;
+const TF = THK - AA;                                 // thickness away from the rear bar, IF the keyboard deck is level to the front (16.4)
+const DESK = { t: 25, clear: 70, side: 110 };        // the desk: nothing measured yet
+const MASS = 2.5;                                    // kg, assumed
+const FRONT = AHD - SLOPE, VENT2 = U - S / 2 - V, HD1 = U + X;
+// PROPOSED sizes of the holder (mm)
+const H = { slot: TF + 2, depth: 45, wall: 6, floor: 6, jaw: 60, jawT: 6, gap: DESK.t + .5, foot: 60, len: 60, inset: 50, lift: 70, faceB: 18 };
+
+const VIEWS = {
+  lap: { ox: 0, oy: 0, sx: 1.6, sy: 1.6, title: "1  THE LAPTOP FROM ABOVE", short: "Laptop", sub: ["keyboard towards you · rear edge at the top", "the three edges it could stand on"], ok: "OUTLINE AND REAR EDGE FROM THE CHARGER BRACE SHEET", unk: "KEYBOARD, TOUCHPAD AND SIDE VENTS NOT MEASURED (IND.)", focus: [AGW / 2, 120] },
+  prof: { ox: 0, oy: 0, sx: 3, sy: -3, title: "2  THE LAPTOP FROM THE SIDE", short: "Side profile", sub: ["cut through the middle · rear on the left, front on the right", "keyboard side up"], ok: "REAR BAR, TROUGH AND REAR FOOT MEASURED", unk: "THICKNESS FROM THE TOP VENTS TO THE FRONT ASSUMED (IND.)", focus: [130, 10] },
+  desk: { ox: 0, oy: 0, sx: 4, sy: -4, title: "3  THE DESK EDGE", short: "Desk edge", sub: ["cut through the side edge of the desk", "desk to the right · open room to the left"], ok: "", unk: "NOTHING HERE IS MEASURED YET (TBD)", focus: [20, -12] },
+  optA: { ox: 0, oy: 0, sx: 1.5, sy: -1.5, title: "4  OPTION A · FRONT EDGE DOWN", short: "A · front down", sub: ["palm rest in the holders · rear edge, charger and vent on top", "left: keyboard side towards you · right: seen edge on"], ok: "LAPTOP TO SCALE", unk: "HOLDERS ARE A PROPOSAL (PROP.)", focus: [AGW / 2, 150] },
+  optB: { ox: 0, oy: 0, sx: 1.5, sy: -1.5, title: "5  OPTION B · SIDE EDGE DOWN", short: "B · side down", sub: ["the side away from the charger in the holders · rear edge to the right", "left: keyboard side towards you · right: seen edge on"], ok: "LAPTOP TO SCALE", unk: "HOLDERS ARE A PROPOSAL (PROP.)", focus: [150, 180] },
+  optC: { ox: 0, oy: 0, sx: 1.5, sy: -1.5, title: "6  OPTION C · REAR EDGE DOWN", short: "C · rear down", sub: ["rear edge, charger and vent at the bottom, lifted clear of the desk", "left: keyboard side towards you · right: seen edge on"], ok: "LAPTOP TO SCALE", unk: "HOLDERS ARE A PROPOSAL (PROP.)", focus: [AGW / 2, 190] },
+  part: { ox: 0, oy: 0, sx: 5, sy: -5, title: "7  THE HOLDER", short: "Holder", sub: ["its cross-section: one of two identical pieces", "slot up · desk jaw to the right · foot to the left"], ok: "", unk: "EVERY SIZE HERE IS A PROPOSAL (PROP.)", focus: [0, 26] },
+  hang: { ox: 0, oy: 0, sx: 2.2, sy: -2.2, title: "8  HOOKED ON THE DESK EDGE", short: "Hooked on", sub: ["the same holder pushed onto the side edge of the desk", "laptop standing beside the desk, option A"], ok: "", unk: "DESK DRAWN TO A PLACEHOLDER SIZE (TBD)", focus: [10, 60] },
+};
+const P = (v, x, y) => { const Vw = VIEWS[v]; return [Vw.ox + x * Vw.sx, Vw.oy + y * Vw.sy]; };
+const FOCUS = v => P(v, ...VIEWS[v].focus);   // the part of a view a closed card keeps in sight
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e); return e;
+}
+const fx = n => n.toFixed(1);
+const seg = (v, pts, close) => "M" + pts.map(([x, y]) => P(v, x, y).map(fx).join(",")).join(" L") + (close ? " Z" : "");
+const d = (v, pts, close) => Array.isArray(pts[0][0]) ? pts.map(p => seg(v, p, close)).join(" ") : seg(v, pts, close);
+const circ = (cx, cy, r, n = 48) => Array.from({ length: n + 1 }, (_, i) => [cx + r * Math.cos(2 * Math.PI * i / n), cy + r * Math.sin(2 * Math.PI * i / n)]);
+
+// ---------- cards ----------
+const defs = el("defs", {}, document.getElementById("defs-svg"));
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="arrowhead" d="M0,1 L10,5 L0,9 z"/></marker><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="hatch-line"/></pattern>`;
+const LAY = {};   // per view: its card, its own svg, and layers for shapes, edges, points and the selected dimension
+for (const [i, [v, Vw]] of Object.entries(VIEWS).entries()) {
+  const [num, ...name] = Vw.title.split(/\s{2,}/);
+  const card = document.createElement("article"); card.className = "card"; card.dataset.view = v; card.style.setProperty("--i", i);
+  card.innerHTML = `<header class="ch"><span class="cn">${num}</span><h3 class="ct"><span class="tl">${name.join(" ")}</span><span class="ts">${Vw.short}</span></h3><span class="cs"></span><button class="cx" type="button" aria-expanded="false"><span class="cxl">Open</span><i class="cxi" aria-hidden="true"></i></button></header>
+    <div class="cd"><span class="cap">${Vw.sub.join(" · ")}</span>${Vw.ok ? `<span class="ok-l">${Vw.ok}</span>` : ""}<span class="unk-l">${Vw.unk}</span></div>
+    <div class="cb"><svg role="img" aria-label="${name.join(" ")}"></svg></div>`;
+  bento.appendChild(card);
+  const s = card.querySelector("svg"), g = el("g", {}, s), q = c => card.querySelector(c);
+  LAY[v] = { card, svg: s, g, cb: q(".cb"), cd: q(".cd"), cs: q(".cs"), cx: q(".cx"), cxl: q(".cxl"), shapes: el("g", {}, g), edges: el("g", {}, g), pts: el("g", {}, g), dim: el("g", { class: "dim" }, s) };
+}
+const gS = v => LAY[v].shapes;
+function shape(v, pts, cls, close = true) { return el("path", { d: d(v, pts, close), class: cls }, gS(v)); }
+function txt(v, x, y, s, cls, anchor = "middle", dx = 0, dy = 0) { const [px, py] = P(v, x, y); const t = el("text", { x: px + dx, y: py + dy, class: cls, "text-anchor": anchor }, gS(v)); t.textContent = s; return t; }
+function lines(v, x, y, list, cls, step = 16, dx = 0, dy = 0, anchor = "start") { list.forEach((s, i) => txt(v, x, y, s, cls, anchor, dx, dy + i * step)); }
+function braceFill(v, pts, cls = "s-brace") { shape(v, pts, "s-paper"); return shape(v, pts, cls); }
+function calloutPx(v, px, py, n, dx = 0, dy = 0, extra = "") {
+  const g = el("g", { class: "callout" + extra }, gS(v));
+  if (dx || dy) el("line", { x1: px, y1: py, x2: px + dx, y2: py + dy }, g);
+  el("circle", { cx: px + dx, cy: py + dy, r: 10 }, g);
+  el("text", { x: px + dx, y: py + dy + 4.5 }, g).textContent = n;
+}
+const callout = (v, a, b, n, dx, dy) => calloutPx(v, ...P(v, a, b), n, dx, dy);
+// the numbered parts, the same numbers on every view
+const PARTS = [
+  ["1", "SPACER PLATE.", "Fills the gap the plug leaves and sits flat on the sloping rear face."],
+  ["2", "CLAMP SHELL.", "Two halves tied onto the plug body. Wall 2.55."],
+  ["3", "TIE GROOVES.", "Two cable ties, 3 wide, sunk 1 into the wall."],
+  ["4", "WINDOWS.", "Open at the light ring, so the light still shows."],
+  ["5", "MOUTH.", "Flared, 6.6 bore. The add-on elbow pushes on here."],
+  ["6", "CLIP ARM.", "2.4 thick, lies on top of the rear bar."],
+  ["7", "HOOK LIP.", "Drops 2.8 into the trough, 5 past the ridge."],
+  ["8", "SCREW HOLE.", "Leaves the screw beside the jack clear."],
+  ["9", "SPLIT LINE.", "The two halves meet on the plug's centre line."],
+];
+function legend(v, x, y, title, items) {
+  el("text", { x, y: y - 30, class: "v-sub" }, gS(v)).textContent = title;
+  for (const [n, head, line] of items) {
+    const g = el("g", { class: "callout lg" }, gS(v)); el("circle", { cx: x + 10, cy: y - 4, r: 10 }, g); el("text", { x: x + 10, y: y + .5 }, g).textContent = n;
+    el("text", { x: x + 30, y, class: "legend-head" }, gS(v)).textContent = head;
+    el("text", { x: x + 30, y: y + 15, class: "note" }, gS(v)).textContent = line; y += 44;
+  }
+  return y;
+}
+
+defs.insertAdjacentHTML("beforeend", `<marker id="arr-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="arrowhead-ink" d="M0,1 L10,5 L0,9 z"/></marker>`);
+const arrow = (v, a, b) => { const [x1, y1] = P(v, ...a), [x2, y2] = P(v, ...b); el("line", { x1, y1, x2, y2, class: "s-arrow", "marker-end": "url(#arr-ink)" }, gS(v)); };
+const cable = (v, pts, w) => el("path", { d: d(v, pts, false), class: "s-cable", "stroke-width": w, "stroke-linejoin": "round", "stroke-linecap": "round" }, gS(v));
+const stage = (v, x, y, s, dx = 0, dy = 0) => txt(v, x, y, s, "face-txt stage", "start", dx, dy);
+
+// ---------- the laptop, as outlines in (x across the width, q from the top of the rear face towards the front) ----------
+const HULL = [[8, -SLOPE], [AGW - 8, -SLOPE], [AGW, 3], [AGW, FRONT - 10], [AGW - 10, FRONT], [10, FRONT], [0, FRONT - 10], [0, 3]];
+const REARFACE = [[4, -SLOPE], [AGW - 4, -SLOPE], [AGW - 1.5, 0], [1.5, 0]];
+const DECK = [[CORNER, RIDGE], [AGW - CORNER, RIDGE], [AGW - CORNER, AJT], [AGW, AJT], [AGW, FRONT - 10], [AGW - 10, FRONT], [10, FRONT], [0, FRONT - 10], [0, AJT], [CORNER, AJT]];
+const KB = [[KBX, AK], [AGW - KBX, AK], [AGW - KBX, KB2], [KBX, KB2], [KBX, AK]];
+const PAD = [[AGW / 2 - 52, KB2 + 12], [AGW / 2 + 52, KB2 + 12], [AGW / 2 + 52, FRONT - 14], [AGW / 2 - 52, FRONT - 14], [AGW / 2 - 52, KB2 + 12]];
+const VENT = [[VENT1, -SLOPE], [VENT2, -SLOPE], [VENT2, 0], [VENT1, 0]];
+const BRACE = [[U - 8.2, -FJ - BRACE_OUT], [U + 8.2, -FJ - BRACE_OUT], [U + 8.2, -FJ], [U - 8.2, -FJ]];
+const HDMI = [[HD1, -FJ - Y], [HD1 + HDW, -FJ - Y], [HD1 + HDW, -FJ], [HD1, -FJ]];
+function laptopFace(v, F, bare) {
+  const m = pts => pts.map(([x, q]) => F(x, q));
+  shape(v, m(HULL), "s-paper"); shape(v, m(REARFACE), "s-metal"); shape(v, m(DECK), "s-relief"); shape(v, m(VENT), "s-body");
+  shape(v, m([[CORNER, RIDGE], [AGW - CORNER, RIDGE]]), "s-fine", false);
+  if (!bare) { shape(v, m(KB), "s-provline", false); shape(v, m(PAD), "s-provline", false); shape(v, m(HULL), "s-thin"); }
+  shape(v, m(HDMI), "s-relief-line"); braceFill(v, m(BRACE), "s-brace-plan");
+}
+// the holder's cross-section: (h sideways from the middle of the slot, v up from the surface it stands on). ft = height of the slot floor
+function holderProf(slotW, ft = H.floor) {
+  const s = slotW / 2, w = H.wall, J = H.jaw, jt = H.jawT, G = H.gap, O = H.foot, top = ft + H.depth;
+  return [[-s - w - O, 0], [s + w + J, 0], [s + w + J, jt], [s + w, jt], [s + w, jt + G], [s + w + J, jt + G], [s + w + J, jt + G + jt], [s + w, jt + G + jt],
+    [s + w, top], [s, top], [s, ft], [-s, ft], [-s, top], [-s - w, top], [-s - w, jt], [-s - w - O, jt]];
+}
+
+// ---------- view 1: the laptop from above ----------
+const I1 = (x, q) => [x, q];
+laptopFace("lap", I1, true);
+for (const sgn of [0, 1]) shape("lap", [[sgn ? AGW - 4 : 0, 30], [sgn ? AGW : 4, 30], [sgn ? AGW : 4, 110], [sgn ? AGW - 4 : 0, 110]], "s-prov");
+cable("lap", [[U, -FJ - BRACE_OUT], [U, -FJ - BRACE_OUT - 10], [U + 8, -FJ - BRACE_OUT - 16], [U + 60, -FJ - BRACE_OUT - 16]], 9);
+txt("lap", AGW / 2 + 60, RIDGE / 2, "REAR BAR", "face-txt", "middle", 0, 4); txt("lap", AGW / 2, (AJT + AK) / 2, "TOP VENTS", "face-txt", "middle", 0, 4);
+txt("lap", AGW / 2, (AK + KB2) / 2, "KEYBOARD", "face-txt", "middle", 0, 4); txt("lap", AGW / 2, (KB2 + FRONT) / 2 + 2, "TOUCHPAD", "face-txt", "middle", 0, 4);
+txt("lap", 62, FRONT - 22, "PALM REST", "face-txt", "middle", 0, 4);
+txt("lap", U + 10, -FJ - 34, "CHARGER IN ITS BRACE", "face-txt", "start", 8, 4); txt("lap", HD1 + HDW, -FJ - 14, "HDMI", "face-txt", "start", 8, 4);
+txt("lap", 46, -SLOPE, "REAR VENT", "face-txt", "middle", 0, -8);
+txt("lap", AGW, 70, "SIDE VENT? (TBD)", "unk-txt", "start", 10, 4); txt("lap", 0, 70, "SIDE VENT? (TBD)", "unk-txt", "end", -10, 4);
+stage("lap", AGW / 2, FRONT, "FRONT EDGE · OPTION A", -90, 58); stage("lap", AGW, 190, "FAR SIDE EDGE", 12, 0); stage("lap", AGW, 190, "OPTION B", 12, 20);
+stage("lap", 232, -SLOPE, "REAR EDGE · OPTION C", 0, -96);
+
+// ---------- view 2: the laptop from the side, cut through the middle ----------
+const ease = t => (1 - Math.cos(Math.PI * t)) / 2;
+const trough = [...Array.from({ length: 9 }, (_, i) => [RIDGE + AM * i / 8, THK - AN * ease(i / 8)]), ...Array.from({ length: 8 }, (_, i) => [RIDGE + AM + (AJT - RIDGE - AM) * (i + 1) / 8, THK - AN + (AN - AA) * ease((i + 1) / 8)])];
+const RIB0 = -SLOPE + AB - RIBW;
+const SIDE = [[-SLOPE, 0], [0, THK], [RIDGE, THK], ...trough.slice(1), [FRONT - 3, TF], [FRONT, TF - 3], [FRONT, 2], [FRONT - 2, 0], [FOOT2 + RIBW, 0], [FOOT2 + RIBW - .8, -AC], [FOOT2 + .8, -AC], [FOOT2, 0],
+  [RIB0 + RIBW, 0], [RIB0 + RIBW - .8, -AC], [RIB0 + .8, -AC], [RIB0, 0]];
+shape("prof", SIDE, "s-relief");
+shape("prof", [[0, THK], [AJT, THK], [AJT, TF]], "s-hidden", false);
+shape("prof", [[INT1, -AC - 4], [INT2, -AC - 4]], "s-provline", false);
+shape("prof", [[-12, -AC], [FRONT + 12, -AC]], "s-fine", false);
+txt("prof", 9, THK, "REAR BAR", "face-txt", "middle", 4, 26);
+txt("prof", AJT / 2 + 12, THK, "raised corners stay this high, at the two sides only", "note", "start", 70, -22);
+txt("prof", 170, TF / 2, "KEYBOARD DECK · DRAWN LEVEL TO THE FRONT (IND.)", "unk-txt", "middle", 0, 4);
+txt("prof", (INT1 + INT2) / 2, -AC - 4, "INTAKE GRILLE UNDERNEATH (IND.)", "unk-txt", "middle", 0, 18);
+txt("prof", RIB0 + RIBW / 2, -AC, "REAR FOOT", "face-txt", "middle", 0, 34); txt("prof", FOOT2 + RIBW / 2, -AC, "FRONT FOOT (IND.)", "unk-txt", "middle", 0, 34);
+txt("prof", FRONT + 12, -AC, "DESK", "note", "start", 4, 4);
+stage("prof", -SLOPE, THK, "REAR", -4, -34); stage("prof", FRONT, THK, "FRONT", -50, -34);
+
+// ---------- view 3: the desk edge. All of it is a placeholder until it is measured. ----------
+shape("desk", [[0, 0], [150, 0], [150, -DESK.t], [0, -DESK.t]], "s-relief");
+shape("desk", [[150, 3], [149, -8], [151, -17], [150, -DESK.t - 3]], "s-break", false);
+shape("desk", [[DESK.clear, -DESK.t], [DESK.clear + 26, -DESK.t], [DESK.clear + 26, -DESK.t - 34], [DESK.clear, -DESK.t - 34]], "s-prov");
+shape("desk", [[-DESK.side, 16], [-DESK.side, -DESK.t - 40]], "s-provline", false);
+txt("desk", 80, -DESK.t / 2, "DESKTOP", "face-txt", "middle", 0, 4); txt("desk", DESK.clear + 13, -DESK.t - 34, "FRAME, RAIL OR MOUNT? (TBD)", "unk-txt", "middle", 0, 20);
+txt("desk", -DESK.side / 2, -DESK.t - 14, "OPEN ROOM BESIDE THE DESK", "face-txt", "middle", 0, 4); txt("desk", -DESK.side, 16, "WALL OR FURNITURE? (TBD)", "unk-txt", "start", -30, -10);
+lines("desk", 20, 16, ["Which edge of the desk is it: left or right side? What is underneath within 60 of the edge:", "a frame, a drawer, the mount the laptop normally hangs in? A photo from the side and one from below answers all of it."], "note", 16, 0, -44);
+
+// ---------- views 4 to 6: the three ways to stand it ----------
+// F places a point of the laptop (x, q) on the page as (along the desk, up from the desk)
+function option(v, o) {
+  laptopFace(v, o.F);
+  shape(v, [[-36, 0], [o.L + o.pad + 16, 0]], "s-thin", false); txt(v, -36, 0, "DESK", "note", "start", 0, 16);
+  for (const p of o.at) braceFill(v, [[p, 0], [p + H.len, 0], [p + H.len, o.ft + o.face], [p, o.ft + o.face]], "s-brace-plan");
+  // edge on: the laptop in the slot. Its underside faces the desk jaw.
+  const e = o.L + o.pad + 130, u = e + o.slot / 2 - 1;
+  shape(v, [[e - 104, 0], [e + 96, 0]], "s-thin", false);
+  braceFill(v, holderProf(o.slot, o.ft).map(([h, b]) => [e + h, b]));
+  o.side(u, e);
+  stage(v, 0, o.top, "KEYBOARD SIDE TOWARDS YOU", 0, -48); stage(v, e - 84, o.top, "EDGE ON", 0, -48);
+  txt(v, u, o.ft + o.mid, "UNDERSIDE", "note", "start", 12, 4); txt(v, u - THK, o.ft + o.mid, "KEYS", "note", "end", -10, 4);
+  const [lx] = P(v, e + 118, 0), [, ly] = P(v, 0, o.top);
+  legend(v, lx, ly + 8, o.verdict, o.notes);
+  return { e, u };
+}
+const sideBox = (v, pts) => { shape(v, pts, "s-paper"); shape(v, pts, "s-relief-line"); };
+const FA = (x, q) => [x, H.floor + FRONT - q], topA = H.floor + AHD;
+const OA = option("optA", { F: FA, L: AGW, pad: 0, top: topA + BRACE_OUT, ft: H.floor, face: H.depth, slot: H.slot, mid: 150, at: [H.inset, AGW - H.inset - H.len],
+  side: (u) => { sideBox("optA", [[u, H.floor], [u, topA], [u - THK, topA], [u - THK, topA - AJT], [u - TF, topA - AJT], [u - TF, H.floor]]);
+    braceFill("optA", [[u - RJ - 8.2, topA], [u - RJ + 8.2, topA], [u - RJ + 8.2, topA + BRACE_OUT], [u - RJ - 8.2, topA + BRACE_OUT]], "s-brace-plan"); },
+  verdict: "OPTION A", notes: [
+    ["+", "HOT AIR LEAVES UPWARD.", "The rear vent is on top, in free air. Nothing blows at the desk."],
+    ["+", "NOTHING IMPORTANT IN THE SLOT.", "It holds the palm rest: no keys, vents or ports there."],
+    ["+", "LOWEST OF THE THREE.", "273 tall. Tips with about 7 N at the top edge."],
+    ["+", "ALL PORTS STAY FREE.", "Rear ports on top, both sides open."],
+    ["–", "THE CHARGER CABLE STARTS AT THE TOP.", "It has to come over and down: the brace's elbow add-on turns it."],
+  ] });
+cable("optA", [[U, topA + BRACE_OUT], [U, topA + BRACE_OUT + 10], [U + 10, topA + BRACE_OUT + 18], [U + 46, topA + BRACE_OUT + 18]], 9);
+for (const x of [24, 46, 68]) arrow("optA", [x, topA + 6], [x, topA + 40]);
+txt("optA", 46, topA + 40, "HOT AIR", "face-txt", "middle", 0, -8); txt("optA", HD1 + HDW / 2, topA + Y, "HDMI", "face-txt", "middle", 0, -8);
+
+const FB = (x, q) => [FRONT - q, H.floor + AGW - x], topB = H.floor + AGW;
+const OB = option("optB", { F: FB, L: AHD, pad: 62, top: topB, ft: H.floor, face: H.faceB, slot: H.slot, mid: 200, at: [14, 150],
+  side: (u) => { sideBox("optB", [[u, H.floor], [u, topB], [u - TF, topB], [u - TF, H.floor]]);
+    shape("optB", [[u - TF, H.floor], [u - THK, H.floor], [u - THK, topB], [u - TF, topB]], "s-hidden", false);
+    braceFill("optB", circ(u - RJ, topB - U, 8.2), "s-brace-plan"); },
+  verdict: "OPTION B", notes: [
+    ["+", "REAR PORTS FACE SIDEWAYS.", "Charger and HDMI leave level, with no bend over the top."],
+    ["–", "TALLEST OF THE THREE.", "356 tall. Tips with about 5 N at the top edge."],
+    ["–", "THE LOWER SIDE IS BURIED.", "Any vent or port on that side ends up in or near the slot (TBD)."],
+    ["–", "KEYS ARE CLOSE TO THIS EDGE.", "About 24 in, so the wall on the keyboard side can only be 18 tall."],
+    ["–", "THE EDGE HAS TWO THICKNESSES.", "23 at the raised corner, about 16 along the rest."],
+    ["–", "THE REAR VENT BLOWS SIDEWAYS.", "Across the desk, at whatever stands beside it."],
+  ] });
+cable("optB", [[AHD + BRACE_OUT, topB - U], [AHD + BRACE_OUT + 10, topB - U], [AHD + BRACE_OUT + 18, topB - U - 10], [AHD + BRACE_OUT + 18, topB - U - 50]], 9);
+for (const b of [topB - 24, topB - 46, topB - 68]) arrow("optB", [AHD + 6, b], [AHD + 40, b]);
+txt("optB", AHD + 40, topB - 46, "HOT AIR", "face-txt", "start", 6, 4);
+
+const FC = (x, q) => [AGW - x, H.lift + SLOPE + q], topC = H.lift + AHD;
+const OC = option("optC", { F: FC, L: AGW, pad: 0, top: topC, ft: H.lift, face: H.depth, slot: THK + 2, mid: 170, at: [AGW - 350, AGW - 225],
+  side: (u) => { sideBox("optC", [[u, H.lift], [u, topC], [u - TF, topC], [u - TF, H.lift + AJT], [u - THK, H.lift + AJT], [u - THK, H.lift]]);
+    shape("optC", [[u - RJ - 8.2, H.lift], [u - RJ + 8.2, H.lift], [u - RJ + 8.2, H.lift - 50], [u - RJ - 8.2, H.lift - 50], [u - RJ - 8.2, H.lift]], "s-hidden", false); },
+  verdict: "OPTION C", notes: [
+    ["+", "A STRONG EDGE TO HOLD.", "The rear bar is 23 thick and 18 deep."],
+    ["–", "THE REAR VENT BLOWS AT THE DESK.", "The hot air then rises straight back over the laptop."],
+    ["–", "THE CHARGER IS UNDERNEATH.", "The brace stands 52 out, so the laptop has to be lifted 70."],
+    ["–", "LITTLE FREE EDGE TO HOLD.", "Vent, jack and HDMI take the first 160. A second vent at the far end? (TBD)"],
+    ["–", "HOOKING ON THE DESK NEEDS A TALLER PART.", "The lift does not fit the same holder as A and B."],
+  ] });
+cable("optC", [[AGW - U, H.lift - 50], [AGW - U, 10], [AGW - U + 8, 5], [AGW - U + 70, 5]], 9);
+for (const a of [AGW - 24, AGW - 46, AGW - 68]) arrow("optC", [a, H.lift - 6], [a, H.lift - 40]);
+txt("optC", AGW - 46, H.lift - 40, "HOT AIR", "face-txt", "middle", 0, 22);
+txt("optC", AGW - 350 + H.len / 2, 0, "ONLY IF NO VENT HERE (TBD)", "unk-txt", "middle", 20, 40);
+
+// ---------- view 7: the holder ----------
+const PROF = holderProf(H.slot), hs = H.slot / 2, top7 = H.floor + H.depth, jawX = hs + H.wall + H.jaw, footX = -hs - H.wall - H.foot;
+braceFill("part", PROF);
+shape("part", [[-hs + 1, H.floor + 1], [-hs + 1, top7 + 14], [hs - 1, top7 + 14], [hs - 1, H.floor + 1], [-hs + 1, H.floor + 1]], "s-hidden", false);
+shape("part", [[footX - 10, 0], [jawX + 10, 0]], "s-fine", false);
+txt("part", 0, top7 + 14, "LAPTOP EDGE", "face-txt", "middle", 0, -8); txt("part", (hs + H.wall + jawX) / 2, H.jawT + H.gap / 2, "THE DESK GOES HERE", "face-txt", "middle", 0, 4);
+txt("part", jawX + 10, 0, "DESK", "note", "start", 6, 4);
+callout("part", 0, H.floor + 14, "1", 0, 0); callout("part", -hs - H.wall / 2, 30, "2", -50, -40); callout("part", 0, H.floor / 2, "3", 0, 60);
+callout("part", jawX - 14, H.jawT + H.gap + H.jawT / 2, "4", 20, -44); callout("part", jawX - 14, H.jawT / 2, "5", 40, 40); callout("part", footX + 16, H.jawT / 2, "6", -20, -44);
+{ const [lx] = P("part", jawX + 30, 0), [, ly] = P("part", 0, top7 + 14);
+  legend("part", lx, ly + 30, "THE PARTS", [
+    ["1", "SLOT.", "The laptop's edge stands in it, on 1 of felt each side."],
+    ["2", "WALLS.", "6 thick, 45 tall. They keep the laptop upright."],
+    ["3", "FLOOR.", "6 thick. Carries the weight."],
+    ["4", "UPPER JAW.", "Rests on top of the desk when hooked on."],
+    ["5", "LOWER JAW.", "Goes under the desk when hooked on. On the desk it is a foot."],
+    ["6", "FOOT.", "The other half of the base when standing on the desk."],
+  ]); }
+
+// ---------- view 8: hooked on the desk edge ----------
+const dx0 = hs + H.wall, uH = hs - 1, topH = H.floor + AHD, WN = MASS * 9.81;
+shape("hang", [[dx0, H.jawT], [dx0 + 190, H.jawT], [dx0 + 190, H.jawT + DESK.t], [dx0, H.jawT + DESK.t]], "s-relief");
+shape("hang", [[dx0 + 190, H.jawT - 4], [dx0 + 189, H.jawT + 8], [dx0 + 191, H.jawT + 17], [dx0 + 190, H.jawT + DESK.t + 4]], "s-break", false);
+shape("hang", [[dx0, H.jawT], [dx0 + 190, H.jawT]], "s-provline", false); shape("hang", [[dx0, H.jawT + DESK.t], [dx0 + 190, H.jawT + DESK.t]], "s-provline", false);
+shape("hang", [[dx0 + DESK.clear, H.jawT], [dx0 + DESK.clear + 26, H.jawT], [dx0 + DESK.clear + 26, H.jawT - 34], [dx0 + DESK.clear, H.jawT - 34]], "s-prov");
+braceFill("hang", PROF);
+sideBox("hang", [[uH, H.floor], [uH, topH], [uH - THK, topH], [uH - THK, topH - AJT], [uH - TF, topH - AJT], [uH - TF, H.floor]]);
+braceFill("hang", [[uH - RJ - 8.2, topH], [uH - RJ + 8.2, topH], [uH - RJ + 8.2, topH + BRACE_OUT], [uH - RJ - 8.2, topH + BRACE_OUT]], "s-brace-plan");
+txt("hang", dx0 + 120, H.jawT + DESK.t / 2, "DESKTOP", "face-txt", "middle", 0, 4); txt("hang", dx0 + DESK.clear + 26, H.jawT - 20, "FRAME? (TBD)", "unk-txt", "start", 8, 4);
+txt("hang", uH - TF, 180, "LAPTOP", "face-txt", "end", -12, 4); txt("hang", uH, 240, "UNDERSIDE FACES THE DESK", "note", "start", 12, 4);
+txt("hang", uH - RJ, topH + BRACE_OUT, "CHARGER", "face-txt", "middle", 0, -10);
+lines("hang", dx0 + 40, 200, ["Nothing changes on the holder: it is pushed onto the edge", "the same way up as it stands on the desk.",
+  "The laptop's weight tries to roll the holder off the edge.", "The upper jaw presses down on the desktop and the tip of the", "lower jaw presses up underneath, with about 6 N.",
+  "Hooked on, it cannot be knocked over the way it can on the desk."], "note big", 17, 0, 0);
+arrow("hang", [uH - THK - 12, 176], [uH - THK - 12, 136]); txt("hang", uH - THK - 12, 136, `WEIGHT ABOUT ${Math.round(WN)} N`, "unk-txt", "end", -8, 4);
+arrow("hang", [dx0 + 10, H.jawT + DESK.t + H.jawT + 24], [dx0 + 10, H.jawT + DESK.t + H.jawT + 2]); arrow("hang", [jawX - 5, -22], [jawX - 5, -2]);
+txt("hang", jawX - 5, -14, "ABOUT 6 N UP", "unk-txt", "end", -10, 4);
+// ---------- points & edges ----------
+const NAMES = {
+  N1: "vent corner (rear, charger side)", N2: "far rear corner", N3: "far front corner", N4: "front corner on the charger side", N5: "bottom row of keys, middle", N6: "outermost key on the far side", N7: "charger jack",
+  n1: "rear edge", n2: "far side edge", n3: "front edge", n4: "side edge on the charger side", n5: "keyboard outline (position not measured)", n6: "touchpad (position not measured)",
+  G1: "top of the rear face", G2: "bottom of the rear face", G3: "where the trough ends and the deck starts", G4: "top of the front edge", G5: "bottom of the front edge", G6: "deck, halfway along the side", G7: "front foot",
+  g1: "rear face", g2: "top of the rear bar", g3: "trough", g4: "keyboard deck (level assumed)", g5: "front edge", g6: "underside", g7: "rear foot rib", g8: "front foot (position and height not measured)",
+  K1: "top corner of the desk edge", K2: "bottom corner of the desk edge", K3: "first thing underneath",
+  k1: "top of the desk", k2: "edge face of the desk", k3: "underside of the desk", k4: "frame, rail or mount underneath", k5: "next thing beside the desk",
+  A1: "first holder", A2: "second holder", a1: "front edge, in the slots", a2: "the two holders",
+  B1: "first holder", B2: "second holder", b1: "far side edge, in the slots", b2: "the two holders",
+  C1: "first holder", C2: "second holder", c1: "rear edge, in the slots", c2: "the two holders (taller)",
+  H1: "tip of the foot", H2: "tip of the lower jaw", H3: "top of the slot wall", H4: "inside corner of the jaw (the desk's edge sits here)",
+  h1: "slot", h2: "upper jaw", h3: "lower jaw", h4: "foot", h5: "slot wall on the jaw side",
+  J1: "desk edge", J2: "tip of the lower jaw", J3: "tip of the foot", j1: "desk top, under the upper jaw", j2: "desk underside, on the lower jaw",
+};
+const rect = (a0, b0, a1, b1) => [[a0, b0], [a1, b0], [a1, b1], [a0, b1], [a0, b0]];
+const hold = (o, ft, face) => o.map(p => rect(p, 0, p + H.len, ft + face));
+const POINTS = [ // id, view, x, y, label dx, dy (px)
+  ["N1","lap",0,0,-12,-4],["N2","lap",AGW,0,10,-4],["N3","lap",AGW,FRONT,10,16],["N4","lap",0,FRONT,-12,16],["N5","lap",AGW/2,KB2,8,-8],["N6","lap",AGW-KBX,130,-10,-8],["N7","lap",U,0,-12,18],
+  ["G1","prof",0,THK,-10,-8],["G2","prof",-SLOPE,0,-10,16],["G3","prof",AJT,TF,6,-10],["G4","prof",FRONT,TF,10,-8],["G5","prof",FRONT,0,10,16],["G6","prof",136,TF,0,-10],["G7","prof",FOOT2+RIBW/2,-AC,-14,14],
+  ["K1","desk",0,0,-12,-8],["K2","desk",0,-DESK.t,-12,16],["K3","desk",DESK.clear,-DESK.t,-10,18],
+  ["A1","optA",H.inset+H.len/2,0,0,18],["A2","optA",AGW-H.inset-H.len/2,0,0,18],
+  ["B1","optB",14+H.len/2,0,0,18],["B2","optB",150+H.len/2,0,0,18],
+  ["C1","optC",AGW-350+H.len/2,0,0,18],["C2","optC",AGW-225+H.len/2,0,0,18],
+  ["H1","part",footX,0,-4,18],["H2","part",jawX,0,4,18],["H3","part",-hs-H.wall,top7,-12,-6],["H4","part",hs+H.wall,H.jawT,10,-10],
+  ["J1","hang",dx0,H.jawT+DESK.t,-30,-44],["J2","hang",jawX,0,8,16],["J3","hang",footX,0,-8,16],
+];
+const EDGES = [ // id, view, polyline(s), tag x, y, dx, dy (px), style: "dash" hidden · "prov" guessed
+  ["n1","lap",[[1.5,0],[AGW-1.5,0]],280,0,0,0],
+  ["n2","lap",[[AGW,3],[AGW,FRONT-10]],AGW,150,0,0],
+  ["n3","lap",[[AGW-10,FRONT],[10,FRONT]],250,FRONT,0,0],
+  ["n4","lap",[[0,FRONT-10],[0,3]],0,150,0,0],
+  ["n5","lap",KB,70,AK,0,0,"prov"],
+  ["n6","lap",PAD,AGW/2-30,KB2+12,0,0,"prov"],
+  ["g1","prof",[[-SLOPE,0],[0,THK]],-SLOPE*.6,THK*.4,-22,0],
+  ["g2","prof",[[0,THK],[RIDGE,THK]],9,THK,0,-14],
+  ["g3","prof",[[RIDGE,THK],...trough.slice(1)],RIDGE+AM+8,THK-AN+1.5,22,26],
+  ["g4","prof",[[AJT,TF],[FRONT-3,TF]],96,TF,0,0,"prov"],
+  ["g5","prof",[[FRONT-3,TF],[FRONT,TF-3],[FRONT,2],[FRONT-2,0]],FRONT,TF/2,22,0,"prov"],
+  ["g6","prof",[[[-SLOPE,0],[RIB0,0]],[[RIB0+RIBW,0],[FOOT2,0]],[[FOOT2+RIBW,0],[FRONT-2,0]]],190,0,0,0],
+  ["g7","prof",[[RIB0,0],[RIB0+.8,-AC],[RIB0+RIBW-.8,-AC],[RIB0+RIBW,0]],RIB0+RIBW/2,-AC,-26,-4],
+  ["g8","prof",[[FOOT2,0],[FOOT2+.8,-AC],[FOOT2+RIBW-.8,-AC],[FOOT2+RIBW,0]],FOOT2+RIBW/2,-AC,26,-4,"prov"],
+  ["k1","desk",[[0,0],[150,0]],110,0,0,0,"prov"],
+  ["k2","desk",[[0,0],[0,-DESK.t]],0,-DESK.t/2,0,0,"prov"],
+  ["k3","desk",[[0,-DESK.t],[150,-DESK.t]],34,-DESK.t,0,0,"prov"],
+  ["k4","desk",rect(DESK.clear,-DESK.t,DESK.clear+26,-DESK.t-34),DESK.clear+26,-DESK.t-17,0,0,"prov"],
+  ["k5","desk",[[-DESK.side,16],[-DESK.side,-DESK.t-40]],-DESK.side,-DESK.t-24,0,0,"prov"],
+  ["a1","optA",[[10,H.floor],[AGW-10,H.floor]],AGW/2,H.floor,0,-14],
+  ["a2","optA",hold([H.inset,AGW-H.inset-H.len],H.floor,H.depth),H.inset+H.len/2,28,0,0],
+  ["b1","optB",[[5,H.floor],[AHD-5,H.floor]],118,H.floor,0,-14],
+  ["b2","optB",hold([14,150],H.floor,H.faceB),14+H.len/2,12,0,0],
+  ["c1","optC",[[8,H.lift],[AGW-8,H.lift]],250,H.lift,0,-14],
+  ["c2","optC",hold([AGW-350,AGW-225],H.lift,H.depth),AGW-225+H.len/2,40,0,0],
+  ["h1","part",[[-hs,top7],[-hs,H.floor],[hs,H.floor],[hs,top7]],hs,34,-22,0],
+  ["h5","part",[[hs+H.wall,H.jawT],[hs+H.wall,top7]],hs+H.wall,44,22,0],
+  ["h2","part",[[hs+H.wall,H.jawT+H.gap],[jawX,H.jawT+H.gap],[jawX,H.jawT+H.gap+H.jawT],[hs+H.wall,H.jawT+H.gap+H.jawT]],hs+H.wall+34,H.jawT+H.gap+H.jawT,0,0],
+  ["h3","part",[[hs+H.wall,H.jawT],[jawX,H.jawT],[jawX,0],[0,0]],hs+H.wall+34,H.jawT,0,0],
+  ["h4","part",[[0,0],[footX,0],[footX,H.jawT],[-hs-H.wall,H.jawT]],footX+30,H.jawT,0,0],
+  ["j1","hang",[[dx0,H.jawT+DESK.t],[jawX,H.jawT+DESK.t]],dx0+40,H.jawT+DESK.t,0,-34],
+  ["j2","hang",[[dx0,H.jawT],[jawX,H.jawT]],dx0+34,H.jawT,0,30],
+];
+const OUTLINE = new Set("n1 n2 n3 n4 g1 g2 g3 g6 a1 b1 c1 h1 h2 h3 h4 h5".split(" "));
+const VIEW_OF = {};
+const nodes = {};
+for (const [id, v, pts, lxp, lyp, ldx, ldy, style] of EDGES) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "edge" + (style ? " " + style : "") + (OUTLINE.has(id) ? " outline" : ""), "data-id": id }, LAY[v].edges);
+  const dd = d(v, pts, false);
+  el("path", { d: dd, class: "vis" }, g);
+  el("path", { d: dd, class: "hit" }, g);
+  const [px, py] = P(v, lxp, lyp); const tx = px + ldx, ty = py + ldy, w = 9 + 7.6 * id.length;
+  if (Math.abs(ldx) > 30 || Math.abs(ldy) > 30) el("line", { x1: px, y1: py, x2: tx, y2: ty, class: "lead" }, g);
+  const tg = el("g", { class: "tag" }, g);
+  el("rect", { x: tx - w / 2, y: ty - 9, width: w, height: 17 }, tg);
+  el("text", { x: tx, y: ty + 4 }, tg).textContent = id;
+  nodes[id] = g;
+}
+for (const [id, v, x, y, dx, dy] of POINTS) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "pt", "data-id": id }, LAY[v].pts);
+  const [px, py] = P(v, x, y);
+  if (Math.abs(dx) > 16 || Math.abs(dy) > 24) el("line", { x1: px, y1: py, x2: px + dx * .85, y2: py + dy * .85 }, g);
+  el("circle", { cx: px, cy: py, r: 3.2 }, g);
+  el("circle", { cx: px, cy: py, r: 10, class: "hitc" }, g);
+  el("text", { x: px + dx, y: py + dy + 4, "text-anchor": dx >= 0 ? "start" : "end" }, g).textContent = id;
+  nodes[id] = g;
+}
+const VNAME = { lap: "View 1 · the laptop from above", prof: "View 2 · the laptop from the side", desk: "View 3 · the desk edge", optA: "View 4 · option A, front edge down", optB: "View 5 · option B, side edge down", optC: "View 6 · option C, rear edge down", part: "View 7 · the holder", hang: "View 8 · hooked on the desk edge" };
+
+// ---------- schedule ----------
+// f: "ind" not confirmed · "prop" a proposed size · "der" worked out · none = measured · no v = to be measured · u: unit when it is not mm
+// dim: [view, "h" | "v", from, to, where the line sits, [where each extension line starts], [pill offset in px]]
+const GROUPS = [["need", "To measure · laptop"], ["desk", "To measure · desk"], ["lap", "Laptop · already measured (charger brace sheets)"], ["part", "Holder · proposed sizes"], ["hold", "How it stands · worked out"]];
+const tipN = top => Math.round(MASS * 9.81 * (hs + H.wall + H.foot) / top);
+const M = [
+  { k: "SC", g: "need", t: "Thickness at the front edge", how: "Calipers across the front edge, underside to the top of the palm rest, in the middle. Not over a rubber foot. This sets the slot width for option A.", refs: ["G4","G5","g5"], dim: ["prof","v",0,TF,FRONT+8,[FRONT,FRONT]] },
+  { k: "SD", g: "need", t: "Thickness at the side edge, halfway along", how: "Across the far side edge, about halfway between front and rear, underside to the deck beside the keyboard. For option B.", refs: ["G6","g4","g6"], dim: ["prof","v",0,TF,136,[136,136],[-44,0]] },
+  { k: "SA", g: "need", t: "Front edge to the bottom row of keys", how: "The depth of the palm rest. The holder's wall can be at most this tall on the keyboard side, less a margin.", refs: ["N5","n3","n5"], dim: ["lap","v",KB2,FRONT,AGW/2-78,[AGW/2-78,AGW/2-78]] },
+  { k: "SB", g: "need", t: "Far side edge to the nearest key", how: "From the side edge away from the charger, in to the first key. For option B.", refs: ["N6","n2","n5"], dim: ["lap","h",AGW-KBX,AGW,130,[130,130],[0,-22]] },
+  { k: "SE", g: "need", t: "Height of the front foot", how: "How far the rubber foot nearest the front stands off the underside. The rear rib is 4.25 (AC).", refs: ["G7","g8"], dim: ["prof","v",-AC,0,FOOT2+RIBW+6,[FOOT2+RIBW,FOOT2+RIBW],[64,-14]] },
+  { k: "SF", g: "need", t: "Front edge back to the front foot", how: "From the front edge to the nearest edge of that foot. A slot wall on the underside has to stop short of it, or the slot has to be wider.", refs: ["G5","G7","g8"], dim: ["prof","h",FOOT2+RIBW,FRONT,-AC-7,[0,0],[0,22]] },
+  { k: "DA", g: "desk", t: "Desk top thickness at the edge", how: "Top surface to underside, right at the edge the holder would hook onto. Say if the edge is rounded or has a lip.", refs: ["K1","K2","k2"], dim: ["desk","v",-DESK.t,0,-9,[0,0],[-44,0]] },
+  { k: "DB", g: "desk", t: "Clear depth underneath, from the edge", how: "From the edge inward along the underside to the first thing in the way: frame, rail, drawer, the laptop's under-desk mount. The lower jaw needs 60.", refs: ["K2","K3","k3","k4"], dim: ["desk","h",0,DESK.clear,-DESK.t-8,[-DESK.t,-DESK.t],[0,22]] },
+  { k: "DD", g: "desk", t: "Open room beside the desk", how: "From the desk's edge outward to the next thing: wall, drawers, another desk. The holder and laptop need about 90.", refs: ["K1","k5"], dim: ["desk","h",-DESK.side,0,8,[0,0],[0,-22]] },
+  { k: "AG", g: "lap", v: "356.2", t: "Overall width", how: "Published size, accepted as it is on the charger brace sheet. The edge that stands in the holders in options A and C.", refs: ["N1","N2","n3"], dim: ["lap","h",0,AGW,FRONT+12,[FRONT,FRONT]] },
+  { k: "AH", g: "lap", v: "272.5", t: "Overall depth, rear face to front edge", how: "Published size, accepted as it is. How tall it stands in option A; the edge in the holders in option B.", refs: ["N2","N3","n2"], dim: ["lap","v",-SLOPE,FRONT,-12,[8,10]] },
+  { k: "P", g: "lap", v: "23", t: "Thickness at the rear", how: "Underside to the top of the rear bar. Measured.", refs: ["G1","G2","g1"], dim: ["prof","v",0,THK,-SLOPE-7,[-SLOPE,0],[-36,0]] },
+  { k: "AA", g: "lap", v: "6.6", t: "Drop from the rear bar level to the deck", how: "Measured at the front of the raised corner. If the deck stays level from there, the laptop is 16.4 thick at the front: that is what SC checks.", refs: ["G3","g3","g4"], dim: ["prof","v",TF,THK,AJT+7,[AJT,AJT],[44,0]] },
+  { k: "AK", g: "lap", v: "80.67", t: "Rear face to the first row of keys", how: "Measured. The top vents and the trough lie in this strip.", refs: ["N1","n5","n1"], dim: ["lap","v",0,AK,AGW/2+60,[AGW/2+60,AGW/2+60]] },
+  { k: "U", g: "lap", v: "96.75", t: "Vent corner to the charger jack", how: "Measured. A holder under the rear edge (option C) has to stay clear of it.", refs: ["N1","N7","n1"], dim: ["lap","h",0,U,-SLOPE-78,[0,0]] },
+  { k: "AC", g: "lap", v: "4.25", t: "Rear foot rib height", how: "Measured. With the laptop flat on a desk this is the gap under it.", refs: ["g7"], dim: ["prof","v",-AC,0,RIB0-5,[RIB0,RIB0],[-44,0]] },
+  { k: "BD", g: "lap", v: "52.3", f: "prop", t: "Charger brace stands out of the rear face", how: "From the charger brace sheet 02. In option A this is extra height on top; in option C it is why the laptop must be lifted.", refs: ["N7"], dim: ["lap","v",-FJ-BRACE_OUT,-FJ,U-16,[U-8.2,U-8.2],[-52,0]] },
+  { k: "HA", g: "part", v: "18.4", f: "prop", t: "Slot width", how: "The edge it holds plus 1 of felt on each side. Drawn for a 16.4 front edge; SC sets it.", refs: ["h1"], dim: ["part","h",-hs,hs,top7+7,[top7,top7]] },
+  { k: "HB", g: "part", v: "45", f: "prop", t: "Slot depth", how: "How much of the laptop the walls hold. SA and SF may shorten one wall each.", refs: ["h1","H3"], dim: ["part","v",H.floor,top7,0,[-hs,-hs]] },
+  { k: "HC", g: "part", v: "6", f: "prop", t: "Wall thickness", how: "A 20 N knock at the top of the laptop puts about 8 MPa in a wall, against roughly 40 for printed PETG.", refs: ["H3","h5"], dim: ["part","h",-hs-H.wall,-hs,top7+7,[top7,top7],[-40,-22]] },
+  { k: "HD", g: "part", v: "6", f: "prop", t: "Floor thickness", how: "Under the laptop's edge.", refs: ["h1"], dim: ["part","v",0,H.floor,0,[0,0],[44,0]] },
+  { k: "HE", g: "part", v: "60", f: "prop", t: "Jaw length", how: "How far the jaws reach onto the desk. DB has to allow it underneath.", refs: ["H2","H4","h2","h3"], dim: ["part","h",hs+H.wall,jawX,H.jawT+H.gap+H.jawT+7,[H.jawT+H.gap+H.jawT,H.jawT+H.gap+H.jawT]] },
+  { k: "HF", g: "part", t: "Gap between the jaws", how: "The desk's thickness (DA) plus 0.5. Drawn at 25.5 as a placeholder.", refs: ["h2","h3","H4"], dim: ["part","v",H.jawT,H.jawT+H.gap,jawX+7,[jawX,jawX],[30,0]] },
+  { k: "HG", g: "part", v: "6", f: "prop", t: "Jaw thickness", how: "Each jaw. The lower one is also the foot on that side.", refs: ["h3","H2"], dim: ["part","v",0,H.jawT,jawX+7,[jawX,jawX],[46,0]] },
+  { k: "HH", g: "part", v: "60", f: "prop", t: "Foot length", how: "Matches the jaw, so the base is the same width each side of the slot. Longer is steadier on the desk and needs more room beside it when hooked on.", refs: ["H1","h4"], dim: ["part","h",footX,-hs-H.wall,H.jawT+7,[H.jawT,H.jawT]] },
+  { k: "HJ", g: "part", v: "150.4", f: "der", t: "Overall width of the base", how: "Foot, wall, slot, wall, jaw.", refs: ["H1","H2"], dim: ["part","h",footX,jawX,-7,[0,0],[0,22]] },
+  { k: "HI", g: "part", v: "60", f: "prop", t: "Length of each holder", how: "Two holders, each 60 along the edge, set 50 in from each end. The printer's bed is 220, so one long holder is not possible.", refs: ["A1","a2"], dim: ["optA","h",H.inset,H.inset+H.len,-12,[0,0],[0,22]] },
+  { k: "HK", g: "part", v: "90.4", f: "der", t: "Room needed beside the desk, hooked on", how: "From the desk's edge out to the tip of the foot. Compare with DD.", refs: ["J1","J3"], dim: ["hang","h",footX,dx0,-10,[0,H.jawT],[0,22]] },
+  { k: "HL", g: "part", v: "70", f: "prop", t: "Lift under the rear edge, option C only", how: "So the charger brace (52.3) and its cable clear the desk.", refs: ["C2","c1"], dim: ["optC","v",0,H.lift,AGW+14,[AGW-8,AGW-8],[40,0]] },
+  { k: "QA", g: "hold", v: String(MASS), u: "kg", f: "ind", t: "Laptop mass, assumed", how: "Published at about 2.4 to 2.7 with the lid; yours has no lid. Every force below follows from this.", refs: [], dim: null },
+  { k: "QB", g: "hold", v: String(tipN(topA)), u: "N", f: "der", t: "Push at the top edge that tips it, option A on the desk", how: "A sideways push on the top edge, across the thin way. About 0.7 kg. It leans 28 degrees before it goes.", refs: ["a2"], dim: null },
+  { k: "QC", g: "hold", v: String(tipN(topB)), u: "N", f: "der", t: "Push at the top edge that tips it, option B on the desk", how: "Taller, so easier to knock over. It leans 22 degrees before it goes.", refs: ["b2"], dim: null },
+  { k: "QD", g: "hold", v: "6", u: "N", f: "der", t: "Force on the lower jaw, hooked on", how: "The laptop's weight, 15 out from the desk's edge, held by a jaw 60 long. Small: the jaws are far stronger than this needs.", refs: ["j2","J2"], dim: null },
+  { k: "QE", g: "hold", v: "8", u: "MPa", f: "der", t: "Stress in a slot wall, 20 N knock at the top", how: "Shared by two holders. Printed PETG takes about 40 along its layers.", refs: ["h5"], dim: null },
+];
+const BYK = Object.fromEntries(M.map(m => [m.k, m]));
+const ST = m => (!m.v || m.f) ? "unk" : "ok";
+const UNIT = m => m.u && m.u !== "mm" ? " " + m.u : "";
+const VAL = m => !m.v ? "TBD" : m.v + UNIT(m) + (m.f === "ind" ? " (IND.)" : m.f === "prop" ? " (PROP.)" : m.f === "der" ? " (DERIVED)" : "");
+const USED = {};
+for (const m of M) for (const r of m.refs) (USED[r] = USED[r] || []).push(m.k);
+// ---------- the card grid of this sheet ----------
+const OPTS = ["optA", "optB", "optC"], PD = ["prof", "desk"];
+const WIDE = [OPTS.slice(), ["lap", PD, "part", "hang"]], SQUARE = [["optA", "optB"], ["optC", "lap"], ["part", "hang"], ["prof"], ["desk"]];
+const TWO_UP = [["optA"], ["optB"], ["optC"], ["lap", "hang"], ["part"], ["prof"], ["desk"]];
+const COLUMN = [["lap"], ["prof"], ["desk"], ["optA"], ["optB"], ["optC"], ["part"], ["hang"]];
+const BENTOS = [
+  WIDE,
+  [OPTS.slice(), ["part", "hang", "lap"], PD.slice()],
+  [["lap", "optA", "optB"], ["optC", "part", "hang"], PD.slice()],
+  [["lap", PD], OPTS.slice(), ["part", "hang"]],
+  [["optA", "optB", "optC", "hang"], ["lap", "part", PD]],
+  [["optA", ["prof", "part"]], ["optB", "optC"], ["lap", "hang", "desk"]],
+  [["lap", "optA"], ["optB", "optC"], ["part", "hang"], PD.slice()],
+  SQUARE,
+  [["optA"], ["optB", "optC"], ["lap", "hang"], ["part", "desk"], ["prof"]],
+  TWO_UP,
+  COLUMN,
+];
+const NATURAL = [[1500, WIDE], [820, SQUARE], [340, TWO_UP], [0, COLUMN]];
+const SHARE = { optA: .17, optB: .15, optC: .15, lap: .13, part: .12, hang: .12, prof: .08, desk: .08 };   // the share of the grid each view deserves
+// ---------- dimension drawing ----------
+function drawDim(m) {
+  for (const L of Object.values(LAY)) L.dim.replaceChildren();
+  if (!m || !m.dim) return;
+  const [v, kind, a, b, at, ext, off = [0, 0]] = m.dim, gDim = LAY[v].dim;
+  gDim.setAttribute("class", "dim" + (ST(m) === "unk" ? " unk" : ""));
+  const L = (x1, y1, x2, y2, cls, marker) => { const [p1x, p1y] = P(v, x1, y1), [p2x, p2y] = P(v, x2, y2);
+    const l = el("line", { x1: p1x, y1: p1y, x2: p2x, y2: p2y }, gDim); if (cls) l.setAttribute("class", cls);
+    if (marker) { l.setAttribute("marker-start", "url(#arr)"); l.setAttribute("marker-end", "url(#arr)"); } };
+  let mx, my;
+  if (kind === "v") { L(ext[0], a, at, a, "ext"); L(ext[1], b, at, b, "ext"); L(at, a, at, b, null, true); [mx, my] = P(v, at, (a + b) / 2); }
+  else { L(a, ext[0], a, at, "ext"); L(b, ext[1], b, at, "ext"); L(a, at, b, at, null, true); [mx, my] = P(v, (a + b) / 2, at); }
+  mx += off[0]; my += off[1];
+  const label = m.k + " " + VAL(m);
+  const w = 16 + label.length * 8.6;
+  const pill = el("g", { class: "pill" }, gDim);
+  el("rect", { x: mx - w / 2, y: my - 12, width: w, height: 24 }, pill);
+  el("text", { x: mx, y: my + 5 }, pill).textContent = label;
+}
+
+// ---------- cards: a bento grid of view cards ----------
+// Each view is a card. The grid is solved from the drawings' own proportions, so the cards tile the sheet exactly
+// with even gutters. On a screen with room, the arrangement that best matches the free rectangle is chosen and
+// stretched to fill it: the drawings then fill their cards and run off the edges a little (what is cut off is
+// shown when the card is opened). Closed, a card shows the drawing alone. Open, it rolls out from its own cell
+// in every direction and shows each tag, note and caption.
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DUR = 420;                    // ms, the same as the cards' CSS transition
+const CGAP = 14, SHADOW = 5;        // gutter between cards; room kept for the cards' offset shadow
+const BORDER = 2, HEAD = 34, CAPH = 22;   // px a card adds around its drawing: borders, title strip, caption line
+const LBL = 12.5;                   // size of the lettering inside the drawings, in drawing units
+const KMIN = .78, KMAX = 1.28;      // how far a card may be stretched away from its drawing's proportions
+const OPEN_MAX = 1.5;               // the largest an open drawing is shown, in px per drawing unit
+const PAN_BELOW = .48, PAN_AT = .6; // an open drawing that would come out smaller than this is shown larger and panned instead
+const padBox = (b, p) => [b.x - p, b.y - p, b.width + 2 * p, b.height + 2 * p];
+const unionBox = (a, b) => { const x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]); return [x, y, Math.max(a[0] + a[2], b[0] + b[2]) - x, Math.max(a[1] + a[3], b[1] + b[3]) - y]; };
+const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+const px = n => n.toFixed(1) + "px";
+// the cards' easing, cubic-bezier(.2,.8,.2,1), so the drawing inside moves in step with its card
+const bez = p => {
+  if (p <= 0) return 0; if (p >= 1) return 1;
+  const B = (a, b, t) => 3 * (1 - t) * (1 - t) * t * a + 3 * (1 - t) * t * t * b + t * t * t;
+  let lo = 0, hi = 1; for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2; B(.2, .2, m) < p ? lo = m : hi = m; }
+  return B(.8, 1, (lo + hi) / 2);
+};
+
+// The arrangements (BENTOS), the widths for the unfitted grid (NATURAL) and each view's share (SHARE) come with the sheet's content.
+// stretches tried when fitting an arrangement to the screen
+const KS = Array.from({ length: 21 }, (_, i) => Math.exp(Math.log(KMIN) + Math.log(KMAX / KMIN) * i / 20));
+
+let openV = null, ready = false, cur = null;
+
+// ----- the drawing inside a card -----
+function setVB(v, b) { const L = LAY[v]; L.vb = b; L.svg.setAttribute("viewBox", b.map(n => n.toFixed(1)).join(" ")); }
+function tweenVB(v, to, instant, dur = DUR) {
+  const L = LAY[v]; cancelAnimationFrame(L.raf);
+  if (instant || reduce || !L.vb || L.vb.every((n, i) => Math.abs(n - to[i]) < .5)) { setVB(v, to); return; }
+  const from = L.vb.slice(), t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur), e = bez(p); setVB(v, from.map((n, i) => n + (to[i] - n) * e)); if (p < 1) L.raf = requestAnimationFrame(step); };
+  L.raf = requestAnimationFrame(step);
+}
+function dimBox(v) { const g = LAY[v].dim; if (!g.childNodes.length) return null; const d = g.getBBox(); return d.width || d.height ? padBox(d, 14) : null; }
+// a closed card: the drawing is scaled to fill the card and held on its focus; what does not fit runs off the edge
+function cropBox(v, pw, ph) {
+  const L = LAY[v], B = L.core, F = FOCUS(v), D = dimBox(v);
+  let s = Math.max(pw / B[2], ph / B[3]);
+  if (D) s = Math.min(s, pw / D[2], ph / D[3]);   // a selected measurement is never cut off
+  const cw = pw / s, chh = ph / s;
+  const axis = (f, lo, span, size, dlo, dsize) => {
+    let c = size >= span ? lo + span / 2 : clamp(f, lo + size / 2, lo + span - size / 2);
+    if (D) c = clamp(c, dlo + dsize - size / 2, dlo + size / 2);
+    return c - size / 2;
+  };
+  return [axis(F[0], B[0], B[2], cw, D && D[0], D && D[2]), axis(F[1], B[1], B[3], chh, D && D[1], D && D[3]), cw, chh];
+}
+// under the pointer, a closed card steps back to show the whole drawing, cut-off parts included
+function peekBox(v, pw, ph) {
+  const B = LAY[v].core, s = Math.min(pw / B[2], ph / B[3]), w = pw / s, h = ph / s;
+  return [B[0] + B[2] / 2 - w / 2, B[1] + B[3] / 2 - h / 2, w, h];
+}
+function frame(v, peek, instant, dur) {   // set a closed card's drawing: cropped to fill, or whole while peeking
+  const L = LAY[v], c = L.cell, pw = c.w - BORDER, ph = c.h - cur.CH[v];
+  const vb = peek && !dimBox(v) ? peekBox(v, pw, ph) : cropBox(v, pw, ph);
+  letter(v, vb, pw / vb[2]); tweenVB(v, vb, instant, dur);
+}
+// an open card: the whole drawing with every tag, as large as the sheet column and the screen allow
+function capOpen(L, w) { const p = L.cd.cloneNode(true); p.className = "cd probe"; p.style.width = (w - BORDER) + "px"; bento.appendChild(p); const h = p.offsetHeight; p.remove(); return h; }
+function openRect(v, W, H) {
+  const L = LAY[v], c = L.cell, D = dimBox(v), Z = D ? unionBox(L.full, D) : L.full, az = Z[2] / Z[3];
+  const hmax = Math.max(360, viewH() - 24), wmin = Math.min(W, Math.max(c.w, 320));
+  let w = clamp(Z[2] * OPEN_MAX + BORDER, wmin, W), ch = HEAD + capOpen(L, w) + BORDER, h = ch + (w - BORDER) / az, pan = null;   // a small drawing is not blown up past OPEN_MAX
+  if (h > hmax) {
+    h = hmax;
+    for (let i = 0; i < 2; i++) { w = clamp((h - ch) * az + BORDER, wmin, W); ch = HEAD + capOpen(L, w) + BORDER; }
+  }
+  h = Math.max(h, c.h);
+  if (Math.min((w - BORDER) / Z[2], (h - ch) / Z[3]) < PAN_BELOW) {   // too small to read: full width, drawn larger, panned inside the card
+    w = W; ch = HEAD + capOpen(L, w) + BORDER; h = Math.max(c.h, Math.min(hmax, ch + Z[3] * PAN_AT));
+    pan = [Math.max(w - BORDER, Z[2] * PAN_AT), Math.max(h - ch, Z[3] * PAN_AT)];
+  }
+  const Hb = Math.max(H, h), x = clamp(c.x + c.w / 2 - w / 2, 0, W - w), y = clamp(c.y + c.h / 2 - h / 2, 0, Hb - h);
+  const pw = w - BORDER, ph = h - ch, [ew, eh] = pan || [pw, ph]; let [zx, zy, zw, zh] = Z;
+  if (zw / zh > ew / eh) { const nh = zw * eh / ew; zy -= (nh - zh) / 2; zh = nh; } else { const nw = zh * ew / eh; zx -= (nw - zw) / 2; zw = nw; }
+  return { x, y, w, h, pw, ph, pan, vb: [zx, zy, zw, zh] };
+}
+// a panned drawing is moved so the selected measurement, or else the view's focus, sits in the middle of the card
+function panTo(v, r, jump) {
+  const L = LAY[v], D = dimBox(v), [fx, fy] = D ? [D[0] + D[2] / 2, D[1] + D[3] / 2] : FOCUS(v);
+  L.cb.scrollTo({ left: (fx - r.vb[0]) * r.pan[0] / r.vb[2] - r.pw / 2, top: (fy - r.vb[1]) * r.pan[1] / r.vb[3] - r.ph / 2, behavior: jump || reduce ? "auto" : "smooth" });
+}
+// Lettering inside a drawing is kept on a closed card only where it can be read and is not cut by the card's edge.
+function letter(v, vb, scale) {
+  const show = LBL * scale >= 6, x0 = vb[0] + 3, y0 = vb[1] + 3, x1 = vb[0] + vb[2] - 3, y1 = vb[1] + vb[3] - 3;
+  for (const [t, b] of LAY[v].letters) t.classList.toggle("out", !(show && b.x >= x0 && b.y >= y0 && b.x + b.width <= x1 && b.y + b.height <= y1));
+}
+function measure() {   // two outlines of each drawing: with everything on it (open), and its linework alone (closed)
+  for (const L of Object.values(LAY)) {
+    const c = L.card.classList, was = c.contains("open"), ts = [...L.g.querySelectorAll(".face-txt, .unk-txt, .ok-txt")];
+    ts.forEach(t => t.classList.remove("out"));
+    c.add("open"); const f = L.g.getBBox();
+    c.remove("open"); const letters = ts.map(t => [t, t.getBBox()]);
+    c.add("bare"); const k = L.g.getBBox(); c.remove("bare");
+    c.toggle("open", was);
+    if (!f.width || !k.width) continue;
+    L.full = padBox(f, 16); L.core = padBox(k, 16); L.letters = letters;
+  }
+  ready = Object.values(LAY).every(L => L.full);
+  layout(true, true);
+}
+
+// ----- the grid -----
+// Every card's width is a * h + b for a shared row height h; h is solved so the row is exactly W wide.
+// k stretches every card away from its drawing's proportions by the same amount (k > 1 flatter, k < 1 taller).
+function solve(rows, W, k, AR, CH) {
+  const cells = {}; let y = 0;
+  for (const row of rows) {
+    let sa = 0, sb = 0;
+    const lin = row.map(n => {
+      let a, b;
+      if (!Array.isArray(n)) { a = AR[n] * k; b = BORDER - a * CH[n]; }
+      else { const s = n.reduce((t, v) => t + 1 / (AR[v] * k), 0), c = n.reduce((t, v) => t + CH[v], 0) + (n.length - 1) * CGAP; a = 1 / s; b = BORDER - c / s; }
+      sa += a; sb += b; return [a, b];
+    });
+    const h = (W - CGAP * (row.length - 1) - sb) / sa;
+    let x = 0;
+    for (let i = 0; i < row.length; i++) {
+      const n = row[i], w = lin[i][0] * h + lin[i][1];
+      if (!(w > BORDER + 1)) return null;
+      if (!Array.isArray(n)) cells[n] = { x, y, w, h };
+      else { let yy = y; for (const v of n) { const hv = CH[v] + (w - BORDER) / (AR[v] * k); cells[v] = { x, y: yy, w, h: hv }; yy += hv + CGAP; } }
+      x += w + CGAP;
+    }
+    y += h + CGAP;
+  }
+  return { cells, H: y - CGAP };
+}
+const roomy = (r, CH) => Object.entries(r.cells).every(([v, c]) => c.w - BORDER >= 150 && c.h - CH[v] >= 48);
+// Fit one arrangement to a height. A little cropping is cheap and more costs steeply; a grid that ends above the bottom
+// of the screen costs something (the page simply carries on below it); one that runs past the bottom costs a lot; and a
+// grid that gives a simple drawing the biggest card, or a busy one the smallest, costs too.
+function fitRows(rows, W, Ht, AR, CH) {
+  if (!Ht) { const r = solve(rows, W, 1, AR, CH); return r && { k: 1, score: 0, ...r }; }
+  let out = null;
+  const tryK = k => {
+    const r = solve(rows, W, k, AR, CH); if (!r || !roomy(r, CH)) return r;
+    const c = Math.abs(Math.log(k)), f = Math.log(r.H / Ht), area = Object.values(r.cells).reduce((t, q) => t + q.w * q.h, 0);
+    const odd = Object.entries(r.cells).reduce((t, [v, q]) => t + SHARE[v] * Math.abs(Math.log(q.w * q.h / area / SHARE[v])), 0);
+    const score = .5 * c + 6 * c * c + (f > 0 ? 5 * f : -2.4 * f) + .5 * odd;
+    if (!out || score < out.score) out = { k, score, ...r };
+    return r;
+  };
+  KS.forEach(tryK); tryK(1);
+  const tall = solve(rows, W, KMIN, AR, CH), flat = solve(rows, W, KMAX, AR, CH);
+  if (tall && flat && tall.H > Ht && flat.H < Ht) {   // an exact fit lies within reach
+    let lo = Math.log(KMIN), hi = Math.log(KMAX);
+    for (let i = 0; i < 26; i++) { const m = (lo + hi) / 2, r = solve(rows, W, Math.exp(m), AR, CH); if (!r) break; r.H > Ht ? lo = m : hi = m; }
+    tryK(Math.exp((lo + hi) / 2));
+  }
+  return out;
+}
+function pick(W, Ht) {
+  const AR = {}, CH = {};
+  for (const [v, L] of Object.entries(LAY)) { AR[v] = L.core[2] / L.core[3]; CH[v] = HEAD + BORDER; }
+  let best = null;
+  if (Ht) for (const rows of BENTOS) { const r = fitRows(rows, W, Ht, AR, CH); if (r && (!best || r.score < best.score)) best = { rows, ...r }; }
+  if (!best) {
+    Ht = 0;
+    for (const [minW, rows] of NATURAL) { if (W < minW) continue; const r = fitRows(rows, W, 0, AR, CH); if (r && (roomy(r, CH) || !minW)) { best = { rows, ...r }; break; } }
+  }
+  // each card then answers to the size it got: a large card carries a caption line under its title
+  const cap = {}, CH2 = {};
+  for (const v of Object.keys(LAY)) { const c = best.cells[v]; cap[v] = c.w - BORDER >= 300 && c.h - CH[v] >= 150; CH2[v] = HEAD + (cap[v] ? CAPH : 0) + BORDER; }
+  const r2 = fitRows(best.rows, W, Ht, AR, CH2);
+  return r2 ? { rows: best.rows, ...r2, cap, CH: CH2, W, Ht0: Ht } : { ...best, cap: {}, CH, W, Ht0: Ht };
+}
+// the free rectangle: from the top of the drawing column to the bottom of the screen
+const viewH = () => Math.min(innerHeight, (window.screen && screen.availHeight) || innerHeight);
+const sheetEl = bento.parentElement, asideEl = document.querySelector("aside"), wideMain = matchMedia("(min-width: 961px)");
+const toolbarEl = sheetEl.querySelector(".toolbar"), legendEl = sheetEl.querySelector(".legend");
+// what the drawing column carries around the grid: toolbar, legend, the grid's margins and the column's border
+const around = () => { const c = getComputedStyle(bento); return toolbarEl.offsetHeight + legendEl.offsetHeight + parseFloat(c.marginTop) + parseFloat(c.marginBottom) + 2; };
+function fitTarget(W) {
+  if (W < 480) return 0;
+  const h = Math.round(viewH() - (sheetEl.getBoundingClientRect().top + scrollY) - 12 - around() - SHADOW);
+  return h >= 300 ? h : 0;
+}
+function layout(instant, repick) {
+  const W = bento.clientWidth - SHADOW; if (W < 60 || !ready) return;
+  if (instant) bento.classList.add("no-anim");
+  const Ht = fitTarget(W);
+  if (repick || !cur || cur.W !== W || cur.Ht !== Ht) {
+    cur = pick(W, Ht); cur.Ht = Ht;
+    Object.assign(bento.dataset, { arrangement: JSON.stringify(cur.rows).replace(/"/g, ""), stretch: cur.k.toFixed(3), fitted: cur.Ht0 ? "yes" : "no" });
+  }
+  for (const [v, L] of Object.entries(LAY)) {
+    const c = L.cell = cur.cells[v];
+    L.card.classList.toggle("cap", !!cur.cap[v]);
+    if (v === openV) continue;
+    if (L.panned) { L.panned = false; L.cb.classList.remove("pan"); L.svg.style.width = L.svg.style.height = ""; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+    Object.assign(L.card.style, { left: px(c.x), top: px(c.y), width: px(c.w), height: px(c.h) });
+    frame(v, L.peek, instant);
+  }
+  let H = cur.H;
+  if (openV) {
+    const r = openRect(openV, W, H), L = LAY[openV]; H = Math.max(H, r.y + r.h);
+    Object.assign(L.card.style, { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h) });
+    L.cb.classList.toggle("pan", !!r.pan); L.svg.style.width = r.pan ? px(r.pan[0]) : ""; L.svg.style.height = r.pan ? px(r.pan[1]) : "";
+    tweenVB(openV, r.vb, instant || !!r.pan);
+    if (r.pan) { panTo(openV, r, !L.panned || instant); L.panned = true; } else if (L.panned) { L.panned = false; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+  }
+  bento.style.height = px(H + SHADOW);
+  // the schedule column ends level with the drawing column when the grid is fitted to the screen
+  const colH = cur.Ht0 && wideMain.matches ? px(cur.H + SHADOW + around()) : "";
+  asideEl.style.height = asideEl.style.maxHeight = colH;
+  if (instant) { bento.getBoundingClientRect(); bento.classList.remove("no-anim"); }
+}
+function syncButtons() {
+  document.querySelectorAll("[data-zoom]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.zoom === (openV || "all"))));
+  for (const [v, L] of Object.entries(LAY)) { const o = v === openV; L.cxl.textContent = o ? "Close" : "Open"; L.cx.setAttribute("aria-expanded", String(o)); L.cx.setAttribute("aria-label", (o ? "Close " : "Open ") + VNAME[v]); }
+}
+function settle(L) { clearTimeout(L.timer); L.card.classList.add("closing"); L.timer = setTimeout(() => L.card.classList.remove("closing"), DUR + 40); }
+let homeY = null, revealT = 0;   // where the page stood before a card was opened; it goes back there on close
+function reveal() {   // keep the open card on screen once it has finished growing
+  clearTimeout(revealT); const v = openV; if (!v) return;
+  revealT = setTimeout(() => { if (openV === v) LAY[v].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" }); }, reduce ? 0 : DUR + 20);
+}
+function openCard(v) {
+  if (openV === v) return;
+  if (openV) { const P0 = LAY[openV]; P0.card.classList.remove("open"); settle(P0); } else homeY = scrollY;
+  const L = LAY[v]; openV = v; clearTimeout(L.timer); L.peek = false;
+  L.card.classList.remove("closing"); L.card.classList.add("open"); syncButtons(); layout(); reveal();
+}
+function closeCard() {
+  if (!openV) return;
+  const L = LAY[openV], r = L.card.getBoundingClientRect(), seen = r.bottom > 0 && r.top < innerHeight; openV = null; clearTimeout(revealT);
+  L.card.classList.remove("open"); settle(L); syncButtons(); layout();
+  if (homeY !== null && seen && Math.abs(scrollY - homeY) > 4) scrollTo({ top: homeY, behavior: reduce ? "auto" : "smooth" });
+  homeY = null;
+}
+// a closed card under the pointer shows its whole drawing
+for (const [v, L] of Object.entries(LAY)) {
+  const peek = on => e => { if (e.pointerType !== "mouse" || !ready || !cur || L.peek === on) return; L.peek = on; if (v !== openV && !L.card.classList.contains("closing")) frame(v, on, false, 260); };
+  L.card.addEventListener("pointerenter", peek(true)); L.card.addEventListener("pointerleave", peek(false));
+}
+// how many measurements live on each view, on the card's title strip
+for (const [v, L] of Object.entries(LAY)) {
+  const ms = M.filter(m => (m.dim ? m.dim[0] : VIEW_OF[m.refs[0]]) === v), open = ms.filter(m => ST(m) === "unk"), prop = open.filter(m => m.f === "prop");
+  if (!ms.length) { L.cs.hidden = true; continue; }
+  L.cs.innerHTML = open.length ? `${open.length}<span class="w"> ${prop.length === open.length ? "PROP." : "OPEN"}</span>` : `${ms.length}<span class="w"> DIMS</span>`;
+  L.cs.classList.toggle("unk", open.length > 0);
+  L.cs.title = open.length ? `${open.length} of ${ms.length} measurements on this view are not confirmed` : `${ms.length} measurements on this view, all confirmed`;
+}
+let lastW = 0, lastH = 0;
+new ResizeObserver(() => { const w = bento.clientWidth; if (w !== lastW) { lastW = w; ready ? layout(true, true) : measure(); } }).observe(bento);   // also the first time the sheet becomes visible
+addEventListener("resize", () => { const h = viewH(); if (Math.abs(h - lastH) > 1) { lastH = h; layout(true, true); } });
+bento.classList.add("enter"); setTimeout(() => bento.classList.remove("enter"), 1100);
+document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => b.dataset.zoom === "all" ? closeCard() : openCard(b.dataset.zoom)));
+const auto = document.getElementById("autozoom");
+document.getElementById("showlabels").addEventListener("change", e => bento.classList.toggle("labels-off", !e.target.checked));
+
+// ---------- selection ----------
+const detail = document.getElementById("detail");
+let current = null;
+function clearOn() { document.querySelectorAll(".on").forEach(n => n.classList.remove("on")); }
+function chipFor(id) {
+  const b = document.createElement("button");
+  b.className = "chip " + (BYK[id] ? "m-chip" : /^[a-z]/.test(id) ? "ed-chip" : "pt-chip");
+  b.textContent = id; b.addEventListener("click", () => BYK[id] ? selectM(id) : selectItem(id));
+  return b;
+}
+function renderDetail(html, chips, chipLabel) {
+  detail.innerHTML = html;
+  if (chips && chips.length) {
+    const lab = document.createElement("div"); lab.className = "meta"; lab.textContent = chipLabel; detail.appendChild(lab);
+    const wrap = document.createElement("div"); wrap.className = "chips"; chips.forEach(c => wrap.appendChild(chipFor(c))); detail.appendChild(wrap);
+  }
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function refit() { layout(); reveal(); }
+function selectM(k, opts = {}) {
+  const m = BYK[k]; if (!m) return;
+  current = k; clearOn(); bento.classList.add("has-sel");
+  m.refs.forEach(r => nodes[r]?.classList.add("on"));
+  drawDim(m);
+  const view = m.dim ? m.dim[0] : VIEW_OF[m.refs[0]];
+  if (auto.checked && view) openCard(view);
+  refit();
+  const st = ST(m);
+  renderDetail(`<div class="top"><div class="badge ${st}">${m.k}</div><div><h2>${esc(m.t)}</h2>
+    <div class="val ${st}">${!m.v ? "TBD · not measured yet" : m.v + " " + (m.u || "mm") + (m.f === "prop" ? " (PROP.) · proposed, not fit-tested" : m.f === "der" ? " (DERIVED) · worked out, not measured or tested" : m.f ? " (IND.) · not confirmed" : "")}</div></div></div>
+    <p>${esc(m.how)}</p><div class="meta">${VNAME[view] || ""}</div>`, m.refs, "Between");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", String(r.dataset.k === k)));
+  if (!opts.noScroll) document.querySelector(`.row[data-k="${k}"]`)?.scrollIntoView({ block: "nearest" });
+  if (opts.fromList && view && matchMedia("(max-width: 960px)").matches) LAY[view].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  try { history.replaceState(null, "", "#" + k); } catch (e) {}
+}
+function selectItem(id) {
+  current = id; clearOn(); bento.classList.add("has-sel"); drawDim(null);
+  nodes[id]?.classList.add("on"); refit();
+  const used = USED[id] || [];
+  const kind = /^[a-z]/.test(id) ? "Edge" : "Point";
+  const name = NAMES[id] ? " · " + NAMES[id] : "";
+  renderDetail(`<div class="top"><div class="badge item">${id}</div><div><h2>${kind} ${id}${esc(name)}</h2>
+    <div class="meta">${VNAME[VIEW_OF[id]]}</div></div></div>
+    <p>${used.length ? "Used by these measurements:" : "No measurement uses this yet. If you measure to it, tell me which two points or edges you measured between."}</p>`,
+    used, "");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+}
+function clearSel() {
+  current = null; clearOn(); bento.classList.remove("has-sel"); drawDim(null); refit();
+  const need = M.filter(m => ST(m) === "unk").length;
+  renderDetail(`<div class="top"><div class="badge item">mm</div><div><h2>Pick a measurement</h2>
+    <div class="meta">${M.length - need} confirmed · ${need} open</div></div></div>
+    <p>Choose one from the schedule to draw it on its view. Open a card to see its tags, then click any point or edge to see which measurements use it.</p>`);
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+}
+bento.addEventListener("click", e => {
+  const card = e.target.closest(".card"); if (!card) return;
+  const v = card.dataset.view;
+  if (e.target.closest(".cx")) { openV === v ? closeCard() : openCard(v); return; }
+  const g = e.target.closest(".pt, .edge");
+  if (g && openV === v) { selectItem(g.dataset.id); return; }
+  if (openV !== v) { openCard(v); return; }
+  if (!e.target.closest(".pill") && current) clearSel();
+});
+
+// ---------- index ----------
+const list = document.getElementById("list");
+let filter = "all";
+function renderList() {
+  list.replaceChildren();
+  for (const [gk, gname] of GROUPS) {
+    const items = M.filter(m => m.g === gk && (filter === "all" || filter === ST(m)));
+    if (!items.length) continue;
+    const h = document.createElement("div"); h.className = "group"; h.textContent = gname; list.appendChild(h);
+    for (const m of items) {
+      const b = document.createElement("button"); b.className = "row" + (ST(m) === "unk" ? " unk" : ""); b.dataset.k = m.k; b.setAttribute("role", "listitem");
+      b.setAttribute("aria-current", String(current === m.k));
+      b.innerHTML = `<span class="k">${m.k}</span><span class="d">${esc(m.t)}</span><span class="v">${VAL(m)}</span>`;
+      b.addEventListener("click", () => selectM(m.k, { fromList: true, noScroll: true }));
+      list.appendChild(b);
+    }
+  }
+  const need = M.filter(m => ST(m) === "unk").length;
+  document.getElementById("count").textContent = `${M.length - need}/${M.length} CONFIRMED`;
+}
+list.addEventListener("keydown", e => {
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  const rows = [...list.querySelectorAll(".row")]; const i = rows.indexOf(document.activeElement); if (i < 0) return;
+  e.preventDefault(); const n = rows[Math.max(0, Math.min(rows.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))];
+  n.focus(); selectM(n.dataset.k, { noScroll: true });
+});
+document.querySelectorAll(".filter button").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f; document.querySelectorAll(".filter button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList();
+}));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (current) clearSel(); closeCard(); } });
+
+const themeBtn = document.getElementById("theme"), root = document.documentElement;
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const syncTheme = () => { const d = isDark(); themeBtn.textContent = d ? "Paper sheet" : "Dark sheet"; themeBtn.setAttribute("aria-pressed", String(d)); };
+themeBtn.addEventListener("click", () => { const next = isDark() ? "light" : "dark"; root.dataset.theme = next; try { localStorage.setItem("sheet-theme", next); } catch (e) {} syncTheme(); });
+try { const saved = localStorage.getItem("sheet-theme"); if (saved === "dark" || saved === "light") root.dataset.theme = saved; } catch (e) {}
+new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncTheme);
+syncTheme();
+renderList();
+measure(); syncButtons();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); });
+const start = (location.hash || "").slice(1);
+if (BYK[start]) selectM(start); else clearSel();
+})();
+</script>

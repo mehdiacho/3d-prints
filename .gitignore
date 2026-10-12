@@ -1,0 +1,29 @@
+# build output that does not belong in the repo
+out/
+build/
+*.tmp
+
+# the slicer and CAD leave these beside the files they touch
+*.gcode
+*.bgcode
+*.f3d
+*.f3z
+*.step.bak
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# never publish the downloaded fob cover: its licence is unknown.
+# See LICENSE-models.md and prints/key-fob/README.md.
+**/Mazda_5_Fob_Cover.stl
+**/*_Fob_Cover.stl

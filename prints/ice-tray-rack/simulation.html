@@ -1,0 +1,460 @@
+<title>Ice Rack Fill Simulation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: a Drafting Table sheet. Header band; the stack drawn on the left, filling as it runs;
+   on the right the controls, then what each tray ended up with and a chart of the pour over time. */
+:root {
+  --desk: #E9E5DC; --paper: #F7F5F0; --ink: #1C1C1A; --ink2: #6B6862; --rule: #C9C4B8;
+  --struct: #D9D4C9; --struct-tint: #E9E6DE; --shade: #ECEAE5;
+  --water: #2E6F9E; --water-soft: rgba(46, 111, 158, .28); --water-film: rgba(46, 111, 158, .5);
+  --alert: #B0453A; --alert-fill: rgba(176, 69, 58, .08);
+  --ok: #5C8A3C; --ok-fill: rgba(92, 138, 60, .1);
+  --display: Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --water: #6FA8D6; --water-soft: rgba(111, 168, 214, .3); --water-film: rgba(111, 168, 214, .55);
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .1); --ok: #8DBA6C; --ok-fill: rgba(141, 186, 108, .12);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --water: #6FA8D6; --water-soft: rgba(111, 168, 214, .3); --water-film: rgba(111, 168, 214, .55);
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .1); --ok: #8DBA6C; --ok-fill: rgba(141, 186, 108, .12);
+  color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--desk); color: var(--ink); font-family: var(--display); font-size: 14px; line-height: 1.4; -webkit-font-smoothing: antialiased; margin: 0; }
+.wrap { padding-inline: 16px; padding-block: 14px 24px; max-width: 1500px; margin: 0 auto; }
+.frame { background: var(--paper); border: 1px solid var(--ink2); padding: 14px 16px 18px; display: flex; flex-direction: column; gap: 14px; }
+.sh { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 22px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+.sh .num { font: 600 2.6rem/.9 var(--mono); letter-spacing: -.02em; }
+.sh .ttl { flex: 1 1 320px; min-width: 0; }
+.sh h1 { font-weight: 700; font-size: clamp(1rem, 1.8vw, 1.35rem); letter-spacing: .16em; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+.sh p { margin: 0; font-size: .76rem; letter-spacing: .14em; color: var(--ink2); }
+.sh .lab { font: 400 .72rem var(--mono); color: var(--ink2); text-align: right; margin-left: auto; }
+main { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 14px; }
+@media (max-width: 980px) { main { grid-template-columns: minmax(0, 1fr); } }
+.panel { border: 1px solid var(--ink2); min-width: 0; background: var(--paper); }
+.ph { padding: 8px 12px 6px; border-bottom: 1px solid var(--ink2); font-size: .72rem; font-weight: 600; letter-spacing: .22em; color: var(--ink2); display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.ph span:last-child { font-family: var(--mono); letter-spacing: 0; }
+#stack { display: block; width: 100%; height: auto; }
+.right { display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 12px 18px; padding: 12px; }
+.ctl { display: grid; gap: 4px; min-width: 0; }
+.ctl label { font-size: .7rem; font-weight: 600; letter-spacing: .16em; color: var(--ink2); text-transform: uppercase; display: flex; justify-content: space-between; gap: 8px; }
+.ctl label output { font: 600 .82rem var(--mono); letter-spacing: 0; color: var(--ink); text-transform: none; }
+.ctl input[type=range] { width: 100%; accent-color: var(--ink); }
+.ctl .hint { font-size: .74rem; color: var(--ink2); }
+.seg { display: inline-flex; }
+.seg button { font: 600 .78rem var(--mono); border: 1px solid var(--ink2); background: transparent; color: var(--ink); padding: 5px 10px; margin-left: -1px; cursor: pointer; }
+.seg button:first-child { margin-left: 0; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; z-index: 1; }
+.bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 10px 12px; border-top: 1px solid var(--rule); }
+.btn { font: 600 .74rem var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: transparent; border: 1px solid var(--ink2); padding: 8px 12px; cursor: pointer; }
+.btn.primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn:hover { border-color: var(--ink); }
+:is(.btn, .seg button, input):focus-visible { outline: 2px solid var(--water); outline-offset: 2px; }
+.clock { margin-left: auto; font: 600 .82rem var(--mono); color: var(--ink2); }
+table { width: 100%; border-collapse: collapse; font-size: .86rem; }
+th { font: 600 .66rem var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ink2); text-align: left; padding: 8px 10px 6px; border-bottom: 1px solid var(--rule); }
+td { padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: baseline; }
+td.n { font: 600 .86rem var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th.n { text-align: right; } td.n { text-align: right; }
+.chip { font: 600 .62rem var(--display); letter-spacing: .12em; text-transform: uppercase; padding: 2px 6px; border: 1px solid currentColor; white-space: nowrap; }
+.chip.ok { color: var(--ok); background: var(--ok-fill); } .chip.bad { color: var(--alert); background: var(--alert-fill); } .chip.mid { color: var(--ink2); }
+.tw { overflow-x: auto; }
+#chart { display: block; width: 100%; height: auto; }
+.verdict { padding: 10px 12px; font-size: .9rem; border-top: 1px solid var(--rule); }
+.verdict b { font-weight: 700; }
+details { border-top: 1px solid var(--rule); }
+summary { cursor: pointer; padding: 9px 12px; font-size: .72rem; font-weight: 600; letter-spacing: .18em; color: var(--ink2); text-transform: uppercase; }
+.how { padding: 0 12px 12px; display: grid; gap: 6px; font-size: .86rem; max-width: 72ch; }
+.how p { margin: 0; }
+.how code { font-family: var(--mono); font-size: .8rem; }
+/* drawing */
+.d-ink { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.d-thin { fill: none; stroke: var(--ink2); stroke-width: .8; }
+.d-wall { fill: none; stroke: var(--ink2); stroke-width: .8; stroke-dasharray: 4 3; }
+.d-body { fill: var(--struct-tint); stroke: var(--ink2); stroke-width: .8; }
+.d-cell { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; stroke-linejoin: round; }
+.d-water { fill: var(--water-soft); stroke: none; }
+.d-film { fill: var(--water-film); stroke: none; }
+.d-tube { fill: none; stroke: var(--ink2); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; opacity: .35; }
+.d-tube.on { stroke: var(--water); opacity: .9; }
+.d-stream { stroke: var(--water); stroke-width: 2.5; stroke-linecap: round; }
+.t-lab { font: 600 11px var(--display); fill: var(--ink2); letter-spacing: .12em; }
+.t-num { font: 600 11px var(--mono); fill: var(--ink); }
+.t-bad { font: 600 11px var(--mono); fill: var(--alert); }
+.t-note { font: 400 10.5px var(--display); fill: var(--ink2); }
+.c-grid { stroke: var(--rule); stroke-width: .7; }
+.c-axis { font: 500 10px var(--mono); fill: var(--ink2); }
+.c-line { fill: none; stroke-width: 1.8; }
+.c-target { stroke: var(--ink2); stroke-width: 1; stroke-dasharray: 5 4; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="wrap"><div class="frame">
+  <header class="sh">
+    <div class="num">SIM</div>
+    <div class="ttl">
+      <h1>FILL SIMULATION — ONE POUR INTO THE STACK OF FOUR</h1>
+      <p>THE SPLITTER ON SHEET 03 OF THE ICE TRAY BLUEPRINT · PLASTIC TRAYS AT THEIR MEASURED SIZES · VOLUMES IN ml</p>
+    </div>
+    <div class="lab">ICE TRAY BASE AND FREEZER RACK<br>REV A · 2026-10-11 · PROPOSED</div>
+  </header>
+
+  <main>
+    <section class="panel" aria-label="The stack, filling">
+      <div class="ph"><span>THE STACK, FROM THE BACK · TRAYS DRAWN AS TWO ROWS OF SIX CELLS</span><span id="headline">0 / 0 ml</span></div>
+      <svg id="stack" viewBox="0 0 620 700" role="img" aria-label="The trough, its four tubes and the four trays, filling with water"></svg>
+    </section>
+
+    <div class="right">
+      <section class="panel" aria-label="Controls">
+        <div class="ph"><span>THE POUR</span><span>change anything, then pour again</span></div>
+        <div class="controls">
+          <div class="ctl"><label for="trays">Trays in use <output id="trays-o"></output></label>
+            <div class="seg" id="trays" role="group" aria-label="Trays in use"><button type="button" data-n="1">1</button><button type="button" data-n="2">2</button><button type="button" data-n="3">3</button><button type="button" data-n="4">4</button></div>
+            <div class="hint">Holes of empty bays are plugged.</div></div>
+          <div class="ctl"><label for="vol">Water poured <output id="vol-o"></output></label><input type="range" id="vol" min="200" max="1800" step="25"><div class="hint">300 a tray keeps the cubes apart.</div></div>
+          <div class="ctl"><label for="rate">Pour speed <output id="rate-o"></output></label><input type="range" id="rate" min="5" max="120" step="1"><div class="hint">A 1.5 L bottle tipped right over runs at about 60 to 100.</div></div>
+          <div class="ctl"><label for="tx">Freezer tilt, along the trays <output id="tx-o"></output></label><input type="range" id="tx" min="-3" max="3" step="0.1"><div class="hint">Positive: the back end lower. The spouts drop in at the back.</div></div>
+          <div class="ctl"><label for="ty">Freezer tilt, across <output id="ty-o"></output></label><input type="range" id="ty" min="-3" max="3" step="0.1"><div class="hint">Positive: the right side lower.</div></div>
+          <div class="ctl"><label for="spread">Hole size spread <output id="spread-o"></output></label><input type="range" id="spread" min="0" max="0.3" step="0.01"><div class="hint" id="holes-o"></div></div>
+        </div>
+        <div class="bar">
+          <button class="btn primary" type="button" id="go">Pour</button>
+          <button class="btn" type="button" id="reroll">Print a new set of holes</button>
+          <div class="seg" id="speed" role="group" aria-label="Playback speed"><button type="button" data-s="1">1×</button><button type="button" data-s="4">4×</button><button type="button" data-s="16">16×</button><button type="button" data-s="0">Result</button></div>
+          <span class="clock" id="clock">0.0 s</span>
+        </div>
+      </section>
+
+      <section class="panel" aria-label="What each tray got">
+        <div class="ph"><span>WHAT EACH TRAY GOT</span><span id="done">ready</span></div>
+        <div class="tw"><table>
+          <thead><tr><th>Bay</th><th class="n">Water</th><th class="n">Off 300</th><th class="n">Highest cell vs walls</th><th>Cubes</th></tr></thead>
+          <tbody id="rows"></tbody>
+        </table></div>
+        <div class="verdict" id="verdict"></div>
+      </section>
+
+      <section class="panel" aria-label="The pour over time">
+        <div class="ph"><span>OVER TIME · WATER IN EACH TRAY, AND STANDING IN THE TROUGH</span><span>ml</span></div>
+        <svg id="chart" viewBox="0 0 560 230" role="img" aria-label="Water in each tray and in the trough over time"></svg>
+        <details>
+          <summary>How it is worked out</summary>
+          <div class="how">
+            <p><b>Trough.</b> 120 × 114 outside, floor sloping 4 down to a 36 mm sump, rim 32.4 over the holes; it holds about 390 ml. Four 6 mm holes 18 apart in the sump. Each passes <code>0.62 × area × √(2 g h)</code>, where h is the water over that hole: the tilt lowers some holes and raises others.</p>
+            <p><b>Tubes.</b> 8 mm inside, wider than the 6 mm holes, so they never run full and do not change the split. Each delivers into one end cell of its tray.</p>
+            <p><b>Trays.</b> Each tray is twelve cells. 300 ml brings every cell to 1 under the walls between cells (X); 400 to the brim (AO). Water crosses a wall between cells through the gaps at the ends of its ridge (AB, 2 × 3.45 wide) once it is over the wall top, and over the whole ridge 2 higher (W); the middle wall has no ridge. Each crossing is a weir: <code>0.41 × width × √(2 g) × H^1.5</code>.</p>
+            <p><b>Tilt</b> moves every cell floor, wall top and hole by its distance from the centre. A cell more than 0.5 over a wall at the end is counted as joined to its neighbour: that film freezes into a bridge.</p><p><b>One inlet per tray.</b> Water fills the cell it lands in up to the wall top before it crosses, so the cells nearest the spout end at the wall top and the far end cells get what is left. Pouring 300 ml into one cell gives cubes that snap apart, with the far end cubes a little smaller.</p><p><b>Resting state.</b> After the trough runs dry, the last slow creep over the walls is sped up so the table shows where the water comes to rest; where it ends up does not depend on how fast it gets there.</p>
+            <p><b>Not modelled:</b> the tube's travel time, splashing, water clinging to the trough and tubes (a few ml each), and the cells' taper (each cell has one area below the walls and one above).</p>
+          </div>
+        </details>
+      </section>
+    </div>
+  </main>
+</div></div>
+
+<script>
+(() => {
+// ---------- the parts, as on the blueprint (mm) ----------
+const G = 9810;                                   // mm/s²
+const CD = 0.62, CW = (2 / 3) * CD * Math.sqrt(2 * G);   // orifice; weir
+const TR = { inL: 116.8, inW: 110.8, sump: 36, slope: 4, rim: 32.4, hole: 6, pitch: 18 };
+const CELL = { n: 6, along: 28, across: 39.5, pitchX: 28 + 5.8, pitchY: 39.5 + 10, wall: 24.5, ridge: 2, gap: 3.45, lip: 33.5 };
+CELL.Alo = 300000 / 12 / (CELL.wall - 1);          // 300 ml: every cell 1 under the walls
+CELL.Ahi = (400000 - 12 * CELL.Alo * CELL.wall) / 12 / (CELL.lip - CELL.wall);   // 400 ml: to the brim
+const HOLEPOS = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([a, b]) => [a * TR.pitch / 2, b * TR.pitch / 2]);
+const INLET = [[5, 0], [5, 1], [5, 0], [5, 1]];   // each bay's spout drops into a back cell, alternating sides
+
+// trough: volume ↔ head over the holes
+const a1 = (TR.inL - TR.sump) / TR.slope, b1 = (TR.inW - TR.sump) / TR.slope;
+const Vslope = h => TR.sump * TR.sump * h + TR.sump * (a1 + b1) * h * h / 2 + a1 * b1 * h * h * h / 3;
+const V4 = Vslope(TR.slope), Afull = TR.inL * TR.inW;
+const troughV = h => h <= TR.slope ? Vslope(h) : V4 + Afull * (h - TR.slope);
+const troughH = v => { if (v <= 0) return 0; if (v >= V4) return TR.slope + (v - V4) / Afull; let lo = 0, hi = TR.slope; for (let k = 0; k < 40; k++) { const m = (lo + hi) / 2; Vslope(m) < v ? lo = m : hi = m; } return (lo + hi) / 2; };
+const TROUGH_CAP = troughV(TR.rim);
+
+// ---------- controls ----------
+const $ = id => document.getElementById(id);
+const S = { trays: 4, vol: 1200, rate: 40, tx: -0.3, ty: 0, spread: 0.1, speed: 4 };
+let seed = 7, dev = [0, 0, 0, 0];
+const rnd = () => { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+const reroll = () => { dev = [0, 1, 2, 3].map(() => { let s = 0; for (let k = 0; k < 6; k++) s += rnd(); return (s - 3) / 1.7; }); };   // about −1 to 1
+reroll();
+const holeD = i => TR.hole + dev[i] * S.spread;
+const fmt = (n, d = 0) => (Math.round(n * 10 ** d) / 10 ** d).toFixed(d);
+function syncControls() {
+  $("vol").value = S.vol; $("rate").value = S.rate; $("tx").value = S.tx; $("ty").value = S.ty; $("spread").value = S.spread;
+  $("trays-o").textContent = S.trays; $("vol-o").textContent = S.vol + " ml"; $("rate-o").textContent = S.rate + " ml/s";
+  $("tx-o").textContent = (+S.tx).toFixed(1) + "°"; $("ty-o").textContent = (+S.ty).toFixed(1) + "°"; $("spread-o").textContent = "± " + (+S.spread).toFixed(2) + " mm";
+  $("holes-o").textContent = "Holes as printed: " + [0, 1, 2, 3].slice(0, S.trays).map(i => holeD(i).toFixed(2)).join(" · ") + " mm";
+  document.querySelectorAll("#trays button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.n === S.trays)));
+  document.querySelectorAll("#speed button").forEach(b => b.setAttribute("aria-pressed", String(+b.dataset.s === S.speed)));
+}
+for (const [id, key] of [["vol", "vol"], ["rate", "rate"], ["tx", "tx"], ["ty", "ty"], ["spread", "spread"]]) $(id).addEventListener("input", e => { S[key] = +e.target.value; syncControls(); reset(); });
+$("trays").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; const n = +b.dataset.n; if (S.vol === S.trays * 300) S.vol = n * 300; S.trays = n; syncControls(); reset(); });
+$("speed").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; S.speed = +b.dataset.s; syncControls(); if (S.speed === 0 && sim && !sim.done) finish(); });
+$("reroll").addEventListener("click", () => { reroll(); syncControls(); reset(); });
+
+// ---------- the model ----------
+let sim = null;
+function newSim() {
+  const tanx = Math.tan(S.tx * Math.PI / 180), tany = Math.tan(S.ty * Math.PI / 180);
+  const holeOff = HOLEPOS.map(([x, y]) => x * tanx + y * tany);   // a hole further back / to the right sits lower: more water over it
+  const trays = [];
+  for (let b = 0; b < 4; b++) {
+    const cells = [];
+    for (let j = 0; j < 2; j++) for (let i = 0; i < CELL.n; i++) {
+      const x = (i - 2.5) * CELL.pitchX, y = (j - .5) * CELL.pitchY;
+      cells.push({ i, j, zf: -(x * tanx + y * tany), v: 0 });
+    }
+    const links = [];
+    const id = (i, j) => j * CELL.n + i;
+    for (let j = 0; j < 2; j++) for (let i = 0; i < CELL.n - 1; i++) {   // walls between cells along a row: gaps at the wall top, ridge 2 higher
+      const x = (i - 2) * CELL.pitchX, y = (j - .5) * CELL.pitchY, zw = -(x * tanx + y * tany) + CELL.wall;
+      links.push({ a: id(i, j), b: id(i + 1, j), seg: [[zw, 2 * CELL.gap], [zw + CELL.ridge, CELL.across - 2 * CELL.gap]] });
+    }
+    for (let i = 0; i < CELL.n; i++) {                                    // the middle wall: no ridge
+      const x = (i - 2.5) * CELL.pitchX, zw = -(x * tanx) + CELL.wall;
+      links.push({ a: id(i, 0), b: id(i, 1), seg: [[zw, CELL.along]] });
+    }
+    trays.push({ cells, links, got: 0, spill: 0, inlet: id(...INLET[b]), on: b < S.trays, hist: [] });
+  }
+  return { t: 0, poured: 0, tv: 0, spillT: 0, holeOff, trays, hist: [], done: false, q: [0, 0, 0, 0] };
+}
+const level = c => { const v = c.v, lo = CELL.Alo * CELL.wall; return c.zf + (v <= lo ? v / CELL.Alo : CELL.wall + (v - lo) / CELL.Ahi); };
+const cellVol = (c, L) => { const d = Math.max(0, L - c.zf); return d <= CELL.wall ? d * CELL.Alo : CELL.wall * CELL.Alo + (d - CELL.wall) * CELL.Ahi; };
+function step(dt) {
+  const s = sim;
+  // pour
+  if (s.poured < S.vol * 1000) { const dv = Math.min(S.rate * 1000 * dt, S.vol * 1000 - s.poured); s.poured += dv; s.tv += dv; }
+  // trough: holes
+  const h = troughH(s.tv);
+  let out = 0;
+  for (let i = 0; i < 4; i++) {
+    const tr = s.trays[i];
+    const hi = tr.on ? h + s.holeOff[i] : 0;
+    const q = hi > 0 && s.tv > 0 ? CD * Math.PI * holeD(i) ** 2 / 4 * Math.sqrt(2 * G * hi) : 0;
+    s.q[i] = q; out += q * dt;
+  }
+  const scale = out > 0 && out > s.tv ? Math.max(0, s.tv) / out : 1;
+  for (let i = 0; i < 4; i++) { const dv = s.q[i] * dt * scale; s.trays[i].cells[s.trays[i].inlet].v += dv; s.trays[i].got += dv; s.q[i] *= scale; }
+  s.tv = Math.max(0, s.tv - out * scale);
+  if (s.tv > TROUGH_CAP) { s.spillT += s.tv - TROUGH_CAP; s.tv = TROUGH_CAP; }
+  // trays: weirs between cells, then the lip. Once the trough is dry only the last slow creep is left:
+  // it is sped up so the result shows where the water comes to rest (the resting state does not depend on the speed)
+  const boost = s.dry ? 25 : 1;
+  let moving = 0;
+  for (const tr of s.trays) {
+    if (!tr.on) continue;
+    const L = tr.cells.map(level);
+    for (const k of tr.links) {
+      const up = L[k.a] >= L[k.b] ? k.a : k.b, dn = up === k.a ? k.b : k.a;
+      let q = 0;
+      for (const [z, w] of k.seg) { const hu = L[up] - z; if (hu <= 0) continue; const hd = Math.max(0, L[dn] - z); q += CW * w * boost * (hu ** 1.5 - hd ** 1.5); }
+      let dv = q * dt;
+      const half = (tr.cells[up].v - cellVol(tr.cells[up], (L[up] + L[dn]) / 2));   // never overshoot the level between them
+      if (dv > Math.max(0, half)) dv = Math.max(0, half);
+      tr.cells[up].v -= dv; tr.cells[dn].v += dv; moving = Math.max(moving, dv / dt);
+    }
+    for (const c of tr.cells) { const over = c.zf + CELL.lip; const Lc = level(c); if (Lc > over) { const dv = c.v - cellVol(c, over); c.v -= dv; tr.spill += dv; } }
+  }
+  s.moving = moving;
+  s.t += dt;
+}
+function record() {
+  const s = sim;
+  s.hist.push([s.t, s.tv / 1000, ...s.trays.map(tr => (tr.got - tr.spill) / 1000)]);
+}
+function settled() {
+  const s = sim;
+  if (s.poured < S.vol * 1000 - 1 || s.tv > 50) return false;
+  if (!s.dry) s.dry = s.t;
+  return s.moving < 2 || s.t > s.dry + 120;   // under 2 mm³ a second still crossing anywhere: at rest
+  for (const tr of s.trays) { if (!tr.on) continue; const L = tr.cells.map(level); for (const k of tr.links) { if (Math.abs(L[k.a] - L[k.b]) > .05 && Math.max(L[k.a], L[k.b]) > Math.min(...k.seg.map(z => z[0])) + .02) return false; } }
+  return true;
+}
+const DT = 0.004;
+function advance(seconds) {
+  const n = Math.ceil(seconds / DT);
+  for (let k = 0; k < n && !sim.done; k++) {
+    step(DT);
+    if (k % 25 === 0) record();
+    if (sim.t > 2 && settled()) { sim.done = true; record(); }
+    if (sim.t > 600) sim.done = true;
+  }
+}
+function finish() { while (!sim.done) advance(5); draw(); }
+
+// ---------- drawing the stack ----------
+const svg = $("stack"), NS = "http://www.w3.org/2000/svg";
+const mk = (tag, a, p = svg) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const SC = 1.55;                       // px per mm in the stack drawing
+const TX0 = 70, TY0 = 26, TW = TR.inL * SC, TH = TR.rim * SC;     // trough, in section
+const BAYY = b => 200 + b * 120;       // top of each tray block
+const CX0 = 70, CWpx = 70, CHpx = 46;  // cells: x of the first, width, depth (px) for 33.5 mm
+const zpx = CHpx / CELL.lip;
+let refs = null;
+function buildStack() {
+  svg.replaceChildren();
+  refs = { cells: [], tubes: [], streams: [], labels: [] };
+  // trough section
+  const sumpL = TX0 + (TW - TR.sump * SC) / 2, sumpR = sumpL + TR.sump * SC, floorY = TY0 + TH;
+  mk("path", { d: `M${TX0} ${TY0} L${TX0} ${floorY - TR.slope * SC} L${sumpL} ${floorY} L${sumpR} ${floorY} L${TX0 + TW} ${floorY - TR.slope * SC} L${TX0 + TW} ${TY0}`, class: "d-ink" });
+  refs.tw = mk("path", { d: "", class: "d-water" });
+  mk("text", { x: TX0 + TW + 14, y: TY0 + 12, class: "t-lab" }).textContent = "TROUGH";
+  refs.tlab = mk("text", { x: TX0 + TW + 14, y: TY0 + 30, class: "t-num" });
+  refs.tspill = mk("text", { x: TX0 + TW + 14, y: TY0 + 48, class: "t-bad" });
+  // holes and tubes
+  const holeX = [sumpL + 6, sumpL + 14, sumpR - 14, sumpR - 6];
+  for (let b = 0; b < 4; b++) {
+    const y = BAYY(b) - 10, xIn = CX0 + 5 * CWpx + CWpx / 2 + (b % 2 ? 8 : -8);
+    const route = `M${holeX[b]} ${floorY} L${holeX[b]} ${floorY + 18 + 6 * b} L${560 - 16 * b} ${floorY + 28 + 6 * b} L${560 - 16 * b} ${y - 8} L${xIn} ${y - 8} L${xIn} ${y}`;
+    refs.tubes.push(mk("path", { d: route, class: "d-tube" }));
+    refs.streams.push(mk("line", { x1: xIn, y1: y, x2: xIn, y2: y, class: "d-stream" }));
+  }
+  // trays: two rows of six cells, far row above the near row
+  for (let b = 0; b < 4; b++) {
+    const y0 = BAYY(b);
+    mk("text", { x: 14, y: y0 + 22, class: "t-lab" }).textContent = "BAY " + (b + 1);
+    refs.labels.push(mk("text", { x: 14, y: y0 + 40, class: "t-num" }));
+    const rows = [];
+    for (let j = 0; j < 2; j++) {
+      const top = y0 + j * (CHpx + 8);
+      const r = [];
+      for (let i = 0; i < CELL.n; i++) {
+        const x = CX0 + i * CWpx;
+        const g = mk("g", {});
+        const cup = `M${x + 3} ${top} L${x + CWpx - 3} ${top} L${x + CWpx - 9} ${top + CHpx} L${x + 9} ${top + CHpx} Z`;
+        mk("path", { d: cup, class: "d-cell" }, g);
+        const clipId = `c${b}${j}${i}`;
+        const cp = mk("clipPath", { id: clipId }, g); mk("path", { d: cup }, cp);
+        const w = mk("rect", { x: x, y: top + CHpx, width: CWpx, height: 0, class: "d-water", "clip-path": `url(#${clipId})` }, g);
+        mk("line", { x1: x + 1, x2: x + CWpx - 1, y1: top + CHpx - CELL.wall * zpx, y2: top + CHpx - CELL.wall * zpx, class: "d-wall" }, g);
+        r.push({ w, top });
+      }
+      rows.push(r);
+    }
+    refs.cells.push(rows);
+  }
+  mk("text", { x: CX0, y: BAYY(3) + 2 * CHpx + 30, class: "t-note" }).textContent = "Each tray: far row above, near row below. Dashed: the top of the walls between cells. Darker blue: water over a wall.";
+}
+function draw() {
+  const s = sim;
+  // trough water
+  const h = troughH(s.tv), floorY = TY0 + TH;
+  if (h > 0) {
+    const yW = floorY - Math.min(h, TR.rim) * SC;
+    const halfAt = hh => hh <= TR.slope ? (TR.sump + (TR.inL - TR.sump) * hh / TR.slope) / 2 : TR.inL / 2;
+    const cx = TX0 + TW / 2, hw = halfAt(Math.min(h, TR.rim)) * SC;
+    refs.tw.setAttribute("d", h <= TR.slope ? `M${cx - TR.sump * SC / 2} ${floorY} L${cx + TR.sump * SC / 2} ${floorY} L${cx + hw} ${yW} L${cx - hw} ${yW} Z`
+      : `M${cx - TR.sump * SC / 2} ${floorY} L${cx + TR.sump * SC / 2} ${floorY} L${TX0 + TW} ${floorY - TR.slope * SC} L${TX0 + TW} ${yW} L${TX0} ${yW} L${TX0} ${floorY - TR.slope * SC} Z`);
+  } else refs.tw.setAttribute("d", "");
+  refs.tlab.textContent = `${fmt(s.tv / 1000)} ml standing · ${fmt(h, 1)} over the holes`;
+  refs.tspill.textContent = s.spillT > 500 ? `${fmt(s.spillT / 1000)} ml over the rim` : "";
+  for (let b = 0; b < 4; b++) {
+    const tr = s.trays[b], on = tr.on;
+    refs.tubes[b].classList.toggle("on", on && s.q[b] > 50);
+    const st = refs.streams[b]; const y1 = +st.getAttribute("y1");
+    st.setAttribute("y2", on && s.q[b] > 50 ? y1 + 22 : y1);
+    for (let j = 0; j < 2; j++) for (let i = 0; i < CELL.n; i++) {
+      const c = tr.cells[j * CELL.n + i], ref = refs.cells[b][j][i];
+      const d = Math.max(0, Math.min(CELL.lip, level(c) - c.zf));
+      const hpx = d * zpx;
+      ref.w.setAttribute("y", ref.top + CHpx - hpx); ref.w.setAttribute("height", hpx);
+      ref.w.setAttribute("class", d > CELL.wall + .5 ? "d-film" : "d-water");
+      ref.w.parentNode.style.opacity = on ? 1 : .35;
+    }
+    refs.labels[b].textContent = on ? fmt((tr.got - tr.spill) / 1000) + " ml" : "plugged";
+  }
+  $("headline").textContent = `${fmt(s.poured / 1000)} / ${S.vol} ml poured`;
+  $("clock").textContent = fmt(s.t, 1) + " s";
+  results();
+  chart();
+}
+// ---------- results ----------
+function results() {
+  const s = sim, rows = [];
+  const got = [];
+  for (let b = 0; b < 4; b++) {
+    const tr = s.trays[b];
+    if (!tr.on) { rows.push(`<tr><td>${b + 1}</td><td class="n">—</td><td class="n">—</td><td class="n">—</td><td><span class="chip mid">Plugged</span></td></tr>`); continue; }
+    const v = (tr.got - tr.spill) / 1000; got.push(v);
+    const over = Math.max(...tr.cells.map(c => level(c) - (c.zf + CELL.wall)));
+    const joined = tr.cells.filter(c => level(c) - (c.zf + CELL.wall) > .5).length;
+    const target = S.vol / S.trays;
+    let chip = "";
+    if (!s.done) chip = `<span class="chip mid">Filling</span>`;
+    else if (tr.spill > 2000) chip = `<span class="chip bad">Spilled ${fmt(tr.spill / 1000)} ml</span>`;
+    else if (joined) chip = `<span class="chip bad">${joined === 12 ? "All joined" : joined + " cells joined"}</span>`;
+    else if (over < -3) chip = `<span class="chip mid">Small cubes</span>`;
+    else chip = `<span class="chip ok">Snap apart</span>`;
+    rows.push(`<tr><td>${b + 1}</td><td class="n">${fmt(v)} ml</td><td class="n">${v - 300 >= 0 ? "+" : "−"}${fmt(Math.abs(v - 300))}</td><td class="n">${over >= 0 ? "+" : "−"}${fmt(Math.abs(over), 1)} mm</td><td>${chip}</td></tr>`);
+  }
+  $("rows").innerHTML = rows.join("");
+  $("done").textContent = s.done ? `trough empty after ${fmt(s.dry || s.t, 0)} s` : "running";
+  if (!s.done) { $("verdict").textContent = ""; return; }
+  const spread = got.length ? Math.max(...got) - Math.min(...got) : 0;
+  const bad = s.trays.filter(tr => tr.on && (tr.spill > 2000 || tr.cells.some(c => level(c) - (c.zf + CELL.wall) > .5))).length;
+  const parts = [];
+  parts.push(`<b>${bad ? bad + (bad === 1 ? " tray has" : " trays have") + " joined cubes." : "Every tray's cubes come apart."}</b>`);
+  parts.push(`The trays differ by ${fmt(spread)} ml.`);
+  const joinedAny = bad > 0;
+  if (joinedAny && S.tx > 0.05) parts.push("The spouts drop in at the back, and with the back lower the water has to climb to the front cells: the back cells end up over their walls first. Raise the back a little, with a shim under the back of the stack.");
+  else if (joinedAny && Math.abs(S.ty) > 0.3) parts.push("Tipped sideways, one row fills over its walls before the other row is reached. Level the stack across.");
+  if (s.spillT > 500) parts.push(`The trough ran over by ${fmt(s.spillT / 1000)} ml: pour slower than ${fmt(4 * CD * Math.PI * TR.hole ** 2 / 4 * Math.sqrt(2 * G * TR.rim) / 1000 * S.trays / 4)} ml/s.`);
+  else parts.push(`The trough never filled above ${fmt(Math.max(...s.hist.map(r => r[1])))} ml of its ${fmt(TROUGH_CAP / 1000)}.`);
+  $("verdict").innerHTML = parts.join(" ");
+}
+// ---------- chart ----------
+const CH = $("chart");
+const COLS = ["var(--water)", "var(--ink)", "var(--ink2)", "var(--alert)"];
+function chart() {
+  const s = sim, W = 560, H = 230, l = 44, r = 14, t = 14, bt = 30;
+  CH.replaceChildren();
+  const mkc = (tag, a) => { const e = document.createElementNS(NS, tag); for (const k in a) e.setAttribute(k, a[k]); CH.appendChild(e); return e; };
+  const tmax = Math.max(20, Math.ceil((s.done ? s.t : Math.max(s.t, S.vol / S.rate * 1.4)) / 10) * 10);
+  const vmax = Math.max(400, Math.ceil(Math.max(...s.hist.map(r => Math.max(r[1], ...r.slice(2))), 0) / 100) * 100);
+  const X = v => l + (W - l - r) * v / tmax, Y = v => H - bt - (H - t - bt) * v / vmax;
+  for (let v = 0; v <= vmax; v += 100) { mkc("line", { x1: l, x2: W - r, y1: Y(v), y2: Y(v), class: "c-grid" }); mkc("text", { x: l - 6, y: Y(v) + 3, "text-anchor": "end", class: "c-axis" }).textContent = v; }
+  const tstep = tmax > 60 ? 20 : 10;
+  for (let v = 0; v <= tmax; v += tstep) mkc("text", { x: X(v), y: H - bt + 14, "text-anchor": "middle", class: "c-axis" }).textContent = v + " s";
+  mkc("line", { x1: l, x2: W - r, y1: Y(300), y2: Y(300), class: "c-target" });
+  mkc("text", { x: W - r, y: Y(300) - 4, "text-anchor": "end", class: "c-axis" }).textContent = "300: just under the walls";
+  const path = k => s.hist.map((r, n) => `${n ? "L" : "M"}${X(r[0]).toFixed(1)} ${Y(r[k]).toFixed(1)}`).join(" ");
+  if (s.hist.length > 1) {
+    const tp = mkc("path", { d: path(1), class: "c-line" }); tp.setAttribute("stroke", "var(--water)"); tp.setAttribute("stroke-dasharray", "3 3");
+    for (let b = 0; b < 4; b++) if (s.trays[b].on) { const p = mkc("path", { d: path(2 + b), class: "c-line" }); p.setAttribute("stroke", COLS[b]); }
+    const last = s.hist[s.hist.length - 1];
+    for (let b = 0; b < 4; b++) if (s.trays[b].on) { const lab = mkc("text", { x: Math.min(X(last[0]) + 4, W - 60), y: Y(last[2 + b]) + 3 - (b - 1.5) * 9, class: "c-axis" }); lab.textContent = "bay " + (b + 1); lab.setAttribute("fill", COLS[b]); }
+  }
+  mkc("text", { x: l + 4, y: t + 8, class: "c-axis" }).textContent = "dashed blue: standing in the trough";
+}
+// ---------- run ----------
+let raf = 0, last = 0;
+function reset() { cancelAnimationFrame(raf); sim = newSim(); record(); draw(); }
+function loop(ts) {
+  const dt = Math.min(.05, (ts - last) / 1000 || 0); last = ts;
+  advance(dt * S.speed);
+  draw();
+  if (!sim.done) raf = requestAnimationFrame(loop);
+}
+function go() {
+  cancelAnimationFrame(raf); sim = newSim(); record();
+  if (S.speed === 0 || matchMedia("(prefers-reduced-motion: reduce)").matches) { finish(); return; }
+  last = performance.now(); raf = requestAnimationFrame(loop);
+}
+$("go").addEventListener("click", go);
+syncControls(); buildStack();
+// opens with a finished example pour, so the first view shows a result
+sim = newSim(); record(); finish();
+window.__sim = { get: () => sim, S, finish, newSim: () => { sim = newSim(); record(); finish(); return sim; } };
+})();
+</script>

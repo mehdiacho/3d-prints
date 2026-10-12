@@ -1,0 +1,59 @@
+name: build
+
+# prints.json is what the portfolio fetches, so it has to match the files in the repo on
+# every push. This job regenerates it, commits it if it changed, and then asks jsDelivr to
+# drop its cached copy — jsDelivr holds a branch for hours, and a stale prints.json shows the
+# site yesterday's prints.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'prints/**'
+      - 'tools/build_web.py'
+      - '.github/workflows/build.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prints-json:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # build_web.py stamps each print with the last commit that touched its folder,
+          # so it needs the history, not just the tip.
+          fetch-depth: 0
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      # Only needed to decimate a GLB that came in over budget. If nothing is over, the
+      # install is wasted but cheap; if something is, failing for want of it is worse.
+      - run: pip install --quiet trimesh fast_simplification numpy
+
+      - name: Write prints.json
+        run: python tools/build_web.py --fix
+
+      - name: Commit it, if it changed
+        run: |
+          if git diff --quiet -- prints.json prints/; then
+            echo "prints.json already matches the repo"
+            exit 0
+          fi
+          git config user.name  "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add prints.json prints/
+          git commit -m "build: regenerate prints.json"
+          git push
+
+      - name: Ask jsDelivr to drop its cached copy
+        continue-on-error: true
+        run: |
+          curl -sS -m 30 "https://purge.jsdelivr.net/gh/mehdiacho/3d-prints@main/prints.json" || true

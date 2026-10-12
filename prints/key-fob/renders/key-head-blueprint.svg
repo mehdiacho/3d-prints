@@ -1,0 +1,513 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1840" height="1380" viewBox="0 0 1840 1380" font-family="Helvetica, Arial, sans-serif" xmlns:c2pa="http://c2pa.org/manifest"><metadata><c2pa:manifest>AAAWgmp1bWIAAAAeanVtZGMycGEAEQAQgAAAqgA4m3EDYzJwYQAAABZcanVtYgAAAEdqdW1kYzJtYQARABCAAACqADibcQN1cm46YzJwYTo2NDg2NTMxZS01OTlmLTQyYTItOWJiNS1mYmVmYjYwYzU1ZjIAAAADl2p1bWIAAAApanVtZGMyYXMAEQAQgAAAqgA4m3EDYzJwYS5hc3NlcnRpb25zAAAAALxqdW1iAAAARGp1bWRjYm9yABEAEIAAAKoAOJtxE2MycGEuaW5ncmVkaWVudC52MwAAAAAYYzJzaE1KicYCqI19OXCwWOYUO18AAABwY2JvcqNpZGM6Zm9ybWF0bWltYWdlL3N2Zyt4bWxqaW5zdGFuY2VJRHgseG1wOmlpZDphMTIxYzU5MC05YmEyLTRhMWUtOWFhOS1hNjBlNzU3NmZjZjBscmVsYXRpb25zaGlwaHBhcmVudE9mAAAB4mp1bWIAAABBanVtZGNib3IAEQAQgAAAqgA4m3ETYzJwYS5hY3Rpb25zLnYyAAAAABhjMnNonYzIFsOUXuijkfp6dLzEdwAAAZljYm9yomdhY3Rpb25zgqJmYWN0aW9ua2MycGEub3BlbmVkanBhcmFtZXRlcnOha2luZ3JlZGllbnRzgaJjdXJseC1zZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmluZ3JlZGllbnQudjNkaGFzaFggtuLAWpY4YCdC+5Z6nrEtwamJMMHzyE0m+A6Q4trTPwKkZmFjdGlvbngdY29tLmFudGhyb3BpYy5jbGF1ZGUucHJvdmlkZWRqcGFyYW1ldGVyc6F4H2NvbS5hbnRocm9waWMub3JpZ2luLWNvbmZpZGVuY2VndW5rbm93bmtkZXNjcmlwdGlvbnhmQ2xhdWRlIHByb3ZpZGVkIHRoaXMgZmlsZSBhdCB0aGUgcmVxdWVzdCBvZiBhIHVzZXIgYW5kIG1heSBoYXZlIGNyZWF0ZWQgb3IgbW9kaWZpZWQgdGhlIGZpbGUgY29udGVudHMubXNvZnR3YXJlQWdlbnShZG5hbWVmQ2xhdWRlcmFsbEFjdGlvbnNJbmNsdWRlZPUAAADIanVtYgAAAEBqdW1kY2JvcgARABCAAACqADibcRNjMnBhLmhhc2guZGF0YQAAAAAYYzJzaA5rRe+m7MO3Tuf8IqcVE7EAAACAY2JvcqVjYWxnZnNoYTI1NmNwYWRNAAAAAAAAAAAAAAAAAGRoYXNoWCBNnCLMaY2luPfwai1G1BW8h8B/9+jNJFaj37xr7vFZemRuYW1lbmp1bWJmIG1hbmlmZXN0amV4Y2x1c2lvbnOBomVzdGFydBjFZmxlbmd0aBkeBAAAAj5qdW1iAAAAJ2p1bWRjMmNsABEAEIAAAKoAOJtxA2MycGEuY2xhaW0udjIAAAACD2Nib3KlY2FsZ2ZzaGEyNTZpc2lnbmF0dXJleE1zZWxmI2p1bWJmPS9jMnBhL3VybjpjMnBhOjY0ODY1MzFlLTU5OWYtNDJhMi05YmI1LWZiZWZiNjBjNTVmMi9jMnBhLnNpZ25hdHVyZWppbnN0YW5jZUlEeCx4bXA6aWlkOmU5Y2VkMjVmLTgyNWEtNDg5NC04ZjkwLWIwYTQ4MGY2ZGY2YXJjcmVhdGVkX2Fzc2VydGlvbnODomN1cmx4LXNlbGYjanVtYmY9YzJwYS5hc3NlcnRpb25zL2MycGEuaW5ncmVkaWVudC52M2RoYXNoWCC24sBaljhgJ0L7lnqesS3BqYkwwfPITSb4DpDi2tM/AqJjdXJseCpzZWxmI2p1bWJmPWMycGEuYXNzZXJ0aW9ucy9jMnBhLmFjdGlvbnMudjJkaGFzaFggJuUKT6ProL0WNiA4smPyblnFp/zAaXUFrlilSfNfMQWiY3VybHgpc2VsZiNqdW1iZj1jMnBhLmFzc2VydGlvbnMvYzJwYS5oYXNoLmRhdGFkaGFzaFgglKEyFtx+TDup0rc3oiJio41ATZW8aLbAvLLNtcT5TTN0Y2xhaW1fZ2VuZXJhdG9yX2luZm+jZG5hbWVvQW50aHJvcGljIEZpbGVzZ3ZlcnNpb25lMS4wLjBrc3BlY1ZlcnNpb25lMi40LjAAABA4anVtYgAAAChqdW1kYzJjcwARABCAAACqADibcQNjMnBhLnNpZ25hdHVyZQAAABAIY2JvctKEWQISogEmGCFZAgowggIGMIIBjaADAgECAhRA5aAK7sI50L64g/oGQgU9Z1UTADAKBggqhkjOPQQDAzBJMRcwFQYDVQQKEw5BbnRocm9waWMsIFBCQzEuMCwGA1UEAxMlQW50aHJvcGljIENvbnRlbnQgQ3JlZGVudGlhbHMgUm9vdCBDQTAeFw0yNjA4MDcxODQzNTZaFw0yODA4MDYxOTQzNTZaMEQxFzAVBgNVBAoTDkFudGhyb3BpYywgUEJDMSkwJwYDVQQDEyBBbnRocm9waWMgQ2xhdWRlIENvbnRlbnQgU2lnbmluZzBZMBMGByqGSM49AgEGCCqGSM49AwEHA0IABJh6CmvLUBgFFNU0vUKlOVtE6djd17L5SuwX0LemFisBM3dkd/3cyjxFA3Qo5S46fX0/ihY0VZ7mfb9KF703t5OjWDBWMA4GA1UdDwEB/wQEAwIHgDAVBgNVHSUEDjAMBgorBgEEAYPoXgIBMAwGA1UdEwEB/wQCMAAwHwYDVR0jBBgwFoAUzlHiBIFOZFsj+OPEz5o+nMHXXMIwCgYIKoZIzj0EAwMDZwAwZAIwMXMdFJ4BetLLVY7ORuE9noqbbAZOZn/aArXyTwFAZfKrPzxF2vPoJNf1+UCdg1XGAjBwX1zd9WGqYkqmL5SFqw1QySjr1zJfpJM9+1rdDwSPLMOPOjKuiXjoU/pUUeG9RwmhY3BhZFkNngAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPZYQO/bP/OBTHNyYfJgsefK0iLIsmvB7i+JMgDnGhkA80sV+uZsMpIpVyF2/OrD0UXbLfKSrsXCWsjUZOf0EOlRT4s=</c2pa:manifest></metadata>
+<defs><pattern id="g" width="14" height="14" patternUnits="userSpaceOnUse"><path d="M14 0H0V14" fill="none" stroke="#e3e9f4" stroke-width="0.6"/></pattern></defs>
+<rect width="1840" height="1380" fill="white"/><rect width="1840" height="1380" fill="url(#g)"/>
+<text x="30.0" y="40.0" font-size="22" font-weight="700" text-anchor="start" fill="#1b2a4a">Mazda flip key – blade head: points and edges (v3)</text>
+<text x="30" y="64" font-size="13.5" fill="#1b2a4a"><tspan fill="#c0392b" font-weight="700">● F1, B6, U7…</tspan> = points (corners and tips).   <tspan fill="#0f7c8c" font-weight="700">[f1] [u7]…</tspan> = edges.   Single capital letters (A–Z) = measurements, listed at the bottom.   Blade folded. Shapes approximate.</text>
+<text x="50.0" y="100.0" font-size="16" font-weight="700" text-anchor="start" fill="#1b2a4a">1  FRONT — logo face towards you</text>
+<text x="50.0" y="118.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">blade on the RIGHT · bottom edge points DOWN in the middle</text>
+<path d="M407.1,360.1 L407.1,676.1 L340.5,712.1 L317.1,667.1 L323.4,634.6 L317.1,602.1 L323.4,569.6 L317.1,537.1 L323.4,504.6 L317.1,472.1 L323.4,439.6 L317.1,407.1 L317.1,371.1 Z" fill="#c9ced8" stroke="#1b2a4a" stroke-width="1.5"/>
+<path d="M120.0,360.1 L122.2,224.7 L131.7,190.1 L141.1,180.4 L150.5,173.8 L159.9,168.8 L169.3,164.8 L178.8,161.5 L188.2,158.8 L197.6,156.6 L207.0,154.7 L216.4,153.2 L225.9,152.0 L235.3,151.1 L244.7,150.5 L254.1,150.1 L263.5,150.0 L273.0,150.1 L282.4,150.5 L291.8,151.1 L301.2,152.0 L310.6,153.2 L320.1,154.7 L329.5,156.6 L338.9,158.8 L348.3,161.5 L357.8,164.8 L367.2,168.8 L376.6,173.8 L386.0,180.4 L395.4,190.1 L404.8,224.7 L407.1,360.1 L263.5,377.7 Z" fill="#eef3fb" stroke="#1b2a4a" stroke-width="2"/>
+<path d="M183.0,357.0 L183.0,385.8 L300.0,385.8 L300.0,362.4 Z" fill="#5b6270" stroke="#1b2a4a" stroke-width="1.3"/>
+<path d="M205.5,385.8 L205.5,517.2 L285.1,517.2 L285.1,504.6 L268.9,501.0 L268.9,385.8 Z" fill="#3a404b" stroke="#1b2a4a" stroke-width="1.3"/>
+<rect x="219.9" y="405.6" width="34.6" height="17.1" fill="#eef3fb"/>
+<rect x="219.9" y="435.3" width="34.6" height="17.1" fill="#eef3fb"/>
+<rect x="219.9" y="465.0" width="34.6" height="17.1" fill="#eef3fb"/>
+<text x="263.5" y="276.0" font-size="14" font-weight="400" text-anchor="middle" fill="#1b2a4a">LOGO FACE</text>
+<rect x="86.0" y="285.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="98.0" y="298.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f1</text>
+<rect x="172.0" y="141.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="184.0" y="154.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f2</text>
+<rect x="370.2" y="285.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="382.2" y="298.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f3</text>
+<rect x="355.5" y="339.9" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="367.5" y="352.9" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f4</text>
+<rect x="135.0" y="336.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="147.0" y="349.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f5</text>
+<rect x="149.0" y="370.5" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="161.0" y="383.5" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f6</text>
+<rect x="225.0" y="376.8" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="237.0" y="389.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f7</text>
+<rect x="302.0" y="370.5" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="314.0" y="383.5" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f8</text>
+<rect x="171.5" y="447.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="183.5" y="460.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f9</text>
+<rect x="225.8" y="522.2" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="241.5" y="535.2" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f10</text>
+<rect x="295.3" y="515.9" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="311.1" y="528.9" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f11</text>
+<rect x="264.9" y="477.8" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="280.6" y="490.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f12</text>
+<rect x="271.1" y="438.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="286.9" y="451.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f13</text>
+<rect x="279.4" y="591.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="295.1" y="604.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f14</text>
+<rect x="365.8" y="702.7" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="381.5" y="715.7" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f15</text>
+<rect x="413.3" y="546.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="429.1" y="559.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">f16</text>
+<circle cx="120.0" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="110.0" y="366.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F1</text>
+<text x="110.0" y="366.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F1</text>
+<circle cx="122.2" cy="224.7" r="3.6" fill="#c0392b"/>
+<text x="112.2" y="228.7" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F2</text>
+<text x="112.2" y="228.7" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F2</text>
+<circle cx="263.5" cy="150.0" r="3.6" fill="#c0392b"/>
+<text x="271.5" y="144.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F3</text>
+<text x="271.5" y="144.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F3</text>
+<circle cx="404.8" cy="224.7" r="3.6" fill="#c0392b"/>
+<text x="414.8" y="228.7" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F4</text>
+<text x="414.8" y="228.7" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F4</text>
+<circle cx="407.1" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="417.1" y="360.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F5</text>
+<text x="417.1" y="360.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F5</text>
+<line x1="263.5" y1="377.7" x2="272.5" y2="345.3" stroke="#c0392b" stroke-width="1"/>
+<circle cx="263.5" cy="377.7" r="3.6" fill="#c0392b"/>
+<text x="273.5" y="345.7" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F6</text>
+<text x="273.5" y="345.7" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F6</text>
+<line x1="183.0" y1="367.8" x2="179.4" y2="331.8" stroke="#c0392b" stroke-width="1"/>
+<circle cx="183.0" cy="367.8" r="3.6" fill="#c0392b"/>
+<text x="179.0" y="331.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F7</text>
+<text x="179.0" y="331.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F7</text>
+<line x1="183.0" y1="385.8" x2="148.8" y2="398.4" stroke="#c0392b" stroke-width="1"/>
+<circle cx="183.0" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="145.0" y="403.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F8</text>
+<text x="145.0" y="403.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F8</text>
+<line x1="300.0" y1="385.8" x2="332.4" y2="400.2" stroke="#c0392b" stroke-width="1"/>
+<circle cx="300.0" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="336.0" y="405.8" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F9</text>
+<text x="336.0" y="405.8" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F9</text>
+<line x1="300.0" y1="373.2" x2="305.4" y2="348.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="300.0" cy="373.2" r="3.6" fill="#c0392b"/>
+<text x="306.0" y="349.2" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F10</text>
+<text x="306.0" y="349.2" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F10</text>
+<line x1="205.5" y1="385.8" x2="182.1" y2="418.2" stroke="#c0392b" stroke-width="1"/>
+<circle cx="205.5" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="179.5" y="425.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F11</text>
+<text x="179.5" y="425.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F11</text>
+<circle cx="205.5" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="195.5" y="527.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F12</text>
+<text x="195.5" y="527.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F12</text>
+<line x1="285.1" y1="517.2" x2="281.5" y2="537.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="285.1" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="281.1" y="543.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F13</text>
+<text x="281.1" y="543.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F13</text>
+<line x1="285.1" y1="504.6" x2="308.5" y2="492.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="285.1" cy="504.6" r="3.6" fill="#c0392b"/>
+<text x="311.1" y="494.6" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F14</text>
+<text x="311.1" y="494.6" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F14</text>
+<line x1="268.9" y1="501.0" x2="295.9" y2="474.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="268.9" cy="501.0" r="3.6" fill="#c0392b"/>
+<text x="298.9" y="475.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F15</text>
+<text x="298.9" y="475.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F15</text>
+<line x1="268.9" y1="385.8" x2="292.3" y2="412.8" stroke="#c0392b" stroke-width="1"/>
+<circle cx="268.9" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="294.9" y="419.8" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F16</text>
+<text x="294.9" y="419.8" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F16</text>
+<line x1="317.1" y1="371.1" x2="349.5" y2="365.7" stroke="#c0392b" stroke-width="1"/>
+<circle cx="317.1" cy="371.1" r="3.6" fill="#c0392b"/>
+<text x="353.1" y="369.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F17</text>
+<text x="353.1" y="369.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F17</text>
+<circle cx="340.5" cy="712.1" r="3.6" fill="#c0392b"/>
+<text x="330.5" y="726.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">F18</text>
+<text x="330.5" y="726.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >F18</text>
+<circle cx="407.1" cy="676.1" r="3.6" fill="#c0392b"/>
+<text x="417.1" y="684.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">F19</text>
+<text x="417.1" y="684.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >F19</text>
+<text x="570.0" y="100.0" font-size="16" font-weight="700" text-anchor="start" fill="#1b2a4a">2  BACK — rivet face towards you</text>
+<text x="570.0" y="118.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">blade on the LEFT · bottom edge points UP in the middle</text>
+<path d="M640.0,360.1 L640.0,676.1 L706.6,712.1 L730.0,667.1 L723.7,631.8 L730.0,596.5 L723.7,561.3 L730.0,526.0 L723.7,490.7 L730.0,455.4 L723.7,420.1 L730.0,384.8 L730.0,348.8 Z" fill="#c9ced8" stroke="#1b2a4a" stroke-width="1.5"/>
+<path d="M640.0,360.1 L642.2,224.7 L651.7,190.1 L661.1,180.4 L670.5,173.8 L679.9,168.8 L689.4,164.8 L698.8,161.5 L708.2,158.8 L717.6,156.6 L727.0,154.7 L736.5,153.2 L745.9,152.0 L755.3,151.1 L764.7,150.5 L774.1,150.1 L783.5,150.0 L793.0,150.1 L802.4,150.5 L811.8,151.1 L821.2,152.0 L830.6,153.2 L840.1,154.7 L849.5,156.6 L858.9,158.8 L868.3,161.5 L877.8,164.8 L887.2,168.8 L896.6,173.8 L906.0,180.4 L915.4,190.1 L924.8,224.7 L927.1,360.1 L783.5,342.1 Z" fill="#eef3fb" stroke="#1b2a4a" stroke-width="2"/>
+<path d="M747.1,335.8 L747.1,385.8 L864.1,385.8 L864.1,341.4 Z" fill="#5b6270" stroke="#1b2a4a" stroke-width="1.3"/>
+<path d="M841.6,385.8 L841.6,517.2 L762.0,517.2 L762.0,504.6 L778.2,501.0 L778.2,385.8 Z" fill="#3a404b" stroke="#1b2a4a" stroke-width="1.3"/>
+<rect x="792.6" y="405.6" width="34.6" height="17.1" fill="#eef3fb"/>
+<rect x="792.6" y="435.3" width="34.6" height="17.1" fill="#eef3fb"/>
+<rect x="792.6" y="465.0" width="34.6" height="17.1" fill="#eef3fb"/>
+<circle cx="718.3" cy="217.5" r="19.8" fill="#b9c0cc" stroke="#1b2a4a" stroke-width="1.5"/>
+<text x="802.0" y="285.0" font-size="14" font-weight="400" text-anchor="middle" fill="#1b2a4a">RIVET FACE</text>
+<rect x="652.0" y="285.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="664.0" y="298.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b1</text>
+<rect x="852.0" y="141.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="864.0" y="154.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b2</text>
+<rect x="938.2" y="285.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="950.2" y="298.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b3</text>
+<rect x="884.5" y="331.2" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="896.5" y="344.2" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b4</text>
+<rect x="673.0" y="361.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="685.0" y="374.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b5</text>
+<rect x="713.1" y="362.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="725.1" y="375.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b6</text>
+<rect x="793.6" y="376.8" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="805.6" y="389.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b7</text>
+<rect x="874.1" y="366.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="886.1" y="379.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b8</text>
+<rect x="851.6" y="447.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="863.6" y="460.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b9</text>
+<rect x="789.9" y="522.2" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="805.6" y="535.2" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b10</text>
+<rect x="716.3" y="505.9" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="732.0" y="518.9" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b11</text>
+<rect x="766.8" y="477.8" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="782.5" y="490.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b12</text>
+<rect x="762.5" y="415.5" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="778.2" y="428.5" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b13</text>
+<rect x="734.2" y="546.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="750.0" y="559.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b14</text>
+<rect x="649.9" y="702.7" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="665.6" y="715.7" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b15</text>
+<rect x="602.2" y="546.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="618.0" y="559.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">b16</text>
+<circle cx="640.0" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="630.0" y="360.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B1</text>
+<text x="630.0" y="360.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B1</text>
+<circle cx="642.2" cy="224.7" r="3.6" fill="#c0392b"/>
+<text x="632.2" y="228.7" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B2</text>
+<text x="632.2" y="228.7" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B2</text>
+<circle cx="783.5" cy="150.0" r="3.6" fill="#c0392b"/>
+<text x="791.5" y="144.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B3</text>
+<text x="791.5" y="144.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B3</text>
+<circle cx="924.8" cy="224.7" r="3.6" fill="#c0392b"/>
+<text x="934.8" y="228.7" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B4</text>
+<text x="934.8" y="228.7" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B4</text>
+<circle cx="927.1" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="937.1" y="366.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B5</text>
+<text x="937.1" y="366.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B5</text>
+<circle cx="783.5" cy="342.1" r="3.6" fill="#c0392b"/>
+<text x="787.5" y="334.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B6</text>
+<text x="787.5" y="334.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B6</text>
+<line x1="718.3" y1="217.5" x2="739.9" y2="221.1" stroke="#c0392b" stroke-width="1"/>
+<circle cx="718.3" cy="217.5" r="3.6" fill="#c0392b"/>
+<text x="742.3" y="225.5" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B7</text>
+<text x="742.3" y="225.5" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B7</text>
+<line x1="747.1" y1="346.6" x2="752.5" y2="319.6" stroke="#c0392b" stroke-width="1"/>
+<circle cx="747.1" cy="346.6" r="3.6" fill="#c0392b"/>
+<text x="753.1" y="320.6" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B8</text>
+<text x="753.1" y="320.6" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B8</text>
+<line x1="747.1" y1="385.8" x2="720.1" y2="414.6" stroke="#c0392b" stroke-width="1"/>
+<circle cx="747.1" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="717.1" y="421.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B9</text>
+<text x="717.1" y="421.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B9</text>
+<line x1="864.1" y1="385.8" x2="891.1" y2="394.8" stroke="#c0392b" stroke-width="1"/>
+<circle cx="864.1" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="894.1" y="399.8" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B10</text>
+<text x="894.1" y="399.8" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B10</text>
+<circle cx="864.1" cy="352.2" r="3.6" fill="#c0392b"/>
+<text x="856.1" y="340.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B11</text>
+<text x="856.1" y="340.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B11</text>
+<line x1="841.6" y1="385.8" x2="848.8" y2="418.2" stroke="#c0392b" stroke-width="1"/>
+<circle cx="841.6" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="849.6" y="425.8" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B12</text>
+<text x="849.6" y="425.8" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B12</text>
+<circle cx="841.6" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="849.6" y="527.2" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B13</text>
+<text x="849.6" y="527.2" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B13</text>
+<line x1="762.0" y1="517.2" x2="735.0" y2="533.4" stroke="#c0392b" stroke-width="1"/>
+<circle cx="762.0" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="732.0" y="539.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B14</text>
+<text x="732.0" y="539.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B14</text>
+<line x1="762.0" y1="504.6" x2="738.6" y2="492.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="762.0" cy="504.6" r="3.6" fill="#c0392b"/>
+<text x="736.0" y="494.6" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B15</text>
+<text x="736.0" y="494.6" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B15</text>
+<line x1="778.2" y1="501.0" x2="747.6" y2="479.4" stroke="#c0392b" stroke-width="1"/>
+<circle cx="778.2" cy="501.0" r="3.6" fill="#c0392b"/>
+<text x="744.2" y="481.0" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B16</text>
+<text x="744.2" y="481.0" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B16</text>
+<line x1="778.2" y1="385.8" x2="754.8" y2="423.6" stroke="#c0392b" stroke-width="1"/>
+<circle cx="778.2" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="752.2" y="431.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B17</text>
+<text x="752.2" y="431.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B17</text>
+<line x1="730.0" y1="348.8" x2="706.6" y2="327.2" stroke="#c0392b" stroke-width="1"/>
+<circle cx="730.0" cy="348.8" r="3.6" fill="#c0392b"/>
+<text x="704.0" y="328.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B18</text>
+<text x="704.0" y="328.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B18</text>
+<circle cx="706.6" cy="712.1" r="3.6" fill="#c0392b"/>
+<text x="716.6" y="726.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">B19</text>
+<text x="716.6" y="726.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >B19</text>
+<circle cx="640.0" cy="676.1" r="3.6" fill="#c0392b"/>
+<text x="630.0" y="684.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">B20</text>
+<text x="630.0" y="684.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >B20</text>
+<text x="1110.0" y="100.0" font-size="16" font-weight="700" text-anchor="start" fill="#1b2a4a">3  SIDE — looking at the blade side</text>
+<text x="1110.0" y="118.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">logo face on the LEFT · rivet face on the RIGHT</text>
+<path d="M1181.7,360.1 L1181.7,385.8 L1265.4,385.8 L1265.4,360.1 Z" fill="#5b6270" stroke="#1b2a4a" stroke-width="1.2"/>
+<path d="M1191.2,385.8 L1191.2,517.2 L1240.7,517.2 L1240.7,385.8 Z" fill="#3a404b" stroke="#1b2a4a" stroke-width="1.2"/>
+<path d="M1170.0,360.1 L1167.3,258.0 L1170.0,177.0 L1181.8,160.7 L1193.7,157.2 L1205.5,154.2 L1217.4,151.9 L1229.2,150.5 L1241.1,150.0 L1253.0,150.5 L1264.8,151.9 L1276.7,154.2 L1288.5,157.2 L1300.3,160.7 L1312.2,177.0 L1314.9,258.0 L1312.2,360.1 Z" fill="#eef3fb" stroke="#1b2a4a" stroke-width="2"/>
+<path d="M1170.0,377.7 L1312.2,342.1" fill="none" stroke="#1b2a4a" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M1212.0,360.1 L1212.0,199.5 L1244.4,199.5 L1244.4,360.1" fill="white" stroke="#1b2a4a" stroke-width="1.3"/>
+<path d="M1216.5,204.0 L1216.5,712.1 L1239.9,712.1 L1239.9,204.0 Z" fill="#c9ced8" stroke="#1b2a4a" stroke-width="1.3"/>
+<rect x="1134.2" y="276.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1146.2" y="289.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s1</text>
+<rect x="1230.0" y="127.9" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1242.0" y="140.9" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s2</text>
+<rect x="1324.0" y="276.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1336.0" y="289.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s3</text>
+<rect x="1180.5" y="351.1" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1192.5" y="364.1" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s4</text>
+<rect x="1297.0" y="347.6" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1309.0" y="360.6" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s5</text>
+<rect x="1180.0" y="267.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1192.0" y="280.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s6</text>
+<rect x="1216.5" y="176.5" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1228.5" y="189.5" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s7</text>
+<rect x="1252.4" y="240.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1264.4" y="253.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s8</text>
+<rect x="1211.5" y="378.8" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1223.5" y="391.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s9</text>
+<rect x="1180.2" y="465.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1195.9" y="478.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s10</text>
+<rect x="1212.8" y="719.1" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="1228.5" y="732.1" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">s11</text>
+<circle cx="1170.0" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="1158.0" y="356.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S1</text>
+<text x="1158.0" y="356.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S1</text>
+<circle cx="1170.0" cy="177.0" r="3.6" fill="#c0392b"/>
+<text x="1160.0" y="181.0" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S2</text>
+<text x="1160.0" y="181.0" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S2</text>
+<circle cx="1312.2" cy="177.0" r="3.6" fill="#c0392b"/>
+<text x="1322.2" y="181.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S3</text>
+<text x="1322.2" y="181.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S3</text>
+<circle cx="1312.2" cy="360.1" r="3.6" fill="#c0392b"/>
+<text x="1322.2" y="368.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S4</text>
+<text x="1322.2" y="368.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S4</text>
+<line x1="1170.0" y1="377.7" x2="1143.0" y2="383.1" stroke="#c0392b" stroke-width="1"/>
+<circle cx="1170.0" cy="377.7" r="3.6" fill="#c0392b"/>
+<text x="1140.0" y="387.7" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S5</text>
+<text x="1140.0" y="387.7" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S5</text>
+<circle cx="1312.2" cy="342.1" r="3.6" fill="#c0392b"/>
+<text x="1322.2" y="340.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S6</text>
+<text x="1322.2" y="340.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S6</text>
+<circle cx="1212.0" cy="199.5" r="3.6" fill="#c0392b"/>
+<text x="1202.0" y="197.5" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S7</text>
+<text x="1202.0" y="197.5" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S7</text>
+<circle cx="1244.4" cy="199.5" r="3.6" fill="#c0392b"/>
+<text x="1254.4" y="197.5" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S8</text>
+<text x="1254.4" y="197.5" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S8</text>
+<line x1="1181.7" y1="385.8" x2="1158.3" y2="411.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="1181.7" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="1155.7" y="417.8" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S9</text>
+<text x="1155.7" y="417.8" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S9</text>
+<circle cx="1265.4" cy="385.8" r="3.6" fill="#c0392b"/>
+<text x="1275.4" y="397.8" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S10</text>
+<text x="1275.4" y="397.8" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S10</text>
+<circle cx="1191.2" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="1181.2" y="529.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S11</text>
+<text x="1181.2" y="529.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S11</text>
+<circle cx="1240.7" cy="517.2" r="3.6" fill="#c0392b"/>
+<text x="1250.7" y="529.2" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S12</text>
+<text x="1250.7" y="529.2" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S12</text>
+<circle cx="1216.5" cy="712.1" r="3.6" fill="#c0392b"/>
+<text x="1206.5" y="724.1" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">S13</text>
+<text x="1206.5" y="724.1" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >S13</text>
+<circle cx="1239.9" cy="712.1" r="3.6" fill="#c0392b"/>
+<text x="1249.9" y="724.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">S14</text>
+<text x="1249.9" y="724.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >S14</text>
+<text x="1138.5" y="429.0" font-size="10.5" font-weight="400" text-anchor="end" fill="#1b2a4a">dashed s5 =</text>
+<text x="1138.5" y="442.0" font-size="10.5" font-weight="400" text-anchor="end" fill="#1b2a4a">bottom centre line</text>
+<text x="1138.5" y="455.0" font-size="10.5" font-weight="400" text-anchor="end" fill="#1b2a4a">(S5 low → S6 high)</text>
+<text x="1339.2" y="564.0" font-size="10.5" font-weight="400" text-anchor="start" fill="#1b2a4a">blade in gap,</text>
+<text x="1339.2" y="577.0" font-size="10.5" font-weight="400" text-anchor="start" fill="#1b2a4a">tab and base</text>
+<text x="1339.2" y="590.0" font-size="10.5" font-weight="400" text-anchor="start" fill="#1b2a4a">behind it</text>
+<text x="50.0" y="830.0" font-size="16" font-weight="700" text-anchor="start" fill="#1b2a4a">4  BOTTOM — held the way you hold it</text>
+<text x="50.0" y="848.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">bottom towards you · logo face DOWN · blade on the LEFT</text>
+<rect x="110.0" y="930.0" width="574.1999999999999" height="284.40000000000003" rx="34" fill="#eef3fb" stroke="#1b2a4a" stroke-width="2"/>
+<path d="M397.1,930.0 L397.1,1214.4" fill="none" stroke="#1b2a4a" stroke-width="1.2" stroke-dasharray="5 3"/>
+<path d="M106.4,1065.5 L317.0,1065.5 L317.0,1130.3 L106.4,1130.3" fill="white" stroke="#1b2a4a" stroke-width="1.3"/>
+<path d="M110.0,1074.5 L290.0,1074.5 L290.0,1121.3 L110.0,1121.3 Z" fill="#c9ced8" stroke="#1b2a4a" stroke-width="1.2"/>
+<path d="M344.0,1023.6 L560.0,1023.6 L560.0,1191.0 L344.0,1191.0 Z" fill="none" stroke="#1b2a4a" stroke-width="1.4" stroke-dasharray="6 3"/>
+<path d="M383.6,1073.1 L510.3,1073.1 L510.3,1172.1 L383.6,1172.1 Z" fill="#3a404b" stroke="#1b2a4a" stroke-width="1.2"/>
+<path d="M351.2,1095.6 L383.6,1095.6 L383.6,1149.6 L351.2,1149.6 Z" fill="#7d8592" stroke="#1b2a4a" stroke-width="1"/>
+<text x="397.1" y="906.2" font-size="11.5" font-weight="400" text-anchor="middle" fill="#1b2a4a">RIVET FACE</text>
+<text x="397.1" y="1244.2" font-size="11.5" font-weight="400" text-anchor="middle" fill="#1b2a4a">LOGO FACE</text>
+<rect x="242.0" y="921.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="254.0" y="934.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u1</text>
+<rect x="530.0" y="921.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="542.0" y="934.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u2</text>
+<rect x="672.2" y="993.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="684.2" y="1006.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u3</text>
+<rect x="611.0" y="1205.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="623.0" y="1218.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u4</text>
+<rect x="206.0" y="1205.4" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="218.0" y="1218.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u5</text>
+<rect x="98.0" y="984.0" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="110.0" y="997.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u6</text>
+<rect x="403.1" y="967.8" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="415.1" y="980.8" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u7</text>
+<rect x="197.0" y="1044.5" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="209.0" y="1057.5" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u8</text>
+<rect x="305.0" y="1088.9" width="24.0" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="317.0" y="1101.9" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u9</text>
+<rect x="193.2" y="1133.3" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="209.0" y="1146.3" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u10</text>
+<rect x="436.2" y="1002.6" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="452.0" y="1015.6" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u11</text>
+<rect x="544.2" y="1097.4" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="560.0" y="1110.4" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u12</text>
+<rect x="445.2" y="1193.0" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="461.0" y="1206.0" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u13</text>
+<rect x="328.2" y="1036.2" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="344.0" y="1049.2" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u14</text>
+<rect x="430.8" y="1064.1" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="446.6" y="1077.1" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u15</text>
+<rect x="494.6" y="1113.6" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="510.3" y="1126.6" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u16</text>
+<rect x="430.8" y="1163.1" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="446.6" y="1176.1" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u17</text>
+<rect x="367.8" y="1077.6" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="383.6" y="1090.6" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u18</text>
+<rect x="335.5" y="1113.6" width="31.5" height="17" rx="4" fill="white" stroke="#0f7c8c" stroke-width="1.4"/>
+<text x="351.2" y="1126.6" font-size="12" font-weight="700" text-anchor="middle" fill="#0f7c8c">u19</text>
+<circle cx="126.2" cy="946.2" r="3.6" fill="#c0392b"/>
+<text x="112.2" y="938.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U1</text>
+<text x="112.2" y="938.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U1</text>
+<circle cx="668.0" cy="946.2" r="3.6" fill="#c0392b"/>
+<text x="680.0" y="938.2" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U2</text>
+<text x="680.0" y="938.2" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U2</text>
+<circle cx="668.0" cy="1198.2" r="3.6" fill="#c0392b"/>
+<text x="680.0" y="1216.2" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U3</text>
+<text x="680.0" y="1216.2" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U3</text>
+<circle cx="126.2" cy="1198.2" r="3.6" fill="#c0392b"/>
+<text x="112.2" y="1216.2" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U4</text>
+<text x="112.2" y="1216.2" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U4</text>
+<circle cx="397.1" cy="930.0" r="3.6" fill="#c0392b"/>
+<text x="403.1" y="922.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U5</text>
+<text x="403.1" y="922.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U5</text>
+<circle cx="397.1" cy="1214.4" r="3.6" fill="#c0392b"/>
+<text x="403.1" y="1234.4" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U6</text>
+<text x="403.1" y="1234.4" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U6</text>
+<circle cx="110.0" cy="1065.5" r="3.6" fill="#c0392b"/>
+<text x="98.0" y="1065.5" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U7</text>
+<text x="98.0" y="1065.5" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U7</text>
+<circle cx="317.0" cy="1065.5" r="3.6" fill="#c0392b"/>
+<text x="311.0" y="1057.5" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U8</text>
+<text x="311.0" y="1057.5" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U8</text>
+<circle cx="317.0" cy="1130.3" r="3.6" fill="#c0392b"/>
+<text x="311.0" y="1150.3" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U9</text>
+<text x="311.0" y="1150.3" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U9</text>
+<circle cx="110.0" cy="1130.3" r="3.6" fill="#c0392b"/>
+<text x="98.0" y="1142.3" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U10</text>
+<text x="98.0" y="1142.3" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U10</text>
+<circle cx="290.0" cy="1074.5" r="3.6" fill="#c0392b"/>
+<text x="282.0" y="1092.5" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U11</text>
+<text x="282.0" y="1092.5" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U11</text>
+<circle cx="290.0" cy="1121.3" r="3.6" fill="#c0392b"/>
+<text x="282.0" y="1119.3" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U12</text>
+<text x="282.0" y="1119.3" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U12</text>
+<circle cx="344.0" cy="1023.6" r="3.6" fill="#c0392b"/>
+<text x="334.0" y="1019.6" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U13</text>
+<text x="334.0" y="1019.6" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U13</text>
+<circle cx="560.0" cy="1023.6" r="3.6" fill="#c0392b"/>
+<text x="568.0" y="1019.6" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U14</text>
+<text x="568.0" y="1019.6" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U14</text>
+<circle cx="560.0" cy="1191.0" r="3.6" fill="#c0392b"/>
+<text x="568.0" y="1207.0" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U15</text>
+<text x="568.0" y="1207.0" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U15</text>
+<circle cx="344.0" cy="1191.0" r="3.6" fill="#c0392b"/>
+<text x="334.0" y="1207.0" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U16</text>
+<text x="334.0" y="1207.0" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U16</text>
+<circle cx="383.6" cy="1073.1" r="3.6" fill="#c0392b"/>
+<text x="389.6" y="1069.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U17</text>
+<text x="389.6" y="1069.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U17</text>
+<circle cx="510.3" cy="1073.1" r="3.6" fill="#c0392b"/>
+<text x="516.3" y="1069.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U18</text>
+<text x="516.3" y="1069.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U18</text>
+<circle cx="510.3" cy="1172.1" r="3.6" fill="#c0392b"/>
+<text x="516.3" y="1190.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U19</text>
+<text x="516.3" y="1190.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U19</text>
+<circle cx="383.6" cy="1172.1" r="3.6" fill="#c0392b"/>
+<text x="389.6" y="1192.1" font-size="13" font-weight="700" text-anchor="start" fill="white" stroke="white" stroke-width="4">U20</text>
+<text x="389.6" y="1192.1" font-size="13" font-weight="700" text-anchor="start" fill="#c0392b" >U20</text>
+<line x1="351.2" y1="1095.6" x2="324.2" y2="1074.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="351.2" cy="1095.6" r="3.6" fill="#c0392b"/>
+<text x="321.2" y="1075.6" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U21</text>
+<text x="321.2" y="1075.6" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U21</text>
+<line x1="351.2" y1="1149.6" x2="324.2" y2="1173.0" stroke="#c0392b" stroke-width="1"/>
+<circle cx="351.2" cy="1149.6" r="3.6" fill="#c0392b"/>
+<text x="321.2" y="1179.6" font-size="13" font-weight="700" text-anchor="end" fill="white" stroke="white" stroke-width="4">U22</text>
+<text x="321.2" y="1179.6" font-size="13" font-weight="700" text-anchor="end" fill="#c0392b" >U22</text>
+<text x="88.0" y="1304.4" font-size="11" font-weight="400" text-anchor="start" fill="#1b2a4a">dark = tab (hook = lighter, toward the blade) · dashed box = base</text>
+<text x="88.0" y="1320.4" font-size="11" font-weight="400" text-anchor="start" fill="#1b2a4a">white channel = blade gap · grey = blade · dashed u7 = bottom centre line</text>
+<text x="760.0" y="840.0" font-size="16" font-weight="700" text-anchor="start" fill="#1b2a4a">Measurements as points and edges (check I've put each one in the right place)</text>
+<circle cx="771" cy="870" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="874.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">A</text>
+<text x="790.0" y="874.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F2 – F4  width where the dome starts</text>
+<text x="1285.0" y="874.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">31.40</text>
+<circle cx="771" cy="900" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="904.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">B</text>
+<text x="790.0" y="904.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F1 – F5  width at the bottom corners</text>
+<text x="1285.0" y="904.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">31.90</text>
+<circle cx="771" cy="930" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="934.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">C</text>
+<text x="790.0" y="934.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u1 – u5  thickness (S2 – S3 at the widest)</text>
+<text x="1285.0" y="934.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">15.80</text>
+<circle cx="771" cy="960" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="964.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">D</text>
+<text x="790.0" y="964.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">B3 → B6  dome tip to rivet-face centre</text>
+<text x="1285.0" y="964.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">21.34</text>
+<circle cx="771" cy="990" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="994.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">E</text>
+<text x="790.0" y="994.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F3 → F1/F5 level  dome tip to bottom corners</text>
+<text x="1285.0" y="994.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">23.34</text>
+<circle cx="771" cy="1020" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1024.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">F</text>
+<text x="790.0" y="1024.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">f7 → f10  base bottom to tab tip</text>
+<text x="1285.0" y="1024.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">14.60*</text>
+<circle cx="771" cy="1050" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1054.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">G</text>
+<text x="790.0" y="1054.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F3 → f10  dome tip to tab tip</text>
+<text x="1285.0" y="1054.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">39.04</text>
+<circle cx="771" cy="1080" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1084.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">H</text>
+<text x="790.0" y="1084.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F11 – F16  tab width</text>
+<text x="1285.0" y="1084.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">7.04</text>
+<circle cx="771" cy="1110" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1114.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">I</text>
+<text x="790.0" y="1114.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F12 – F13  tab width incl. hook</text>
+<text x="1285.0" y="1114.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">9.00</text>
+<circle cx="771" cy="1140" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="771" y="1144.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">J</text>
+<text x="790.0" y="1144.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u6 → u18  blade-side edge to tab</text>
+<text x="1285.0" y="1144.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="771" cy="1170" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="771" y="1174.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">K</text>
+<text x="790.0" y="1174.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u3 → u16  other edge to tab</text>
+<text x="1285.0" y="1174.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="771" cy="1200" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1204.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">L</text>
+<text x="790.0" y="1204.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u15 – u17  tab thickness</text>
+<text x="1285.0" y="1204.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">5.50</text>
+<circle cx="771" cy="1230" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1234.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">M</text>
+<text x="790.0" y="1234.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u1 → u15  rivet face to tab</text>
+<text x="1285.0" y="1234.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">7.95</text>
+<circle cx="771" cy="1260" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="771" y="1264.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">N</text>
+<text x="790.0" y="1264.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F5 → F18/F19 level  corner to blade tip</text>
+<text x="1285.0" y="1264.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">39.12</text>
+<circle cx="1316" cy="870" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="1316" y="874.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">O</text>
+<text x="1335.0" y="874.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">f16 flush with f3  blade to blade-side edge</text>
+<text x="1830.0" y="874.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">0.00</text>
+<circle cx="1316" cy="900" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="1316" y="904.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">P</text>
+<text x="1335.0" y="904.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F17 – f16  blade width</text>
+<text x="1830.0" y="904.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">10.00</text>
+<circle cx="1316" cy="930" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="1316" y="934.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">Q</text>
+<text x="1335.0" y="934.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">S13 – S14  blade thickness</text>
+<text x="1830.0" y="934.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">2.60</text>
+<circle cx="1316" cy="960" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="1316" y="964.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">R</text>
+<text x="1335.0" y="964.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u1 → U11 line  rivet face to blade</text>
+<text x="1830.0" y="964.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">8.03</text>
+<circle cx="1316" cy="990" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="994.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">S</text>
+<text x="1335.0" y="994.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F3 → F6  dome tip to logo-face centre</text>
+<text x="1830.0" y="994.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1020" r="11" fill="white" stroke="#1d8a4a" stroke-width="2"/><text x="1316" y="1024.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#1d8a4a">T</text>
+<text x="1335.0" y="1024.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u8 – u10  blade gap width</text>
+<text x="1830.0" y="1024.0" font-size="13" font-weight="700" text-anchor="end" fill="#1d8a4a">3.60</text>
+<circle cx="1316" cy="1050" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1054.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">U</text>
+<text x="1335.0" y="1054.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">F6 → f7  logo-face centre to base bottom</text>
+<text x="1830.0" y="1054.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1080" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1084.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">V</text>
+<text x="1335.0" y="1084.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">U13 – U14  base width</text>
+<text x="1830.0" y="1084.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1110" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1114.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">W</text>
+<text x="1335.0" y="1114.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">U14 – U15  base thickness</text>
+<text x="1830.0" y="1114.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1140" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1144.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">X</text>
+<text x="1335.0" y="1144.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u6 → U13  blade-side edge to base</text>
+<text x="1830.0" y="1144.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1170" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1174.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">Y</text>
+<text x="1335.0" y="1174.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u1 → U13  rivet face to base</text>
+<text x="1830.0" y="1174.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1200" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1204.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">Z</text>
+<text x="1335.0" y="1204.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">u6 → u9  how deep the blade gap goes in</text>
+<text x="1830.0" y="1204.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<circle cx="1316" cy="1230" r="11" fill="white" stroke="#d2561e" stroke-width="2"/><text x="1316" y="1234.5" font-size="12.5" font-weight="700" text-anchor="middle" fill="#d2561e">—</text>
+<text x="1335.0" y="1234.0" font-size="13" font-weight="400" text-anchor="start" fill="#1b2a4a">S7/S8 → F3 level  how far up the side the gap runs</text>
+<text x="1830.0" y="1234.0" font-size="13" font-weight="700" text-anchor="end" fill="#d2561e">?</text>
+<text x="760.0" y="1304.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#d2561e">* F: please confirm it was measured from the bottom of the base (edge f7), not from the head.</text>
+<text x="760.0" y="1324.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">Anything without a label: describe it by the points/edges it sits between (e.g. "a step on f6, 2 mm below F7").</text>
+<text x="760.0" y="1344.0" font-size="12.5" font-weight="400" text-anchor="start" fill="#1b2a4a">Positions of the base, tab and blade gap that are still unmeasured are drawn where I currently guess they are.</text>
+</svg>

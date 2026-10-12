@@ -1,0 +1,2114 @@
+<title>Mazda Key Fob Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: Drafting Table sheet. Header band with the sheet numeral, revision and status; keyed notes in a drawer under it (Notes button).
+   The views on the left as a bento grid of cards (one SVG each; a card rolls out in place when opened); on the right one panel at a time:
+   the measurement schedule, or the selected measurement. The title block only prints. Stacks on phones.
+   Light = the design system's paper. Dark = the same sheet with ink and paper swapped to warm tones (screen only). */
+:root {
+  --desk: #E9E5DC; --paper: #F7F5F0; --ink: #1C1C1A; --ink2: #6B6862; --rule: #C9C4B8;
+  --struct: #D9D4C9; --struct-tint: #E9E6DE; --shade: #ECEAE5;
+  --alert: #B0453A; --alert-fill: rgba(176, 69, 58, .05); --alert-fill-loud: rgba(176, 69, 58, .09);
+  --link: #2E6F9E; --link-soft: rgba(46, 111, 158, .12);
+  --display: Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; }
+
+* { box-sizing: border-box; border-radius: 0; }
+html, body { height: 100%; }
+body { background: var(--desk); color: var(--ink); font-family: var(--display); font-size: 14px; line-height: 1.35; -webkit-font-smoothing: antialiased; }
+.wrap { padding-inline: 16px; padding-block: 14px 22px; max-width: 1680px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.frame { background: var(--paper); border: 1px solid var(--ink2); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* sheet header: numeral, title, subtitle, right-hand label, closing rule */
+.sh { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 22px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+.sh .num { font: 600 3.4rem/.86 var(--mono); letter-spacing: -.02em; }
+.sh .ttl { flex: 1 1 320px; min-width: 0; }
+.sh h1 { font-weight: 700; font-size: clamp(1rem, 1.9vw, 1.45rem); letter-spacing: .18em; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+.sh .sub { margin: 0; font-size: .78rem; letter-spacing: .18em; color: var(--ink2); }
+.sh .lab { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-left: auto; }
+.sh .lab b { font-size: .86rem; font-weight: 600; letter-spacing: .28em; white-space: nowrap; }
+.sh .lab > span { font: 400 .74rem var(--mono); color: var(--ink2); white-space: nowrap; }
+
+main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px; min-height: 0; }
+@media (max-width: 960px) { main { grid-template-columns: minmax(0, 1fr); } }
+
+.sheet { border: 1px solid var(--ink2); display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--ink2); }
+.toolbar .sep { flex: 1; }
+.btn { font: 600 .74rem var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: transparent;
+  border: 1px solid var(--ink2); padding: 6px 9px; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn:focus-visible, .row:focus-visible, .chip:focus-visible, .filter button:focus-visible, .check input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.check { font-size: .78rem; letter-spacing: .06em; color: var(--ink2); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.check input { accent-color: var(--ink); }
+.svgbox { position: relative; flex: 1; min-height: 420px; }
+svg#draw { display: block; width: 100%; height: 100%; min-height: 420px; max-height: calc(100vh - 190px); touch-action: manipulation; background: var(--paper); }
+@media (max-width: 960px) { .svgbox { min-height: 0; } svg#draw { height: auto; aspect-ratio: 3 / 4; min-height: 0; max-height: 78vh; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .76rem; letter-spacing: .06em; color: var(--ink2); align-items: center; padding: 8px 10px; border-top: 1px solid var(--rule); }
+.legend i { display: inline-block; vertical-align: -1px; margin-right: 6px; }
+[hidden] { display: none !important; }
+/* sheet tabs: one page holds a numbered set of sheets; the tabs sit beside the paper / dark sheet button */
+.lab-row { display: flex; flex-wrap: wrap; gap: 8px 10px; align-items: center; justify-content: flex-end; }
+.sheets { display: flex; align-items: center; flex-wrap: wrap; }
+.sheets .sl { font: 600 .68rem var(--display); letter-spacing: .22em; color: var(--ink2); margin-right: 8px; }
+.sheets [role="tab"] { display: inline-flex; align-items: baseline; gap: 7px; height: 30px; padding: 0 10px; margin-left: -1px; border: 1px solid var(--ink2); background: transparent; color: var(--ink); cursor: pointer; font: 600 .86rem var(--mono); }
+.sheets [role="tab"] .nm { font: 600 .66rem var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); }
+.sheets [role="tab"]:hover { border-color: var(--ink); position: relative; z-index: 1; }
+.sheets [role="tab"][aria-selected="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; z-index: 2; }
+.sheets [role="tab"][aria-selected="true"] .nm { color: var(--paper); }
+.sheets [role="tab"]:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; z-index: 3; }
+@media (max-width: 1100px) { .sheets [role="tab"] .nm { display: none; } }
+@media (max-width: 480px) { .lab-row { justify-content: flex-start; } }
+.lg-pt { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.lg-ed { width: 20px; height: 11px; border: 1px solid var(--ink2); }
+.lg-dim { width: 20px; height: 2px; background: var(--link); vertical-align: 3px !important; }
+.lg-unk { width: 20px; height: 0; border-top: 2px dashed var(--alert); vertical-align: 3px !important; }
+
+/* drawing: ranked ink linework on paper; red only for what is not confirmed */
+.v-title { font: 700 17px var(--display); fill: var(--ink); letter-spacing: .12em; }
+.v-sub { font: 400 12px var(--display); fill: var(--ink2); letter-spacing: .08em; text-transform: uppercase; }
+.face-txt { font: 500 12.5px var(--display); fill: var(--ink2); letter-spacing: .14em; }
+.note { font: 400 11.5px var(--display); fill: var(--ink2); letter-spacing: .02em; }
+.unk-txt { font: 600 12.5px var(--mono); fill: var(--alert); }
+.s-head, .s-gap { fill: var(--paper); stroke: none; }
+.s-blade { fill: var(--shade); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-tab { fill: var(--struct); stroke: none; }
+.s-base, .s-hook { fill: var(--struct-tint); stroke: none; }
+.s-skirt { fill: var(--struct-tint); stroke: var(--ink2); stroke-width: 1.2; }
+.s-win { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; }
+.s-hidden { fill: none; stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-rivet { fill: var(--shade); stroke: var(--alert); stroke-width: 1.6; stroke-dasharray: 20 8 5 8; }
+.s-prov { fill: var(--alert-fill-loud); stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.edge path.vis { fill: none; stroke: var(--ink); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; transition: stroke .15s, stroke-width .15s, opacity .15s; }
+.edge.outline path.vis { stroke-width: 3.2; }
+.edge.dash path.vis { stroke: var(--ink2); stroke-dasharray: 8.6 6.5; stroke-width: 1.2; }
+.edge path.hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; }
+.edge .tag rect { fill: var(--paper); stroke: var(--ink2); stroke-width: 1; }
+.edge .tag text { font: 500 12px var(--mono); fill: var(--ink2); text-anchor: middle; }
+.edge .tag { cursor: pointer; }
+.pt circle { fill: var(--ink); }
+.pt .hitc { fill: transparent; cursor: pointer; }
+.pt text { font: 600 12.5px var(--mono); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 3.5px; stroke-linejoin: round; cursor: pointer; }
+.pt line { stroke: var(--ink2); stroke-width: .6; }
+.labels-off .pt text, .labels-off .pt line, .labels-off .edge .tag { display: none; }
+.labels-off .pt.on text, .labels-off .pt.on line, .labels-off .edge.on .tag { display: inline; }
+
+.has-sel .pt, .has-sel .edge .tag { opacity: .3; }
+.has-sel .edge path.vis { opacity: .6; }
+.has-sel .pt.on, .has-sel .edge.on .tag, .has-sel .edge.on path.vis { opacity: 1; }
+.edge.on path.vis { stroke: var(--link); stroke-width: 4; stroke-dasharray: none; }
+.edge.on .tag rect { stroke: var(--link); fill: var(--link); }
+.edge.on .tag text { fill: var(--paper); }
+.pt.on circle { fill: var(--link); r: 5.5; }
+.pt.on text { fill: var(--link); font-size: 14px; }
+.pt.on line { stroke: var(--link); }
+
+.dim line { stroke: var(--link); stroke-width: 1.8; }
+.dim line.ext { stroke-width: .8; }
+.dim .pill rect { fill: var(--link); }
+.dim .pill text { font: 600 14px var(--mono); fill: var(--paper); text-anchor: middle; }
+.dim.unk line { stroke: var(--alert); } .dim.unk .pill rect { fill: var(--alert); }
+.arrowhead { fill: var(--link); }
+.dim .ah { fill: var(--link); } .dim.unk .ah { fill: var(--alert); }
+.dim line.thin { stroke-width: 1.2; }
+.dim line.lead { stroke-width: .9; }
+.dim line.jaw { stroke-width: 4; stroke-linecap: butt; }
+.dim .ring { fill: none; stroke: var(--link); stroke-width: 1.1; stroke-dasharray: 5 4; }
+.dim.unk .ring { stroke: var(--alert); }
+/* a measurement selected: its edges stay faint, the jaw bars and the dimension carry the selection */
+.m-sel .edge.on path.vis { stroke-width: 2.2; opacity: .5; }
+.dz { margin: 0; border: 1px solid var(--rule); background: var(--paper); min-width: 0; }
+.dz figcaption { display: flex; justify-content: space-between; gap: 10px; font: 600 .66rem var(--display); letter-spacing: .18em; color: var(--ink2); padding: 5px 8px; border-bottom: 1px solid var(--rule); }
+.dz figcaption span:last-child { font-family: var(--mono); letter-spacing: 0; }
+.dz svg { display: block; width: 100%; height: 170px; }
+.dz :is(path, line, circle, rect) { vector-effect: non-scaling-stroke; }
+.ftu { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 4px 12px; margin: 0; font-size: .88rem; line-height: 1.3; }
+.ftu dt { font: 600 .66rem var(--mono); letter-spacing: .14em; color: var(--ink2); padding-top: 2px; }
+.ftu dd { margin: 0; min-width: 0; }
+
+/* right column: panels */
+aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+@media (min-width: 961px) { aside { max-height: calc(100vh - 150px); position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); } }
+.panel { border: 1px solid var(--ink2); min-width: 0; }
+.ph { padding: 8px 12px 6px; border-bottom: 1px solid var(--ink2); font-size: .74rem; font-weight: 600; letter-spacing: .22em; color: var(--ink2); }
+.detail { padding: 12px; display: grid; gap: 8px; }
+.detail .top { display: flex; align-items: center; gap: 12px; }
+.badge { font: 700 1.15rem var(--mono); min-width: 46px; height: 46px; padding: 0 6px; display: grid; place-items: center; flex: none; border: 1.5px solid currentColor; }
+.badge.ok { color: var(--ink); } .badge.unk { color: var(--alert); background: var(--alert-fill-loud); } .badge.item { color: var(--link); background: var(--link-soft); font-size: .95rem; }
+.detail h2 { font: 700 1rem/1.2 var(--display); letter-spacing: .02em; margin: 0; text-wrap: balance; }
+.detail .val { font: 600 1.02rem var(--mono); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.detail .val.unk { color: var(--alert); }
+.detail p { margin: 0; font-size: .9rem; }
+.detail .meta { color: var(--ink2); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font: 600 .78rem var(--mono); border: 1px solid var(--ink2); background: transparent; color: var(--ink); padding: 2px 7px; cursor: pointer; }
+.chip.ed-chip { color: var(--ink2); } .chip.m-chip { color: var(--link); border-color: var(--link); }
+.chip:hover { border-color: var(--ink); }
+
+.index { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.filter { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--rule); align-items: center; }
+.filter button { font: 600 .7rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 4px 8px; cursor: pointer; }
+.filter button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.filter .count { color: var(--ink2); font: 500 .76rem var(--mono); margin-left: auto; }
+.list { overflow-y: auto; padding: 2px 0 8px; }
+.group { font-size: .7rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); padding: 10px 12px 4px; margin: 0 0 2px; border-bottom: 1px solid var(--rule); }
+.row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; width: 100%; text-align: left;
+  background: transparent; border: 0; border-left: 3px solid transparent; color: var(--ink); padding: 5px 12px 5px 9px; cursor: pointer; font: inherit; }
+.row:hover { background: var(--link-soft); }
+.row[aria-current="true"] { background: var(--link-soft); border-left-color: var(--link); }
+.row .k { font: 700 .82rem var(--mono); }
+.row .d { font-size: .86rem; min-width: 0; }
+.row .v { font: 600 .82rem var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row.unk .k, .row.unk .v { color: var(--alert); }
+/* entries typed into the page: ink (they are measurements), with an ENTERED chip until they have been cross-checked */
+.row.ent .k, .row.ent .v { color: var(--ink); }
+.et { font: 600 .56rem var(--display); font-style: normal; letter-spacing: .14em; border: 1px solid var(--ink2); color: var(--ink2); padding: 1px 4px; margin-left: 6px; vertical-align: 1px; }
+.badge.ent { color: var(--ink); background: var(--shade); }
+.detail .val.ent { color: var(--ink); }
+.detail { grid-template-columns: minmax(0, 1fr); }
+.entry { min-width: 0; grid-template-columns: minmax(0, 1fr); display: grid; gap: 7px; border-top: 1px solid var(--rule); padding-top: 10px; margin-top: 2px; }
+.entry .el { font-size: .7rem; font-weight: 600; letter-spacing: .2em; color: var(--ink2); }
+.entry .er, .entry .yn { display: flex; gap: 6px; align-items: stretch; }
+.entry .yn { flex-wrap: wrap; }
+.entry input { width: 100%; font: 600 1.05rem var(--mono); color: var(--ink); background: var(--paper); border: 1px solid var(--ink2); padding: 7px 9px; min-width: 0; flex: 1; border-radius: 0; }
+.entry input::placeholder { color: var(--ink2); opacity: .7; }
+.entry #entry-note { font: 400 .86rem var(--display); }
+.entry input:focus-visible { outline: 2px solid var(--link); outline-offset: 1px; border-color: var(--ink); }
+.entry .un { font: 600 .9rem var(--mono); color: var(--ink2); align-self: center; }
+.entry .yn .btn { flex: 1; padding: 9px; }
+.entry .es { font: 500 .74rem var(--mono); color: var(--ink2); }
+.entry .es.err { color: var(--ink); font-weight: 700; }
+.entry .chip { justify-self: start; }
+.ebar { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: center; justify-content: space-between; padding: 8px 12px; border-top: 1px solid var(--rule); }
+.ebar span { font: 500 .72rem var(--mono); color: var(--ink2); min-width: 0; }
+#ecopy-text { display: block; width: calc(100% - 24px); margin: 0 12px 10px; font: 400 .78rem var(--mono); color: var(--ink); background: var(--paper); border: 1px solid var(--ink2); padding: 6px; resize: vertical; }
+
+/* sheet furniture: the title block is for paper. It prints, and stays off the screen: the header carries the sheet, revision and status */
+.furniture { display: grid; grid-template-columns: minmax(0, 1fr); max-width: 680px; margin-left: auto; }
+@media screen { .furniture { display: none !important; } }
+.kn { display: flex; gap: 12px; align-items: baseline; }
+.kn .n { font: 700 .82rem var(--mono); width: 14px; flex: none; }
+.kn i { font-style: normal; color: var(--ink2); }
+.tb { border: 2px solid var(--ink); display: flex; flex-direction: column; }
+.tb > div { border-bottom: 1px solid var(--ink2); padding: 9px 14px; }
+.tb .p { font-size: .82rem; font-weight: 700; letter-spacing: .16em; }
+.tb .t { display: flex; align-items: baseline; gap: 14px; }
+.tb .t .n { font: 600 1.5rem var(--mono); }
+.tb .t .s { font-size: .94rem; font-weight: 600; letter-spacing: .1em; }
+.tb .m { font: 400 .76rem var(--mono); }
+.tb .st { flex: 1; border-bottom: 0; background: var(--struct); font-size: .8rem; font-weight: 700; letter-spacing: .14em; display: flex; align-items: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* charger brace drawing */
+.s-paper, .s-ring { fill: var(--paper); stroke: none; }
+.s-metal { fill: var(--shade); stroke: none; }
+.s-metal-line { fill: var(--shade); stroke: var(--ink); stroke-width: 1.2; }
+.ok-txt { font: 600 12.5px var(--mono); fill: var(--ink); }
+.s-body { fill: var(--struct); stroke: none; }
+.s-relief { fill: var(--struct-tint); stroke: none; }
+.s-relief-line { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-thin { fill: none; stroke: var(--ink); stroke-width: 1.1; }
+.s-fine { fill: none; stroke: var(--ink2); stroke-width: .9; }
+.s-hex { fill: var(--shade); stroke: var(--ink2); stroke-width: .8; }
+.s-pin { fill: var(--ink); stroke: none; }
+.s-centre { fill: none; stroke: var(--ink2); stroke-width: .9; stroke-dasharray: 32 8 8 8; }
+.s-break { fill: none; stroke: var(--ink2); stroke-width: 1.1; }
+.s-socket { fill: var(--paper); stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-provline { fill: none; stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.s-wallhatch { fill: none; stroke: var(--alert); stroke-width: .8; }
+.s-cable { fill: none; stroke: var(--ink); }
+.hatch-line { stroke: var(--ink2); stroke-width: 1.1; }
+.s-brace { fill: url(#hatch); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-brace-plan { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-addon { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
+.s-ghost { fill: var(--shade); stroke: var(--ink2); stroke-width: .9; }
+.s-ghost-ring { fill: var(--paper); stroke: var(--ink2); stroke-width: .9; }
+.s-tie { fill: var(--struct); stroke: var(--ink); stroke-width: 1; }
+.s-window { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.callout circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; }
+.callout line { stroke: var(--ink2); stroke-width: .7; }
+.callout text { font: 700 12.5px var(--mono); fill: var(--ink); text-anchor: middle; }
+.legend-head { font: 700 12.5px var(--display); fill: var(--ink); letter-spacing: .06em; }
+/* pictorial views: flat tones, no gradients */
+.i-top { fill: var(--shade); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.i-side { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.i-dark { fill: var(--struct); stroke: var(--ink); stroke-width: 1.5; stroke-linejoin: round; }
+.q-top { fill: var(--shade); stroke: var(--shade); stroke-width: .8; }
+.q-side { fill: var(--struct-tint); stroke: var(--struct-tint); stroke-width: .8; }
+.q-dark { fill: var(--struct); stroke: var(--struct); stroke-width: .8; }
+.q-tie { fill: var(--ink2); stroke: var(--ink2); stroke-width: .8; }
+.i-line { fill: none; stroke: var(--ink); stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.i-split { fill: none; stroke: var(--ink2); stroke-width: 1; stroke-dasharray: 8.6 6.5; }
+.i-hole { fill: var(--ink); stroke: var(--ink); stroke-width: 1; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .i-hole { fill: var(--desk); } }
+:root[data-theme="dark"] .i-hole { fill: var(--desk); }
+.i-window { fill: var(--paper); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
+.open a, .sh a { color: var(--link); }
+.note.big { font-size: 13.5px; }
+.face-txt.stage { font-weight: 700; font-size: 15px; fill: var(--ink); }
+.s-arrow { stroke: var(--ink); stroke-width: 1.6; }
+.arrowhead-ink { fill: var(--ink); }
+/* Bento grid of view cards, after the Chroma bento: ruled cards with a title strip and a hard offset shadow,
+   the drawing filling the card and running off its edges. Positions are solved in script. */
+.sheet { align-self: start; }
+.bento { position: relative; margin: 14px 9px 9px 14px; transition: height .42s cubic-bezier(.2,.8,.2,1); }
+.card { position: absolute; left: 0; top: 0; border: 1px solid var(--ink); background: var(--paper); display: flex; flex-direction: column; overflow: hidden; cursor: pointer; margin: 0;
+  container: card / inline-size; box-shadow: 4px 4px 0 var(--struct);
+  transition: left .42s cubic-bezier(.2,.8,.2,1), top .42s cubic-bezier(.2,.8,.2,1), width .42s cubic-bezier(.2,.8,.2,1), height .42s cubic-bezier(.2,.8,.2,1), box-shadow .2s, transform .2s, opacity .3s; }
+.bento.no-anim, .bento.no-anim .card { transition: none; }
+.card:not(.open):hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--struct); }
+.card:not(.open):hover .cx { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.card:not(.open):active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--struct); }
+.card.closing { z-index: 4; }
+.card.open { z-index: 5; cursor: default; box-shadow: 0 0 0 1px var(--ink), 8px 8px 0 var(--struct); }
+.bento:has(.card.open) .card:not(.open) { opacity: .4; }
+@keyframes cardin { from { opacity: 0; transform: translateY(12px); } }
+.bento.enter .card { animation: cardin .45s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
+/* title strip: view number, title, how many measurements sit on the view, open / close */
+.ch { display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 6px 0 10px; border-bottom: 1px solid var(--rule); flex: none; }
+.cn { font: 600 1.05rem/1 var(--mono); }
+.ct { font: 700 .72rem var(--display); letter-spacing: .14em; text-transform: uppercase; margin: 0; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct .ts { display: none; }
+.cs { font: 600 .68rem var(--mono); color: var(--ink2); white-space: nowrap; flex: none; }
+.cs.unk { color: var(--alert); }
+.cx { display: inline-flex; align-items: center; gap: 6px; height: 22px; font: 600 .62rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 0 6px 0 7px; cursor: pointer; flex: none; transition: background .15s, color .15s, border-color .15s; }
+.cx:hover, .card.open .cx { border-color: var(--ink); color: var(--ink); }
+.cx:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.cxi { position: relative; width: 9px; height: 9px; flex: none; transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+.cxi::before, .cxi::after { content: ""; position: absolute; background: currentColor; }
+.cxi::before { left: 0; right: 0; top: 4px; height: 1px; }
+.cxi::after { top: 0; bottom: 0; left: 4px; width: 1px; }
+.card.open .cxi { transform: rotate(45deg); }
+/* each card answers to its own width: a narrow card keeps the number, a short title and the open mark */
+@container card (max-width: 330px) { .cxl, .cs { display: none; } .cx { padding: 0 6px; } .ct .tl { display: none; } .ct .ts { display: inline; } }
+/* caption: how the object is held. One line on a large closed card, in full with the scale notes on an open one */
+.cd { flex: none; border-bottom: 1px solid var(--rule); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+.card:not(.open) .cd { display: none; }
+.card.cap:not(.open) .cd { display: block; height: 22px; line-height: 21px; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card:not(.open) .cd :is(.ok-l, .unk-l) { display: none; }
+.card.open .cd, .cd.probe { display: flex; flex-wrap: wrap; gap: 2px 18px; padding: 6px 10px; }
+.cd.probe { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+.cd .ok-l { font: 600 .7rem var(--mono); color: var(--ink); letter-spacing: 0; }
+.cd .unk-l { font: 600 .7rem var(--mono); color: var(--alert); letter-spacing: 0; }
+.cb { min-height: 0; flex: 1; }
+.cb.pan { overflow: auto; scrollbar-width: thin; scrollbar-color: var(--ink2) transparent; }   /* an open drawing too large for the card: drag or scroll it */
+.card svg { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+/* closed cards show the drawing alone: tags, notes and legends appear when the card is open; a small card drops the lettering too */
+.card:not(.open) :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { display: none; }
+.card:not(.open) :is(.pt.on text, .edge.on .tag) { display: inline; }
+.card:not(.open) :is(.out, .callout), .card.bare :is(.face-txt, .unk-txt, .ok-txt) { display: none; }
+@keyframes tagin { 0%, 40% { opacity: 0; } }
+.card.open :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { animation: tagin .55s backwards; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+@media (max-width: 480px) { .sh .lab { align-items: flex-start; margin-left: 0; max-width: 100%; } .sh .lab > span, .sh .lab b { white-space: normal; } }
+.s-key { fill: var(--paper); stroke: var(--ink2); stroke-width: .7; }
+.s-cable5 { fill: none; stroke: var(--ink); stroke-width: 18; }
+.s-cable5-in { fill: none; stroke: var(--paper); stroke-width: 15; }
+.s-cable-in { fill: none; stroke: var(--paper); }
+.coord { font: 500 12.5px var(--mono); fill: var(--ink); }
+.edge.prov path.vis { stroke: var(--alert); stroke-width: 1.5; stroke-dasharray: 20 8 5 8; }
+.edge .lead { stroke: var(--ink2); stroke-width: .6; }
+.has-sel .edge .lead { opacity: .3; } .labels-off .edge .lead { display: none; }
+/* ---------- 2D / 3D switch: the same sheet as drawings, or as its models ---------- */
+:root { --model-fill: #ECE8E0; --model-line: #1C1C1A; --plate: #EBE7E4; --link-ink: #FFFFFF; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --model-fill: #5A564E; --model-line: #ECE8DF; --link-ink: #22211E; } }
+:root[data-theme="dark"] { --model-fill: #5A564E; --model-line: #ECE8DF; --link-ink: #22211E; }
+.mode { display: inline-flex; }
+.mode button { height: 30px; min-width: 40px; padding: 0 10px; margin-left: -1px; border: 1px solid var(--ink2); background: transparent; color: var(--ink); cursor: pointer; font: 600 .82rem var(--mono); letter-spacing: .04em; }
+.mode button:first-child { margin-left: 0; }
+.mode button:hover:not(:disabled) { border-color: var(--ink); position: relative; z-index: 1; }
+.mode button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); position: relative; z-index: 2; }
+.mode button:disabled { color: var(--ink2); border-style: dashed; cursor: not-allowed; }
+.mode button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; z-index: 3; }
+.models { border: 1px solid var(--ink2); display: flex; flex-direction: column; min-width: 0; align-self: start; }
+.m3-vbar { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 8px 10px; border-bottom: 1px solid var(--ink2); }
+.m3-vbar .sep { flex: 1; }
+.m3-parts { display: flex; flex-direction: column; gap: 18px; padding: 14px 10px 6px 12px; min-width: 0; }
+.m3-part { border: 1px solid var(--ink2); padding: 0 0 12px; min-width: 0; }
+.m3-ph { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 4px 14px; align-items: center; padding: 10px 12px; border-bottom: 1px solid var(--rule); }
+.m3-ph .pn { font: 600 1.6rem/1 var(--mono); }
+.m3-ph h2 { margin: 0; font-size: .86rem; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; line-height: 1.2; }
+.m3-ph .pt { font-size: .7rem; letter-spacing: .16em; color: var(--ink2); text-transform: uppercase; margin-top: 3px; }
+.m3-ph .st { font: 600 .7rem var(--mono); letter-spacing: .06em; text-align: right; color: var(--alert); text-transform: uppercase; }
+.m3-pd { padding: 10px 12px 12px; }
+.m3-pd p { margin: 0; max-width: 72ch; font-size: .9rem; }
+.m3-bento { display: grid; grid-template-columns: 2fr 1fr 1fr; grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 14px; padding: 2px 16px 6px 12px; height: clamp(380px, 40vw, 560px); }
+.m3-card { position: relative; display: flex; flex-direction: column; min-width: 0; min-height: 0; border: 1px solid var(--ink); background: var(--paper); box-shadow: 4px 4px 0 var(--struct); transition: transform .2s, box-shadow .2s, opacity .25s; container-type: inline-size; }
+.m3-card.v { grid-column: 1; grid-row: 1 / 3; }
+.m3-card.r1 { grid-column: 2 / 4; grid-row: 1; }
+.m3-card.r2 { grid-column: 2; grid-row: 2; }
+.m3-card.r3 { grid-column: 3; grid-row: 2; }
+.m3-card.pic { cursor: pointer; }
+.m3-card.pic:not(.open):hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--struct); }
+.m3-card.open { grid-column: 1 / -1; grid-row: 1 / 3; z-index: 3; box-shadow: 0 0 0 1px var(--ink), 8px 8px 0 var(--struct); }
+.m3-bento.has-open .m3-card:not(.open) { visibility: hidden; }
+.m3-ch { display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 6px 0 10px; border-bottom: 1px solid var(--rule); flex: none; min-width: 0; }
+.m3-ch .cn { font: 600 .9rem var(--mono); flex: none; }
+.m3-ch .ct { font-size: .7rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.m3-ch .cs { margin-left: auto; font: 600 .66rem var(--mono); color: var(--ink2); white-space: nowrap; flex: none; }
+.m3-ch .ct + .m3-cx { margin-left: auto; }
+.m3-cx { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 6px 0 7px; border: 1px solid var(--rule); background: transparent; font: 600 .62rem var(--display); letter-spacing: .14em; text-transform: uppercase; color: var(--ink2); cursor: pointer; flex: none; }
+.m3-cx:hover, .m3-card.open .m3-cx { border-color: var(--ink); color: var(--ink); }
+.m3-card.pic:not(.open):hover .m3-cx { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.m3-cx:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.m3-cxi { position: relative; width: 9px; height: 9px; flex: none; transition: transform .3s; }
+.m3-cxi::before, .m3-cxi::after { content: ""; position: absolute; background: currentColor; }
+.m3-cxi::before { left: 0; right: 0; top: 4px; height: 1px; }
+.m3-cxi::after { top: 0; bottom: 0; left: 4px; width: 1px; }
+.m3-card.open .m3-cxi { transform: rotate(45deg); }
+@container (max-width: 400px) { .m3-ch .cs { display: none; } }
+@container (max-width: 230px) { .m3-cx .cxl { display: none; } .m3-cx { padding: 0 6px; } }
+.m3-cb { position: relative; flex: 1; min-height: 0; overflow: hidden; }
+.m3-dv { position: absolute; inset: 0; }
+.m3-dv img { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: block; }
+.m3-dv img:not([src]) { visibility: hidden; }
+.m3-dims { position: absolute; left: 0; top: 0; width: 100%; height: 100%; overflow: visible; }
+.m3-dims line { stroke: var(--ink2); stroke-width: .8; }
+.m3-dims text { font: 500 10.5px var(--mono); fill: var(--ink2); }
+.m3-dims .dk { cursor: pointer; pointer-events: all; }
+.m3-dims .dk:hover text { fill: var(--ink); }
+.m3-dims .dk rect.hit { fill: transparent; }
+.m3-dims .m3-on line { stroke: var(--link); stroke-width: 1.4; }
+.m3-dims .m3-on rect.bg { fill: var(--link); }
+.m3-dims .m3-on text { fill: var(--link-ink); font-weight: 600; }
+.m3-dims rect.bg { fill: none; }
+.m3-viewer { position: absolute; inset: 0; cursor: grab; touch-action: pan-y; user-select: none; -webkit-user-select: none; }
+.m3-viewer.drag { cursor: grabbing; }
+.m3-viewer canvas { display: block; width: 100%; height: 100%; }
+.m3-vnote { position: absolute; left: 10px; bottom: 8px; font: 500 .66rem var(--mono); color: var(--ink2); pointer-events: none; letter-spacing: .04em; }
+.m3-axes { position: absolute; right: 10px; bottom: 8px; font: 500 .66rem var(--mono); color: var(--ink2); pointer-events: none; }
+.m3-pill { position: absolute; left: 0; top: 0; transform: translate(-50%, -50%); background: var(--link); color: var(--link-ink); font: 600 .72rem var(--mono); padding: 2px 7px; white-space: nowrap; pointer-events: none; display: none; }
+.m3-vload, .m3-fail { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); font: 500 .7rem var(--mono); color: var(--ink2); letter-spacing: .1em; text-align: center; }
+.m3-reset { position: absolute; right: 8px; top: 8px; height: 22px; padding: 0 7px; border: 1px solid var(--rule); background: var(--paper); font: 600 .62rem var(--display); letter-spacing: .14em; color: var(--ink2); cursor: pointer; text-transform: uppercase; }
+.m3-reset:hover { border-color: var(--ink); color: var(--ink); }
+.m3-sel { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 4px 12px; padding: 12px; }
+.m3-sel .sk { grid-row: 1 / 3; width: 46px; height: 46px; border: 1.5px solid var(--link); background: var(--link-soft); color: var(--link); display: grid; place-items: center; font: 700 .9rem var(--mono); }
+.m3-sel .sd { font: 700 1rem/1.2 var(--display); }
+.m3-sel .sv { font: 600 .9rem var(--mono); }
+.m3-sel .sv.u { color: var(--alert); }
+.m3-sel .sx { grid-column: 1 / -1; font-size: .9rem; margin-top: 6px; }
+.m3-flt { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--rule); align-items: center; }
+.m3-flt button { font: 600 .7rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 4px 8px; cursor: pointer; }
+.m3-flt button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.m3-flt .cnt { color: var(--ink2); font: 500 .76rem var(--mono); margin-left: auto; }
+.m3-rows { overflow-y: auto; padding: 2px 0 8px; min-height: 0; }
+.m3-grp { font-size: .7rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); padding: 10px 12px 4px; border-bottom: 1px solid var(--rule); }
+.m3-grp.part-h { color: var(--ink); font-weight: 700; }
+.m3-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; width: 100%; text-align: left; background: transparent; border: 0; border-left: 3px solid transparent; color: var(--ink); padding: 5px 12px 5px 9px; cursor: pointer; font: inherit; }
+.m3-row:hover { background: var(--link-soft); }
+.m3-row.m3-on { background: var(--link-soft); border-left-color: var(--link); }
+.m3-row .rk { font: 700 .82rem var(--mono); }
+.m3-row .rd { font-size: .86rem; min-width: 0; }
+.m3-row .rv { font: 600 .82rem var(--mono); white-space: nowrap; }
+.m3-row .rv.u { color: var(--alert); }
+.m3-row:focus-visible, .m3-flt button:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.lg-fill { width: 14px; height: 10px; background: var(--model-fill); border: 1px solid var(--ink); }
+.lg-line { width: 20px; height: 0; border-top: 1px solid var(--ink); vertical-align: 3px !important; }
+@media (max-width: 760px) {
+  .m3-bento { height: auto; grid-template-columns: 1fr 1fr; grid-template-rows: none; padding: 2px 12px 6px 10px; }
+  .m3-card.v { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 1 / 1; }
+  .m3-card.r1 { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 11; }
+  .m3-card.r2, .m3-card.r3 { grid-column: auto; grid-row: auto; aspect-ratio: 1 / 1; }
+  .m3-card.open { grid-column: 1 / -1; grid-row: auto; aspect-ratio: 16 / 12; }
+  .m3-bento.has-open .m3-card:not(.open) { display: none; }
+  .m3-ph { grid-template-columns: auto minmax(0, 1fr); }
+  .m3-ph .st { grid-column: 1 / -1; text-align: left; }
+}
+@media (prefers-reduced-motion: reduce) { .m3-card, .m3-cxi { transition: none !important; } }
+/* sheet 02 drawings */
+.s-part { fill: var(--paper); stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; }
+.s-beyond { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-glue { fill: var(--shade); stroke: var(--ink); stroke-width: 2.4; stroke-linejoin: round; }
+.s-pocket { fill: var(--struct); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-through { fill: var(--desk); stroke: var(--ink); stroke-width: 1.4; }
+.s-panel { fill: var(--shade); stroke: var(--ink); stroke-width: 1.2; stroke-linejoin: round; }
+.s-cut { fill: url(#hatch); stroke: none; }
+.s-void { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; }
+.s-pinbar { fill: var(--ink2); stroke: var(--ink); stroke-width: 1; }
+.s-outline { fill: none; stroke: var(--ink); stroke-width: 2.6; stroke-linejoin: round; }
+.s-glueline { fill: none; stroke: var(--ink); stroke-width: 1.8; }
+
+/* ---------- right column: one panel at a time ----------
+   The schedule by default. A selection swaps it for the SELECTED panel, which scrolls inside itself,
+   with the way back to the schedule and the previous / next measurement on its strip. */
+aside[data-show="list"] .sel.p2d, aside[data-show="sel"] .index.p2d { display: none; }
+.panel.sel { display: flex; flex-direction: column; min-height: 0; flex: 0 1 auto; }
+.sel .detail { overflow-y: auto; min-height: 0; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--ink2) transparent; }
+.index.p2d { flex: 1 1 auto; }
+@media (min-width: 961px) { .panel.sel { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); max-height: calc(100vh - 20px); } }   /* stays in sight while the drawing column scrolls */
+.ph.nav { display: flex; align-items: center; gap: 6px; padding: 5px 6px; }
+.ph.nav .phl { flex: 1; min-width: 0; padding-left: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+@media (max-width: 420px) { .ph.nav .phl { visibility: hidden; } }
+.ph.nav .pos { font: 500 .7rem var(--mono); letter-spacing: 0; white-space: nowrap; }
+.nb { display: inline-flex; align-items: center; gap: 6px; height: 26px; padding: 0 9px; border: 1px solid var(--rule); background: transparent; color: var(--ink2); cursor: pointer;
+  font: 600 .64rem var(--display); letter-spacing: .14em; text-transform: uppercase; white-space: nowrap; flex: none; }
+.nb.ar { font: 600 .95rem/1 var(--mono); letter-spacing: 0; min-width: 30px; justify-content: center; padding: 0 6px; }
+.nb:hover:not(:disabled) { border-color: var(--ink); color: var(--ink); }
+.nb:disabled { opacity: .35; cursor: default; }
+.nb:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.hint { margin: 0; padding: 8px 12px; font-size: .8rem; line-height: 1.35; color: var(--ink2); border-bottom: 1px solid var(--rule); }
+.row.last { background: var(--link-soft); }
+/* ---------- header: revision and status of the sheet, from its title block ---------- */
+.sh .sub.sm { margin-top: 5px; font-family: var(--mono); letter-spacing: .04em; font-size: .74rem; }
+.sh .sub.sm b { color: var(--ink); font-weight: 600; font-family: var(--display); letter-spacing: .14em; }
+.btn .nc { font-family: var(--mono); letter-spacing: 0; margin-left: 4px; opacity: .75; }
+.btn[aria-expanded="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+/* ---------- keyed notes: a drawer under the header, the current sheet's notes in a grid that wraps to the width ---------- */
+.notes-d { border: 1px solid var(--ink2); }
+.notes-d .ph { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 5px 6px 5px 12px; }
+.kns { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr)); gap: 10px 26px; padding: 12px; font-size: .86rem; line-height: 1.3; }
+.kns .ax { grid-column: 1 / -1; font: 400 .74rem var(--mono); color: var(--ink2); border-top: 1px solid var(--rule); padding-top: 8px; }
+@media print {
+  body, .wrap { background: var(--paper); }
+  .toolbar, .lab-row, .ebar, #ecopy-text, .filter, .hint, .ph.nav .nb, .notes-d .nb, .m3-vbar { display: none !important; }
+  #notes[hidden] { display: block !important; }
+  aside { position: static !important; height: auto !important; max-height: none !important; }
+  aside .panel.index.p2d { display: flex !important; }
+  .list { overflow: visible; }
+}
+</style>
+
+<div class="wrap"><div class="frame">
+  <header class="sh">
+    <div class="num" id="sh-num">01</div>
+    <div class="ttl">
+      <h1 id="sh-title">KEY HEAD — POINTS, EDGES, MEASUREMENTS</h1>
+      <p class="sub" id="sh-sub">ALL DIMS IN mm</p>
+      <p class="sub sm" id="sh-meta"></p>
+    </div>
+    <div class="lab">
+      <b>MAZDA FLIP KEY</b>
+      <span>BLADE HEAD AND A NEW BODY FOR IT · PETG</span>
+      <div class="lab-row">
+        <div class="sheets" id="sheets" role="tablist" aria-label="Sheets in this set"><span class="sl" aria-hidden="true">SHEET</span></div>
+        <div class="mode" id="mode" role="group" aria-label="Drawings or models">
+          <button type="button" data-mode="2d" aria-pressed="true" title="The drawings and measurements">2D</button>
+          <button type="button" data-mode="3d" aria-pressed="false">3D</button>
+        </div>
+        <button class="btn" id="notes-btn" type="button" aria-expanded="false" aria-controls="notes">Notes</button>
+        <button class="btn" id="theme" type="button" aria-pressed="false">Dark sheet</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="notes-d" id="notes" aria-label="Keyed notes" hidden>
+    <div class="ph"><span>KEYED NOTES · SHEET <span id="notes-n">01</span></span><button class="nb" id="notes-x" type="button">Close</button></div>
+    <div class="kns" data-sheet="01">
+        <div class="kn"><span class="n">1</span><span><b>FRONT AND BACK ARE NOT MIRROR IMAGES.</b> <i>The logo-face edge drops to S in the middle; the rivet-face edge rises to D. Both views are needed.</i></span></div>
+        <div class="kn"><span class="n">2</span><span><b>THE BASE IS HIDDEN FROM THE FRONT.</b> <i>The logo-face skirt covers it. Tab, base and skirt are one piece with no gap between them.</i></span></div>
+        <div class="kn"><span class="n">3</span><span><b>THE HOOK POINTS AT THE BLADE.</b> <i>It sets which wall of the socket carries the catch.</i></span></div>
+        <div class="kn"><span class="n">4</span><span><b>THE TAB AND THE FOLDED BLADE SIT NEARER THE LOGO FACE.</b> <i>Tab 7.95 and blade 8.03 from the rivet face, in a head 15.80 thick. The buttons go on the logo face too.</i></span></div>
+        <div class="kn"><span class="n">5</span><span><b>THESE AXES ARE LEFT-HANDED.</b> <i>x from the blade side, y from the rivet face, z down from the dome tip. A model built straight from them comes out mirrored, as body v3 did: mirror one axis once.</i></span></div>
+        <div class="kn"><span class="n">6</span><span><b>SOME OF THE HEAD IS DRAWN APPROXIMATE.</b> <i>The rivet position (B7), the dome curve and the blade profile. None of them is used by the body.</i></span></div>
+      <div class="ax">DIMS IN mm · x FROM THE BLADE SIDE · y FROM THE RIVET FACE · z DOWN FROM THE DOME TIP</div>
+    </div>
+    <div class="kns" data-sheet="02">
+        <div class="kn"><span class="n">1</span><span><b>v3 PRINTED MIRRORED.</b> <i>Its pockets came out on the wrong face, so the head could not go in. v4 mirrors the measurement axes once and checks the result.</i></span></div>
+        <div class="kn"><span class="n">2</span><span><b>THE BUTTONS ARE ON THE LOGO FACE.</b> <i>The face with the skirt's V and the downward lip, nearest the tab and the folded blade.</i></span></div>
+        <div class="kn"><span class="n">3</span><span><b>LAY IN, THEN CLOSE.</b> <i>The head lies in the rivet half, logo face up, blade folded. The logo half closes straight down over it and is glued, lined up by two filament pins. The hook is never forced.</i></span></div>
+        <div class="kn"><span class="n">4</span><span><b>THE V IS LEFT OPEN.</b> <i>The logo half starts 0.2 below the skirt's V, so the skirt thickness no longer matters.</i></span></div>
+        <div class="kn"><span class="n">5</span><span><b>PRINT EACH HALF STANDING ON ITS KEYRING END.</b> <i>Joint face up: no overhang over the blade slot. PETG.</i></span></div>
+      <div class="ax">DIMS IN mm · SAME AXES AS SHEET 01 · SIZES FROM build_mazda_body_v4.py, FIT B</div>
+    </div>
+  </section>
+
+  <main>
+    <section class="sheet" aria-label="Drawing">
+      <div class="toolbar" role="toolbar" aria-label="Views">
+        <button class="btn" data-zoom="all" aria-pressed="true">Whole sheet</button>
+        <button class="btn" data-sheet="01" data-zoom="front" aria-pressed="false">1 Front</button>
+        <button class="btn" data-sheet="01" data-zoom="back" aria-pressed="false">2 Back</button>
+        <button class="btn" data-sheet="01" data-zoom="side" aria-pressed="false">3 Side</button>
+        <button class="btn" data-sheet="01" data-zoom="bottom" aria-pressed="false">4 Bottom</button>
+        <button class="btn" data-sheet="02" data-zoom="lf" aria-pressed="false" hidden>1 Logo face</button>
+        <button class="btn" data-sheet="02" data-zoom="rv" aria-pressed="false" hidden>2 Rivet half</button>
+        <button class="btn" data-sheet="02" data-zoom="lv" aria-pressed="false" hidden>3 Logo half</button>
+        <button class="btn" data-sheet="02" data-zoom="xs" aria-pressed="false" hidden>4 Section</button>
+        <span class="sep"></span>
+        <label class="check"><input type="checkbox" id="autozoom" checked> Open the view on selection</label>
+        <label class="check"><input type="checkbox" id="showlabels" checked> All tags</label>
+      </div>
+      <svg id="defs-svg" width="0" height="0" aria-hidden="true" focusable="false"></svg>
+      <div class="bento" id="bento"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="lg-pt"></i>POINT (F3, U17)</span>
+        <span><i class="lg-ed"></i>EDGE (f2, r1)</span>
+        <span><i class="lg-dim"></i>SELECTED</span>
+        <span><i class="lg-unk"></i>NOT MEASURED / PROPOSED</span>
+      </div>
+    </section>
+
+    <section class="models" id="models" aria-label="Models" hidden>
+      <nav class="m3-vbar" id="m3-vbar" aria-label="Models on this sheet">
+        <button class="btn vb" type="button" data-show="all" aria-pressed="true">All parts</button>
+        <span class="sep"></span>
+        <label class="check"><input type="checkbox" id="m3-spin"> Turn slowly</label>
+      </nav>
+      <div class="m3-parts" id="m3-parts"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="lg-fill"></i>PRINTED PART</span>
+        <span><i class="lg-line"></i>EDGE</span>
+        <span><i class="lg-dim"></i>SELECTED SIZE</span>
+        <span><i class="lg-unk"></i>PROPOSED / WORKED OUT</span>
+      </div>
+    </section>
+
+    <aside data-show="list">
+      <div class="panel p2d sel"><div class="ph nav"><button class="nb" id="sel-back" type="button">← Schedule</button><span class="phl">SELECTED</span><span class="pos" id="sel-pos"></span><button class="nb ar" id="sel-prev" type="button" aria-label="Previous measurement" title="Previous measurement">‹</button><button class="nb ar" id="sel-next" type="button" aria-label="Next measurement" title="Next measurement">›</button></div><div class="detail" id="detail" aria-live="polite"></div></div>
+      <div class="panel index p2d">
+        <div class="ph">MEASUREMENT SCHEDULE</div>
+        <p class="hint">Click a measurement to see where it goes: it highlights the points and edges it runs between, draws its dimension line, and opens the right view.</p>
+        <div class="filter" role="group" aria-label="Filter measurements">
+          <button data-f="all" aria-pressed="true">All</button>
+          <button data-f="unk" aria-pressed="false">Open</button>
+          <button data-f="ok" aria-pressed="false">Confirmed</button>
+          <button data-f="ent" aria-pressed="false">Entered</button>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="list" id="list" role="list"></div>
+        <div class="ebar" hidden><span id="esync" aria-live="polite">Connecting…</span><button class="btn" type="button" id="ecopy">Copy entries</button></div>
+        <textarea id="ecopy-text" readonly hidden rows="5" aria-label="Entries to copy"></textarea>
+      </div>
+      <div class="panel p3d" hidden><div class="ph">SELECTED</div><div class="detail" id="m3-sel" aria-live="polite"></div></div>
+      <div class="panel index p3d" hidden>
+        <div class="ph">PART SCHEDULE</div>
+        <div class="filter" id="m3-flt" role="group" aria-label="Filter sizes">
+          <button data-f="all" aria-pressed="true">All</button>
+          <button data-f="unk" aria-pressed="false">Open</button>
+          <button data-f="ok" aria-pressed="false">Confirmed</button>
+          <span class="count" id="m3-cnt"></span>
+        </div>
+        <div class="list" id="m3-rows" role="list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="furniture" data-sheet="01">
+    <section class="tb" aria-label="Title block, sheet 01">
+      <div class="p">3D PRINTS · MAZDA KEY FOB BODY</div>
+      <div class="t"><span class="n">01</span><span class="s">KEY HEAD</span></div>
+      <div class="m">SHEET 01 OF 02 · INTERACTIVE SET · DIMS IN mm · x FROM THE BLADE SIDE · y FROM THE RIVET FACE · z DOWN FROM THE DOME TIP</div>
+      <div class="m">REV E · 2026-10-09</div>
+      <div class="st">STATUS: MEASURED</div>
+    </section>
+  </div>
+
+  <div class="furniture" data-sheet="02" hidden>
+    <section class="tb" aria-label="Title block, sheet 02">
+      <div class="p">3D PRINTS · MAZDA KEY FOB BODY</div>
+      <div class="t"><span class="n">02</span><span class="s">BODY v4 · TWO HALVES</span></div>
+      <div class="m">SHEET 02 OF 02 · INTERACTIVE SET · DIMS IN mm · SAME AXES AS SHEET 01 · SIZES FROM build_mazda_body_v4.py, FIT B</div>
+      <div class="m">REV B · 2026-10-09</div>
+      <div class="st">STATUS: MODELLED — FIT TEST v4 TO PRINT</div>
+    </section>
+  </div>
+</div></div>
+
+<script>
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const bento = document.getElementById("bento");
+// ---------- sheet 01: the key's blade head, measured by caliper (mm) ----------
+// x across the width from the blade-side edge (the front view is mirrored: 31.9 - x), y thickness from the rivet face,
+// z down from the dome tip. NOTE: this (x, y, z) set is left-handed. Any model built from it must mirror one axis once
+// (body v4 mirrors z), or it comes out back to front, as body v3 did.
+const TOP_Y = 8.3, EDGE = 23.34, S_C = 29.10, D_C = 21.34, BASE_BOT = 24.34, TAB_END = 39.04, TIP = 23.34 + 39.12, T = 15.8;
+const TB1 = 15.30, TB2 = 15.30 + 7.04, HK = 15.30 - 1.8, BB1 = 11.75, BB2 = 11.75 + 15.60, GAP = 11.50;
+const TY1 = 7.95, TY2 = 7.95 + 5.50, BY1 = 8.20, BY2 = 8.20 + 5.50;   // thickness, from the rivet face
+const GAPTOP = EDGE - 7.30, AE_T = 2.80, AF_IN = 1.44;
+const FT1 = 31.9 - TB2, FT2 = 31.9 - TB1, FHK = 31.9 - HK, FB1 = 31.9 - BB2, FB2 = 31.9 - BB1;
+// ---------- sheet 02: body v4, two halves glued round the tab (proposed sizes, from build_mazda_body_v4.py) ----------
+const BW_ = 31.9, BEND = TIP + 3.0, SPLIT = 10.2, CLR = 0.25;                    // width, keyring end, glue plane, tab clearance (B)
+const SK0 = TB1 - CLR, SK1 = TB2 + CLR, SKY0 = TY1 - CLR, SKY1 = TY2 + CLR, SKD = BASE_BOT + 14.6 + 0.6;   // tab socket
+const CT0 = SK0 - 1.8 - CLR, CTZ = SKD - 1.4 - 2 * CLR;                          // hook catch
+const SLX = 10.6, SLZ = TIP + 0.8, SLY0 = 7.53, SLY1 = 11.13;                    // folded blade slot
+const PINS = [[12, 33], [26, 34]], RING = [26.5, BEND - 5.5, 2.25], AFL = 1.44;  // filament pins (x, z), keyring hole
+const PROF = [[0.18,12.65],[0.594,13.249],[1.192,13.736],[2.191,14.235],[3.252,14.582],[4.25,14.819],[5.98,15.121],[7.947,15.364],[10.131,15.551],[12.07,15.634],[14.009,15.717],[15.948,15.8],[18.073,15.734],[20.197,15.668],[21.722,15.566],[23.247,15.465],[25.289,15.243],[27.097,14.953],[28.649,14.591],[29.91,14.156],[30.845,13.637],[31.478,13.033],[31.827,12.326],[31.9,11.85],[31.9,9.875],[31.9,7.9],[31.9,5.925],[31.9,3.951],[31.794,3.333],[31.589,2.911],[31.388,2.642],[30.83,2.147],[30.067,1.717],[29.1,1.35],[27.602,0.971],[25.805,0.662],[23.89,0.429],[21.663,0.242],[19.755,0.161],[17.847,0.081],[15.939,0.0],[14.235,0.06],[12.53,0.119],[10.826,0.179],[8.542,0.345],[6.477,0.575],[4.635,0.88],[3.067,1.261],[1.817,1.722],[1.066,2.155],[0.414,2.778],[0.064,3.509],[0.0,3.947],[0.0,6.744],[0.06,8.713],[0.12,10.682]];
+const SXP = 31.9 / 34;   // the OEM button layout, scaled; each panel is (x, fraction down its band) and its z band
+const PANELS = [
+  [[[7.5, 0], [26.5, 0], [26.5, .76], [17, 1], [7.5, .76]], [30.6, 38.4]],
+  [[[7.5, .23], [17, 0], [26.5, .23], [26.5, 1], [7.5, 1]], [39.9, 47.4]],
+  [[[7, .19], [17, 0], [27, .19], [27, .81], [17, 1], [7, .81]], [48.9, 56.6]],
+];
+
+// ---------- the sheets in this page ----------
+// One page holds a numbered set of sheets for one print. Each sheet has its own views, schedule groups, OPEN box, keyed notes
+// and title block, and, once something is modelled, its 3D models (the 2D / 3D switch beside the sheet tabs).
+const SHEETS = [
+  { n: "01", name: "Key head", title: "KEY HEAD — POINTS, EDGES, MEASUREMENTS", sub: "ALL DIMS IN mm · BLADE FOLDED · MEASURED BY CALIPER · CLICK A MEASUREMENT TO PLACE IT" },
+  { n: "02", name: "Body v4", title: "BODY v4 — TWO HALVES GLUED ROUND THE TAB", sub: "ALL DIMS IN mm · PROPOSED SIZES FROM THE MODEL · FIT TEST NOT YET PRINTED · CLICK A SIZE TO PLACE IT" },
+];
+const VIEWS = {
+  front: { sheet: "01", ox: 0, oy: 0, sx: 9, sy: 9, title: "1  FRONT", short: "Front", sub: ["logo face towards you · blade on the right", "bottom edge points down in the middle"], ok: "MEASURED BY CALIPER", unk: "DOME AND BLADE PROFILE DRAWN APPROXIMATE", focus: [15.95, 30] },
+  back: { sheet: "01", ox: 0, oy: 0, sx: 9, sy: 9, title: "2  BACK", short: "Back", sub: ["rivet face towards you · blade on the left", "bottom edge points up in the middle"], ok: "MEASURED BY CALIPER", unk: "RIVET POSITION (IND.)", focus: [15.95, 30] },
+  side: { sheet: "01", ox: 0, oy: 0, sx: 9, sy: 9, title: "3  SIDE", short: "Side", sub: ["looking at the blade side", "logo face left · rivet face right"], ok: "MEASURED BY CALIPER", unk: "SKIRT THICKNESS (IND.)", focus: [7.9, 34] },
+  bottom: { sheet: "01", ox: 0, oy: 0, sx: 16, sy: 16, title: "4  BOTTOM", short: "Bottom", sub: ["bottom towards you · logo face down", "blade on the left"], ok: "MEASURED BY CALIPER", unk: "AE, AG, AH (IND.) · AI TBD", focus: [15.95, 7.9] },
+  lf: { sheet: "02", ox: BW_ * 9, oy: 0, sx: -9, sy: 9, title: "1  ASSEMBLED, LOGO FACE", short: "Logo face", sub: ["logo face towards you · blade on the right", "the logo half in front, the rivet half seen above its V"], ok: "", unk: "ALL SIZES PROPOSED (PROP.) · FIT TEST NOT PRINTED", focus: [15.95, 42] },
+  rv: { sheet: "02", ox: BW_ * 9, oy: 0, sx: -9, sy: 9, title: "2  RIVET HALF, GLUE FACE", short: "Rivet half", sub: ["looking at its glue face · blade on the right", "the head lies in here first, blade folded"], ok: "", unk: "ALL SIZES PROPOSED (PROP.)", focus: [15.95, 40] },
+  lv: { sheet: "02", ox: 0, oy: 0, sx: 9, sy: 9, title: "3  LOGO HALF, GLUE FACE", short: "Logo half", sub: ["looking at its glue face · blade on the left", "it closes over the head, straight down"], ok: "", unk: "ALL SIZES PROPOSED (PROP.)", focus: [15.95, 42] },
+  xs: { sheet: "02", ox: BW_ * 12, oy: T * 12, sx: -12, sy: -12, title: "4  SECTION THROUGH THE PINS", short: "Section", sub: ["cut across at 33.5 below the dome tip", "seen from the keyring end · logo face up · blade on the right"], ok: "", unk: "ALL SIZES PROPOSED (PROP.)", focus: [15.95, 7.9] },
+};
+
+const P = (v, x, y) => { const Vw = VIEWS[v]; return [Vw.ox + x * Vw.sx, Vw.oy + y * Vw.sy]; };
+const FOCUS = v => P(v, ...VIEWS[v].focus);
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e); return e;
+}
+const fx = n => n.toFixed(1);
+const seg = (v, pts, close) => "M" + pts.map(([x, y]) => P(v, x, y).map(fx).join(",")).join(" L") + (close ? " Z" : "");
+const d = (v, pts, close) => Array.isArray(pts[0][0]) ? pts.map(p => seg(v, p, close)).join(" ") : seg(v, pts, close);
+
+// ---------- cards ----------
+const defs = el("defs", {}, document.getElementById("defs-svg"));
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="arrowhead" d="M0,1 L10,5 L0,9 z"/></marker><marker id="arr-ink" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="arrowhead-ink" d="M0,1 L10,5 L0,9 z"/></marker><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="hatch-line"/></pattern>`;
+const LAY = {};
+for (const [i, [v, Vw]] of Object.entries(VIEWS).entries()) {
+  const [num, ...name] = Vw.title.split(/\s{2,}/);
+  const card = document.createElement("article"); card.className = "card"; card.dataset.view = v; card.style.setProperty("--i", i);
+  card.innerHTML = `<header class="ch"><span class="cn">${num}</span><h3 class="ct"><span class="tl">${name.join(" ")}</span><span class="ts">${Vw.short}</span></h3><span class="cs"></span><button class="cx" type="button" aria-expanded="false"><span class="cxl">Open</span><i class="cxi" aria-hidden="true"></i></button></header>
+    <div class="cd"><span class="cap">${Vw.sub.join(" · ")}</span>${Vw.ok ? `<span class="ok-l">${Vw.ok}</span>` : ""}<span class="unk-l">${Vw.unk}</span></div>
+    <div class="cb"><svg role="img" aria-label="${name.join(" ")}"></svg></div>`;
+  bento.appendChild(card);
+  const s = card.querySelector("svg"), g = el("g", {}, s), q = c => card.querySelector(c);
+  LAY[v] = { card, svg: s, g, cb: q(".cb"), cd: q(".cd"), cs: q(".cs"), cx: q(".cx"), cxl: q(".cxl"), shapes: el("g", {}, g), edges: el("g", {}, g), pts: el("g", {}, g), dim: el("g", { class: "dim" }, s) };
+}
+const gS = v => LAY[v].shapes;
+function shape(v, pts, cls, close = true) { return el("path", { d: d(v, pts, close), class: cls }, gS(v)); }
+function txt(v, x, y, s, cls, anchor = "middle", dx = 0, dy = 0) { const [px, py] = P(v, x, y); const t = el("text", { x: px + dx, y: py + dy, class: cls, "text-anchor": anchor }, gS(v)); t.textContent = s; return t; }
+function lines(v, x, y, list, cls, step = 16, dx = 0, dy = 0, anchor = "start") { list.forEach((s, i) => txt(v, x, y, s, cls, anchor, dx, dy + i * step)); }
+const arrow = (v, a, b) => { const [x1, y1] = P(v, ...a), [x2, y2] = P(v, ...b); el("line", { x1, y1, x2, y2, class: "s-arrow", "marker-end": "url(#arr-ink)" }, gS(v)); };
+const stage = (v, x, y, s, dx = 0, dy = 0, anchor = "start") => txt(v, x, y, s, "face-txt stage", anchor, dx, dy);
+const rect = (a0, b0, a1, b1) => [[a0, b0], [a1, b0], [a1, b1], [a0, b1]];
+// rounded rectangle; radii [first corner, second, third, fourth] going round from (x0, y0)
+function rr(x0, y0, x1, y1, rs, n = 7) {
+  const [a, b, c, e] = Array.isArray(rs) ? rs : [rs, rs, rs, rs], out = [];
+  const arc = (cx, cy, r, t0, kx, ky) => { if (r <= 0) { out.push([kx, ky]); return; } for (let i = 0; i <= n; i++) { const t = t0 + Math.PI / 2 * i / n; out.push([cx + r * Math.cos(t), cy + r * Math.sin(t)]); } };
+  arc(x0 + a, y0 + a, a, Math.PI, x0, y0); arc(x1 - b, y0 + b, b, 1.5 * Math.PI, x1, y0);
+  arc(x1 - c, y1 - c, c, 0, x1, y1); arc(x0 + e, y1 - e, e, .5 * Math.PI, x0, y1);
+  return out;
+}
+const close = p => [...p, p[0]];
+function braceFill(v, pts, cls = "s-brace") { shape(v, pts, "s-paper"); return shape(v, pts, cls); }
+
+// ---------- sheet 01: the key head ----------
+const botF = x => x <= 15.95 ? EDGE + (x / 15.95) * (S_C - EDGE) : S_C - ((x - 15.95) / 15.95) * (S_C - EDGE);
+const botB = x => x <= 15.95 ? EDGE - (x / 15.95) * (EDGE - D_C) : D_C + ((x - 15.95) / 15.95) * (EDGE - D_C);
+const lx = r => T - r;  // measured from rivet face -> x from logo face (side view)
+function dome() { const pts = []; for (let i = 0; i <= 30; i++) { const t = i / 30; pts.push([0.25 + 31.4 * t, TOP_Y - TOP_Y * Math.pow(Math.sqrt(Math.max(0, 1 - (2 * t - 1) ** 2)), .75)]); } return pts; }
+function sideTop() { const pts = [[0, 3]]; for (let i = 1; i < 12; i++) { const t = i / 12; pts.push([T * t, 1.6 - 1.6 * Math.sin(Math.PI * t)]); } pts.push([T, 3]); return pts; }
+function teeth(xIn, xOut, top) {   // cut edge, from head down to the tip
+  const sgn = xOut > xIn ? 1 : -1, n = 8, pts = [[xIn, top]];
+  for (let i = 0; i <= n; i++) pts.push([xIn + (i % 2 ? 0.7 : 0) * sgn, top + 4 + i * (TIP - 9 - top) / n]);
+  pts.push([xIn + (xOut - xIn) * 0.26, TIP]); return pts;
+}
+const DOME = dome();
+const F_CUT = teeth(21.9, 31.9, botF(21.9)), B_CUT = teeth(10, 0, botB(10));
+shape("front", [[31.9, EDGE], [31.9, TIP - 4], ...F_CUT.slice().reverse()], "s-blade");
+shape("front", [[FT1, BASE_BOT], [FT1, TAB_END], [FHK, TAB_END], [FHK, TAB_END - 1.4], [FT2, TAB_END - 1.8], [FT2, BASE_BOT]], "s-tab");
+shape("front", [[0, EDGE], ...DOME, [31.9, EDGE], [15.95, S_C]], "s-head");
+shape("front", [[FB1, BASE_BOT - 2], [FB1, BASE_BOT], [FB2, BASE_BOT], [FB2, BASE_BOT - 2]], "s-hidden", false);
+// back (rivet face)
+shape("back", [[0, EDGE], [0, TIP - 4], ...B_CUT.slice().reverse()], "s-blade");
+shape("back", [[0, EDGE], [15.95, S_C], [31.9, EDGE], [15.95, D_C]], "s-skirt");
+shape("back", [[0, EDGE], ...DOME, [31.9, EDGE], [15.95, D_C]], "s-head");
+shape("back", [[BB1, botB(BB1) - 1.2], [BB1, BASE_BOT], [BB2, BASE_BOT], [BB2, botB(BB2) - 1.2]], "s-base");
+shape("back", [[TB2, BASE_BOT], [TB2, TAB_END], [HK, TAB_END], [HK, TAB_END - 1.4], [TB1, TAB_END - 1.8], [TB1, BASE_BOT]], "s-tab");
+for (let i = 0; i < 3; i++) shape("back", [[TB1 + 1.6, BASE_BOT + 2.2 + i * 3.3], [TB2 - 1.6, BASE_BOT + 2.2 + i * 3.3], [TB2 - 1.6, BASE_BOT + 4.1 + i * 3.3], [TB1 + 1.6, BASE_BOT + 4.1 + i * 3.3]], "s-win");
+{ const [cx, cy] = P("back", 8.7, 7.5); el("circle", { cx, cy, r: 2.2 * 9, class: "s-rivet" }, gS("back")); }
+// side
+shape("side", [[lx(BY2), EDGE], [lx(BY2), BASE_BOT], [lx(BY1), BASE_BOT], [lx(BY1), EDGE]], "s-base");
+shape("side", [[lx(TY2), BASE_BOT], [lx(TY2), TAB_END], [lx(TY1), TAB_END], [lx(TY1), BASE_BOT]], "s-tab");
+shape("side", [[0, EDGE], [-0.3, 12], ...sideTop(), [T + 0.3, 12], [T, EDGE]], "s-head");
+shape("side", [[0, EDGE], [0, S_C], [AE_T, S_C], [AE_T, EDGE]], "s-head");
+shape("side", [[lx(11.13), EDGE], [lx(11.13), GAPTOP], [lx(7.53), GAPTOP], [lx(7.53), EDGE]], "s-gap");
+shape("side", [[lx(10.63), GAPTOP + 0.4], [lx(10.63), TIP], [lx(8.03), TIP], [lx(8.03), GAPTOP + 0.4]], "s-blade");
+// bottom
+{ const [x, y] = P("bottom", 0, 0); el("rect", { x, y, width: 31.9 * 16, height: T * 16, rx: 30, class: "s-head" }, gS("bottom")); }
+{ const [x, y] = P("bottom", AF_IN, AF_IN); el("rect", { x, y, width: (31.9 - 2 * AF_IN) * 16, height: (T - 2 * AF_IN) * 16, rx: 24, class: "s-hidden" }, gS("bottom")); }
+shape("bottom", [[1.9, T - AE_T], [10.9, T - AE_T], [10.9, T], [1.9, T]], "s-prov");
+shape("bottom", [[0, 7.53], [GAP, 7.53], [GAP, 11.13], [0, 11.13]], "s-gap");
+shape("bottom", [[0, 8.03], [10, 8.03], [10, 10.63], [0, 10.63]], "s-blade");
+shape("bottom", [[TB1, TY1], [TB2, TY1], [TB2, TY2], [TB1, TY2]], "s-tab");
+shape("bottom", [[HK, 9.2], [TB1, 9.2], [TB1, 12.2], [HK, 12.2]], "s-hook");
+txt("front", 15.95, 14.5, "LOGO FACE", "face-txt"); txt("front", 12.35, BASE_BOT - 2.6, "base (hidden)", "note"); txt("back", 18.5, 15.5, "RIVET FACE", "face-txt");
+txt("bottom", 15.95, -1.6, "RIVET FACE", "face-txt"); txt("bottom", 15.95, 17.6, "LOGO FACE", "face-txt");
+txt("side", -1.5, 31, "dashed s5: bottom centre line,", "note", "end"); txt("side", -1.5, 32.6, "low on the logo face (S5),", "note", "end"); txt("side", -1.5, 34.2, "high on the rivet face (S6)", "note", "end");
+txt("bottom", 0, 21.2, "shaded = tab · lighter strip = hook (points at the blade) · dashed box = base", "note", "start");
+txt("back", 11.6, 9.6, "(IND.)", "unk-txt", "start"); txt("bottom", 1.9, 19.2, "AE 2.80 · AH ≈10 (IND.)", "unk-txt", "start");
+txt("bottom", 0, 22.3, "open channel = blade gap · light fill = blade · dashed u7 = bottom centre line · dashed u20 = flat bottom face", "note", "start");
+txt("side", -8, 68.6, "The blade swings out through this side on the rivet;", "note", "start"); txt("side", -8, 70.2, "fully open it points out of the dome top.", "note", "start");
+
+// ---------- sheet 02: body v4 ----------
+const zr = x => EDGE - (EDGE - D_C) * (1 - Math.abs(x - BW_ / 2) / (BW_ / 2));          // rivet-face lip of the body, up to D
+const zl = x => EDGE + (S_C - EDGE) * (1 - Math.abs(x - BW_ / 2) / (BW_ / 2)) + 0.2;    // top of the logo half: the skirt's V plus room
+const XS = Array.from({ length: 33 }, (_, i) => BW_ * i / 32);
+const vTop = f => XS.map(x => [x, f(x)]);
+const circ = (cx, cz, r, n = 28) => Array.from({ length: n }, (_, i) => [cx + r * Math.cos(2 * Math.PI * i / n), cz + r * Math.sin(2 * Math.PI * i / n)]);
+function endRound(pts) {   // down the tab side, round the keyring end, back up the blade side
+  const r = 1.5, out = [...pts];
+  for (let i = 0; i <= 6; i++) { const t = Math.PI / 2 * i / 6; out.push([BW_ - r + r * Math.cos(t), BEND - r + r * Math.sin(t)]); }
+  for (let i = 0; i <= 6; i++) { const t = Math.PI / 2 + Math.PI / 2 * i / 6; out.push([r + r * Math.cos(t), BEND - r + r * Math.sin(t)]); }
+  return out;
+}
+const panelPts = ([poly, [za, zb]]) => poly.map(([x, f]) => [x * SXP, za + f * (zb - za)]);
+const sockPts = top => [[SK0, top(SK0)], ...XS.filter(x => x > SK0 && x < SK1).map(x => [x, top(x)]), [SK1, top(SK1)], [SK1, SKD], [CT0, SKD], [CT0, CTZ], [SK0, CTZ]];
+const flatTop = x => (x < AFL || x > BW_ - AFL) ? EDGE : BASE_BOT;   // top of the rivet half's glue face
+
+// view 1: assembled, from the logo face
+shape("lf", endRound(vTop(zr)), "s-beyond");
+shape("lf", endRound(vTop(zl)), "s-part");
+PANELS.forEach(p => shape("lf", panelPts(p), "s-panel"));
+shape("lf", circ(RING[0], RING[1], RING[2]), "s-through");
+txt("lf", BW_ / 2, 25.6, "RIVET HALF, SEEN ABOVE THE V", "note");
+txt("lf", 26, 60.6, "LOGO FACE", "face-txt", "middle");
+txt("lf", BW_ / 2, BEND, "Buttons are now on this face, with the skirt's V and the tab.", "note", "middle", 0, 26);
+
+// view 2: the rivet half's glue face
+shape("rv", endRound(vTop(zr)), "s-beyond");
+shape("rv", [[SLX, BASE_BOT], [BW_ - AFL, BASE_BOT], [BW_ - AFL, EDGE], [BW_, EDGE], ...endRound([]).slice(0), [0, SLZ], [SLX, SLZ]], "s-glue");
+shape("rv", [[0, EDGE], [AFL, EDGE], [AFL, BASE_BOT], [SLX, BASE_BOT], [SLX, SLZ], [0, SLZ]], "s-pocket");
+shape("rv", sockPts(() => BASE_BOT), "s-pocket");
+PINS.forEach(([x, z]) => shape("rv", circ(x, z, 1), "s-pocket"));
+shape("rv", circ(RING[0], RING[1], RING[2]), "s-through");
+txt("rv", 22.5, 50, "GLUE FACE", "face-txt", "middle");
+txt("rv", (SK0 + SK1) / 2, 31, "TAB", "face-txt", "middle");
+txt("rv", SLX / 2, 44, "BLADE", "face-txt", "middle");
+txt("rv", BW_ / 2, BEND, "Lay the head in, logo face up, blade folded: the hook drops into its catch.", "note", "middle", 0, 26);
+
+// view 3: the logo half's glue face
+shape("lv", endRound(vTop(zl)), "s-glue");
+shape("lv", [[0, zl(0)], ...XS.filter(x => x < SLX).map(x => [x, zl(x)]), [SLX, zl(SLX)], [SLX, SLZ], [0, SLZ]], "s-pocket");
+shape("lv", sockPts(zl), "s-pocket");
+PINS.forEach(([x, z]) => shape("lv", circ(x, z, 1), "s-pocket"));
+shape("lv", circ(RING[0], RING[1], RING[2]), "s-through");
+txt("lv", 22.5, 50, "GLUE FACE", "face-txt", "middle");
+txt("lv", BW_ / 2, 26.6, "OPEN UNDER THE SKIRT'S V", "note", "middle");
+txt("lv", BW_ / 2, BEND, "Close it over the head and glue; the two pins line it up.", "note", "middle", 0, 26);
+
+// view 4: section across through the pins
+function clipY(poly, s, keepBelow) {   // the profile cut on the glue plane: one side kept
+  const inside = p => keepBelow ? p[1] <= s : p[1] >= s, out = [];
+  for (let i = 0; i < poly.length; i++) {
+    const a = poly[i], b = poly[(i + 1) % poly.length], ia = inside(a), ib = inside(b);
+    if (ia) out.push(a);
+    if (ia !== ib) { const t = (s - a[1]) / (b[1] - a[1]); out.push([a[0] + t * (b[0] - a[0]), s]); }
+  }
+  return out;
+}
+shape("xs", clipY(PROF, SPLIT, true), "s-cut");
+shape("xs", clipY(PROF, SPLIT, false), "s-cut");
+shape("xs", rect(-0.6, SLY0, SLX, SLY1), "s-void");
+shape("xs", rect(SK0, SKY0, SK1, SKY1), "s-void");
+shape("xs", rect(0, 8.03, 10, 10.63), "s-blade");
+shape("xs", rect(TB1, TY1, TB2, TY2), "s-tab");
+shape("xs", rect(11, SPLIT - 3, 13, SPLIT + 3), "s-pinbar");
+shape("xs", rect(25, SPLIT - 3, 27, SPLIT + 3), "s-pinbar");
+shape("xs", PROF, "s-outline");
+shape("xs", [[0.05, SPLIT], [BW_, SPLIT]], "s-glueline", false);
+txt("xs", 26, 13.4, "LOGO HALF", "face-txt", "middle");
+txt("xs", 26, 4.6, "RIVET HALF", "face-txt", "middle");
+txt("xs", (TB1 + TB2) / 2, (TY1 + TY2) / 2, "TAB", "face-txt", "middle", 0, 4);
+txt("xs", 5, 9.33, "BLADE", "face-txt", "middle", 0, 4);
+txt("xs", 0, SPLIT, "GLUE", "note", "start", 14, -6);
+
+
+// ---------- points & edges ----------
+const NAMES = {
+  F3: "dome tip", F6: "logo-face bottom centre (lowest point)", F1: "bottom corner, tab side", F5: "bottom corner, blade side", F18: "blade tip", F12: "tab tip",
+  F8: "base corner (hidden behind the logo face)", F9: "base corner (hidden behind the logo face)", f7: "bottom of the base (hidden on this side)",
+  B3: "dome tip", B6: "rivet-face bottom centre (highest point)", B7: "rivet", B9: "base bottom corner", B10: "base bottom corner", b7: "bottom of the base, where the tab starts",
+  U5: "rivet-face edge, centre", U6: "logo-face edge, centre", f10: "tab tip", f16: "blade, straight back edge", f14: "blade, cut edge", u6: "blade-side edge",
+  u1: "rivet face (first half)", u2: "rivet face (second half)", u8: "blade gap, rivet-side wall", u10: "blade gap, logo-side wall", u9: "blade gap, inner end",
+  s4: "bottom edge on the blade side", s5: "bottom centre line", s7: "top end of the blade gap",
+};
+const POINTS = [
+  ["F1","front",0,EDGE,-10,2],["F2","front",0.25,TOP_Y,-10,0],["F3","front",15.95,0,8,-10],["F4","front",31.65,TOP_Y,10,0],["F5","front",31.9,EDGE,10,-4],["F6","front",15.95,S_C,12,14],
+  ["F8","front",FB1,BASE_BOT,8,-10],["F9","front",FB2,BASE_BOT,8,-10],
+  ["F11","front",FT1,botF(FT1),-26,20],["F12","front",FT1,TAB_END,-10,6],["F13","front",FHK,TAB_END,-4,22],["F14","front",FHK,TAB_END-1.4,26,-14],["F15","front",FT2,TAB_END-1.8,30,-30],["F16","front",FT2,botF(FT2),-30,-34],
+  ["F17","front",21.9,botF(21.9),36,-6],["F18","front",24.5,TIP,-10,10],["F19","front",31.9,TIP-4,10,4],
+  ["B1","back",0,EDGE,-10,-4],["B2","back",0.25,TOP_Y,-10,0],["B3","back",15.95,0,8,-10],["B4","back",31.65,TOP_Y,10,0],["B5","back",31.9,EDGE,10,2],["B6","back",15.95,D_C,4,-12],["B7","back",8.7,7.5,24,4],
+  ["B8","back",BB1,botB(BB1),6,-30],["B9","back",BB1,BASE_BOT,-30,28],["B10","back",BB2,BASE_BOT,30,10],["B11","back",BB2,botB(BB2),-8,-16],
+  ["B12","back",TB2,BASE_BOT,8,30],["B13","back",TB2,TAB_END,8,6],["B14","back",HK,TAB_END,-30,18],["B15","back",HK,TAB_END-1.4,-26,-14],["B16","back",TB1,TAB_END-1.8,-34,-24],["B17","back",TB1,BASE_BOT,-26,38],
+  ["B18","back",10,botB(10),-26,-24],["B19","back",7.4,TIP,10,10],["B20","back",0,TIP-4,-10,4],
+  ["S1","side",0,EDGE,-12,-8],["S2","side",0,3,-10,0],["S3","side",T,3,10,0],["S4","side",T,EDGE,10,4],["S5","side",0,S_C,-30,6],["S6","side",T,D_C,10,-6],
+  ["S7","side",lx(11.13),GAPTOP,-10,-6],["S8","side",lx(7.53),GAPTOP,10,-6],["S15","side",AE_T,S_C,8,10],["S9","side",lx(BY2),BASE_BOT,-26,26],["S10","side",lx(BY1),BASE_BOT,12,10],
+  ["S11","side",lx(TY2),TAB_END,-10,8],["S12","side",lx(TY1),TAB_END,10,8],["S13","side",lx(10.63),TIP,-10,8],["S14","side",lx(8.03),TIP,10,8],
+  ["U1","bottom",0.9,0.9,-14,-12],["U2","bottom",31,0.9,12,-12],["U3","bottom",31,14.9,12,14],["U4","bottom",0.9,14.9,-14,14],["U5","bottom",15.95,0,6,-12],["U6","bottom",15.95,T,6,16],
+  ["U7","bottom",0,7.53,-12,-4],["U8","bottom",GAP,7.53,-14,-8],["U9","bottom",GAP,11.13,-8,18],["U10","bottom",0,11.13,-12,8],["U11","bottom",10,8.03,-8,14],["U12","bottom",10,10.63,-8,-6],
+  ["U13","bottom",BB1,BY1,-4,-34],["U14","bottom",BB2,BY1,8,-8],["U15","bottom",BB2,BY2,8,12],["U16","bottom",BB1,BY2,-10,14],
+  ["U17","bottom",TB1,TY1,8,-12],["U18","bottom",TB2,TY1,6,-10],["U19","bottom",TB2,TY2,6,14],["U20","bottom",TB1,TY2,6,16],["U21","bottom",HK,9.2,-2,-36],["U22","bottom",HK,12.2,-2,34],
+];
+const tabF = [[FT1,BASE_BOT],[FT1,TAB_END],[FHK,TAB_END],[FHK,TAB_END-1.4],[FT2,TAB_END-1.8],[FT2,BASE_BOT]];
+const tabB = [[TB2,BASE_BOT],[TB2,TAB_END],[HK,TAB_END],[HK,TAB_END-1.4],[TB1,TAB_END-1.8],[TB1,BASE_BOT]];
+const EDGES = [ // id, view, polyline, label x, y, dx, dy, dashed
+  ["f1","front",[[0,EDGE],[0.25,TOP_Y]],0,16,-22,0],["f2","front",DOME,8,1.6,-8,-14],["f3","front",[[31.65,TOP_Y],[31.9,EDGE]],31.8,16,-24,0],
+  ["f4","front",[[31.9,EDGE],[15.95,S_C]],27.5,botF(27.5),0,-16],["f5","front",[[15.95,S_C],[0,EDGE]],3,botF(3),0,-18],
+  ["f7","front",[[FB1,BASE_BOT],[FB2,BASE_BOT]],12.35,BASE_BOT,0,0,"dash"],
+  ["f9","front",[[FT1,botF(FT1)],tabF[1]],FT1,33,-22,0],["f10","front",[tabF[1],tabF[2]],14,TAB_END,0,14],["f11","front",[tabF[2],tabF[3]],FHK,38.4,26,14],
+  ["f12","front",[tabF[3],tabF[4]],17.5,37.4,4,-16],["f13","front",[tabF[4],[FT2,botF(FT2)]],FT2,33,18,0],
+  ["f14","front",F_CUT,21.9,50,-22,0],["f15","front",[[31.9,TIP-4],[24.5,TIP]],27.5,TIP-1.6,14,14],["f16","front",[[31.9,EDGE],[31.9,TIP-4]],31.9,45,22,0],
+  ["b1","back",[[0,EDGE],[0.25,TOP_Y]],0,16,24,0],["b2","back",DOME,24,1.6,8,-14],["b3","back",[[31.65,TOP_Y],[31.9,EDGE]],31.8,16,24,0],
+  ["b4","back",[[31.9,EDGE],[15.95,D_C]],29.5,botB(29.5),0,-16],["b5","back",[[15.95,D_C],[0,EDGE]],5,botB(5),0,16],
+  ["b6","back",[[BB1,botB(BB1)],[BB1,BASE_BOT]],BB1,23.1,-22,0],["b7","back",[[BB1,BASE_BOT],[BB2,BASE_BOT]],19.5,BASE_BOT,0,0],["b8","back",[[BB2,BASE_BOT],[BB2,botB(BB2)]],BB2,23.6,22,0],
+  ["b9","back",[tabB[0],tabB[1]],TB2,32,22,0],["b10","back",[tabB[1],tabB[2]],18.4,TAB_END,0,14],["b11","back",[tabB[2],tabB[3]],HK,38.4,-30,4],
+  ["b12","back",[tabB[3],tabB[4]],14.5,37.4,12,-16],["b13","back",[tabB[4],tabB[5]],TB1,29.5,0,0],
+  ["b14","back",B_CUT,10,45,20,0],["b15","back",[[0,TIP-4],[7.4,TIP]],4.4,TIP-1.6,-14,14],["b16","back",[[0,EDGE],[0,TIP-4]],0,45,-22,0],
+  ["s1","side",[[0,EDGE],[-0.3,12],[0,3]],-0.2,15,-22,0],["s2","side",sideTop(),8,0.1,0,-14],["s3","side",[[T,3],[T+0.3,12],[T,EDGE]],T+0.2,15,22,0],
+  ["s4","side",[[T,EDGE],[0,EDGE]],1.6,EDGE,0,-12],["s5","side",[[0,S_C],[T,D_C]],13,D_C+0.9,22,10,"dash"],
+  ["s6","side",[[lx(11.13),EDGE],[lx(11.13),GAPTOP]],lx(11.13),19.2,-20,0],["s7","side",[[lx(11.13),GAPTOP],[lx(7.53),GAPTOP]],lx(9.3),GAPTOP,0,-14],["s8","side",[[lx(7.53),GAPTOP],[lx(7.53),EDGE]],lx(7.53),19.2,20,0],
+  ["s12","side",[[AE_T,EDGE],[AE_T,S_C]],AE_T,27,16,0],["s13","side",[[0,S_C],[AE_T,S_C]],AE_T/2,S_C,-22,14],
+  ["s9","side",[[lx(BY2),BASE_BOT],[lx(BY1),BASE_BOT]],lx(10.95),BASE_BOT,0,2],["s10","side",[[lx(TY2),BASE_BOT],[lx(TY2),TAB_END]],lx(TY2),33,-20,0],
+  ["s11","side",[[lx(10.63),TIP],[lx(8.03),TIP]],lx(9.3),TIP,0,16],
+  ["u1","bottom",[[1.9,0],[15.95,0]],8,0,0,0],["u2","bottom",[[15.95,0],[30,0]],24,0,0,0],["u3","bottom",[[31.9,1.9],[31.9,13.9]],31.9,4,0,0],
+  ["u4","bottom",[[30,T],[15.95,T]],28.5,T,0,0],["u5","bottom",[[15.95,T],[1.9,T]],6,T,0,0],["u6","bottom",[[0,13.9],[0,1.9]],0,3.5,0,0],["u7","bottom",[[15.95,0],[15.95,T]],15.95,2.6,18,0,"dash"],
+  ["u8","bottom",[[0,7.53],[GAP,7.53]],5.5,7.53,0,-12],["u9","bottom",[[GAP,7.53],[GAP,11.13]],GAP,9.33,-14,0],["u10","bottom",[[GAP,11.13],[0,11.13]],5.5,11.13,0,12],
+  ["u11","bottom",[[BB1,BY1],[BB2,BY1]],25.3,BY1,0,-12,"dash"],["u12","bottom",[[BB2,BY1],[BB2,BY2]],BB2,11,0,0,"dash"],["u13","bottom",[[BB2,BY2],[BB1,BY2]],25.6,BY2,0,12,"dash"],["u14","bottom",[[BB1,BY2],[BB1,BY1]],BB1,13,0,0,"dash"],
+  ["u15","bottom",[[TB1,TY1],[TB2,TY1]],18.8,TY1,0,0],["u16","bottom",[[TB2,TY1],[TB2,TY2]],TB2,10.7,0,0],["u17","bottom",[[TB2,TY2],[TB1,TY2]],18.8,TY2,0,0],
+  ["u18","bottom",[[TB1,TY2],[TB1,TY1]],TB1,8.9,4,0],["u19","bottom",[[HK,9.2],[HK,12.2]],HK,10.7,0,0],
+  ["u20","bottom",[[AF_IN+1.4,AF_IN],[31.9-AF_IN-1.4,AF_IN]],8,AF_IN,0,12,"dash"],
+];
+const OUTLINE = new Set("f1 f2 f3 f4 f5 b1 b2 b3 b4 b5 s1 s2 s3 s4 u1 u2 u3 u4 u5 u6".split(" "));
+// sheet 02 tags: edges only (lower-case a, r, l, x), so they never clash with sheet 01's letters
+const GLUE_RV = [[SLX, BASE_BOT], [BW_ - AFL, BASE_BOT], [BW_ - AFL, EDGE], [BW_, EDGE], ...endRound([]), [0, SLZ], [SLX, SLZ], [SLX, BASE_BOT]];
+const CATCH = [[SK0, CTZ], [CT0, CTZ], [CT0, SKD], [SK0, SKD]];
+const EDGES2 = [
+  ["a1","lf",vTop(zl),8,zl(8),0,-16],
+  ["a2","lf",vTop(zr),25,zr(25),0,-16],
+  ["a3","lf",PANELS.map(p => close(panelPts(p))),17,43.6,0,0],
+  ["a4","lf",close(circ(RING[0], RING[1], RING[2])),RING[0],RING[1]+RING[2],0,16],
+  ["r1","rv",GLUE_RV,28,46,0,0],
+  ["r2","rv",close(sockPts(() => BASE_BOT)),SK0,30,-26,0],
+  ["r3","rv",CATCH,CT0,(CTZ+SKD)/2,-30,0],
+  ["r4","rv",[[0, EDGE], [AFL, EDGE], [AFL, BASE_BOT], [SLX, BASE_BOT], [SLX, SLZ], [0, SLZ]],SLX/2,36,0,0],
+  ["r5","rv",PINS.map(([x, z]) => close(circ(x, z, 1))),PINS[1][0],PINS[1][1],-24,-16],
+  ["l1","lv",vTop(zl),6,zl(6),0,-16],
+  ["l2","lv",close(sockPts(zl)),SK1,33,26,0],
+  ["l3","lv",CATCH,CT0,(CTZ+SKD)/2,-30,0],
+  ["l4","lv",[[0, zl(0)], [SLX, zl(SLX)], [SLX, SLZ], [0, SLZ]],SLX/2,40,0,0],
+  ["l5","lv",PINS.map(([x, z]) => close(circ(x, z, 1))),PINS[1][0],PINS[1][1],24,-16],
+  ["x1","xs",[[0.05, SPLIT], [BW_, SPLIT]],30,SPLIT,0,-14],
+  ["x2","xs",close(rect(SK0, SKY0, SK1, SKY1)),SK0,SKY0,-22,10],
+  ["x3","xs",close(rect(-0.6, SLY0, SLX, SLY1)),SLX,SLY0,22,10],
+  ["x4","xs",[close(rect(11, SPLIT - 3, 13, SPLIT + 3)), close(rect(25, SPLIT - 3, 27, SPLIT + 3))],26,SPLIT+3,0,-14],
+];
+EDGES.push(...EDGES2);
+Object.assign(NAMES, {
+  a1: "top of the logo half: the skirt's V, plus 0.2 of room", a2: "top of the rivet half: the lip that rises under the rivet face's V",
+  a3: "button panels, 0.8 deep in the logo face", a4: "keyring hole, through both halves",
+  r1: "glue face of the rivet half", r2: "tab socket, open on the glue face", r3: "hook catch, at the bottom of the socket on the blade side",
+  r4: "blade slot, open on the glue face, the blade side and the top", r5: "holes for the two filament pins",
+  l1: "top of the logo half: open under the skirt's V", l2: "tab socket, the logo half's share", l3: "hook catch, the logo half's share",
+  l4: "blade slot, the logo half's share (0.93 deep)", l5: "holes for the two filament pins",
+  x1: "glue plane, 10.2 from the rivet face", x2: "tab socket, cut across", x3: "blade slot, cut across", x4: "the two filament pins",
+});
+["a2", "r1", "l1"].forEach(id => OUTLINE.add(id));
+
+const VIEW_OF = {};
+const nodes = {};
+for (const [id, v, pts, lxp, lyp, ldx, ldy, style] of EDGES) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "edge" + (style ? " " + style : "") + (OUTLINE.has(id) ? " outline" : ""), "data-id": id }, LAY[v].edges);
+  const dd = d(v, pts, false);
+  el("path", { d: dd, class: "vis" }, g);
+  el("path", { d: dd, class: "hit" }, g);
+  const [px, py] = P(v, lxp, lyp); const tx = px + ldx, ty = py + ldy, w = 9 + 7.6 * id.length;
+  if (Math.abs(ldx) > 30 || Math.abs(ldy) > 30) el("line", { x1: px, y1: py, x2: tx, y2: ty, class: "lead" }, g);
+  const tg = el("g", { class: "tag" }, g);
+  el("rect", { x: tx - w / 2, y: ty - 9, width: w, height: 17 }, tg);
+  el("text", { x: tx, y: ty + 4 }, tg).textContent = id;
+  nodes[id] = g;
+}
+for (const [id, v, x, y, dx, dy] of POINTS) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "pt", "data-id": id }, LAY[v].pts);
+  const [px, py] = P(v, x, y);
+  if (Math.abs(dx) > 16 || Math.abs(dy) > 24) el("line", { x1: px, y1: py, x2: px + dx * .85, y2: py + dy * .85 }, g);
+  el("circle", { cx: px, cy: py, r: 3.2 }, g);
+  el("circle", { cx: px, cy: py, r: 10, class: "hitc" }, g);
+  el("text", { x: px + dx, y: py + dy + 4, "text-anchor": dx >= 0 ? "start" : "end" }, g).textContent = id;
+  nodes[id] = g;
+}
+const VNAME = { front: "View 1 · front", back: "View 2 · back", side: "View 3 · side", bottom: "View 4 · bottom", lf: "Sheet 02 · view 1 · assembled, logo face", rv: "Sheet 02 · view 2 · rivet half, glue face", lv: "Sheet 02 · view 3 · logo half, glue face", xs: "Sheet 02 · view 4 · section through the pins" };
+
+
+// ---------- schedule ----------
+// f: "ind" not confirmed · "prop" a proposed size · "der" worked out · none = measured · no v = to be measured · u: unit when it is not mm
+// dim: [view, "h" | "v", from, to, where the line sits, [where each extension line starts], [pill offset in px]]
+// [key, heading, sheet]
+const GROUPS = [["head", "Head outline", "01"], ["tab", "Snap tab", "01"], ["base", "Tab base", "01"], ["blade", "Folded blade", "01"], ["gap", "Blade gap", "01"],
+  ["split", "Split and assembly · proposed", "02"], ["sock", "Tab socket · proposed", "02"], ["slot", "Blade slot · proposed", "02"], ["pins", "Pins · proposed", "02"], ["face", "Logo face · proposed", "02"], ["whole", "Whole body", "02"], ["q02", "Questions · to answer", "02"]];
+const GSHEET = Object.fromEntries(GROUPS.map(([k, , n]) => [k, n]));
+const M = [
+  { k: "A", g: "head", v: "31.40", t: "Width at the top of the straight sides", how: "Straight across, just below where the dome starts curving.", refs: ["F2","F4","f2"], dim: ["front","h",0.25,31.65,-3,[TOP_Y,TOP_Y]] },
+  { k: "B", g: "head", v: "31.90", t: "Width at the bottom corners", how: "The widest point, right where the head ends.", refs: ["F1","F5"], dim: ["front","h",0,31.9,21.6,[EDGE,EDGE]] },
+  { k: "C", g: "head", v: "15.80", t: "Thickness, logo face to rivet face", how: "At the thickest point. The faces curve slightly.", refs: ["U1","U4","u6"], dim: ["bottom","v",0,T,-2.4,[1.9,1.9]] },
+  { k: "E", g: "head", v: "23.34", t: "Dome tip to the bottom corners", how: "Tip of the dome down to the bottom corners (same on both faces).", refs: ["F3","F1","F5"], dim: ["front","v",0,EDGE,-6.5,[15.95,0]] },
+  { k: "D", g: "head", v: "21.34", t: "Dome tip to rivet-face centre", how: "Dome tip down to the middle of the rivet face's bottom edge, its highest point.", refs: ["B3","B6","b4","b5"], dim: ["back","v",0,D_C,-4,[15.95,15.95]] },
+  { k: "S", g: "head", v: "29.10", t: "Dome tip to logo-face centre", how: "Dome tip down to the middle of the logo face's bottom edge, its lowest point. On this side the face hangs down over the top of the tab.", refs: ["F3","F6","f4","f5"], dim: ["front","v",0,S_C,-3.5,[15.95,15.95]] },
+  { k: "AB", g: "head", v: "24.34", t: "Dome tip to the bottom face", how: "Dome tip down to the flat bottom face where the tab starts (the bottom of the base). Different from D, which stops at the rivet face's V point.", refs: ["B3","b7","B9","B10"], dim: ["back","v",0,BASE_BOT,33.6,[15.95,BB2]] },
+  { k: "F", g: "tab", v: "14.60", t: "Tab length, base to tip", how: "From the bottom face (b7) to the very tip of the tab. Matches G − AB = 14.70.", refs: ["b7","B13","b10","b9"], dim: ["back","v",BASE_BOT,TAB_END,24.6,[TB2,TB2]] },
+  { k: "G", g: "tab", v: "39.04", t: "Dome tip to tab tip", how: "Overall length of the head including the tab.", refs: ["F3","F12","f10"], dim: ["front","v",0,TAB_END,-9.5,[15.95,FT1]] },
+  { k: "H", g: "tab", v: "7.04", t: "Tab width, body only", how: "Across the tab's body, not counting the hook.", refs: ["F11","F16","f9","f13"], dim: ["front","h",FT1,FT2,41.8,[TAB_END,TAB_END-1.8]] },
+  { k: "I", g: "tab", v: "9.00", t: "Tab width including the hook", how: "Across the tip, including the hook lip.", refs: ["F12","F13","f10"], dim: ["front","h",FT1,FHK,44.4,[TAB_END,TAB_END]] },
+  { k: "J", g: "tab", v: "15.30", t: "Blade-side edge to tab", how: "At the bottom face, to the tab's body. J + 7.04 + K = 31.94, which matches B.", refs: ["u6","u18"], dim: ["bottom","h",0,TB1,-2.6,[1.9,TY1]] },
+  { k: "K", g: "tab", v: "9.60", t: "Other edge to tab", how: "From the tab-side edge to the nearest face of the tab, at the bottom face.", refs: ["u3","u16"], dim: ["bottom","h",TB2,31.9,-2.6,[TY1,1.9]] },
+  { k: "L", g: "tab", v: "5.50", t: "Tab thickness", how: "Face to face, in the same direction as the key's thickness.", refs: ["u15","u17"], dim: ["bottom","v",TY1,TY2,34.4,[TB2,TB2]] },
+  { k: "M", g: "tab", v: "7.95", t: "Rivet face to tab", how: "From the rivet face to the nearest face of the tab.", refs: ["u1","u2","u15"], dim: ["bottom","v",0,TY1,34.4,[30,TB2]] },
+  { k: "U", g: "base", v: "2.25", t: "Base sticks out below the rivet face", how: "From the rivet face's bottom edge down to the bottom of the base. On the logo side the base is hidden.", refs: ["b6","b7","B8","B9"], dim: ["back","v",BASE_BOT-2.25,BASE_BOT,10.85,[BB1,BB1]] },
+  { k: "V", g: "base", v: "15.60", t: "Base width", how: "Side to side, along the key's width.", refs: ["U13","U14","u11"], dim: ["bottom","h",BB1,BB2,17.4,[BY2,BY2]] },
+  { k: "W", g: "base", v: "5.50", t: "Base thickness", how: "Face to face. Same as the tab's thickness.", refs: ["U14","U15","u12"], dim: ["bottom","v",BY1,BY2,36.4,[BB2,BB2]] },
+  { k: "X", g: "base", v: "11.75", t: "Blade-side edge to base", how: "From the blade-side edge to the nearest side of the base. Only 0.25 mm of wall is left between the blade gap and the base.", refs: ["u6","U13","u14"], dim: ["bottom","h",0,BB1,19.4,[13.9,BY2]] },
+  { k: "Y", g: "base", v: "8.20", t: "Rivet face to base", how: "From the rivet face to the nearest face of the base.", refs: ["u1","U13","u11"], dim: ["bottom","v",0,BY1,36.4,[30,BB2]] },
+  { k: "N", g: "blade", v: "39.12", t: "Bottom corner to blade tip", how: "Blade folded: from the bottom corner on the blade side down to the tip.", refs: ["F5","F18","F19","f16"], dim: ["front","v",EDGE,TIP,35,[31.9,24.5]] },
+  { k: "O", g: "blade", v: "0.00", t: "Blade-side edge to blade", how: "The folded blade sits flush with the blade-side edge.", refs: ["u6","f16","f3","U7","U10"], dim: null },
+  { k: "P", g: "blade", v: "10.00", t: "Blade width", how: "At the widest part of the blade.", refs: ["F17","f16","f14"], dim: ["front","h",21.9,31.9,65,[59.5,TIP-4]] },
+  { k: "Q", g: "blade", v: "2.60", t: "Blade thickness", how: "Flat across the blade.", refs: ["S13","S14","s11"], dim: ["side","h",lx(10.63),lx(8.03),65,[TIP,TIP]] },
+  { k: "R", g: "blade", v: "8.03", t: "Rivet face to blade", how: "From the rivet face to the nearest face of the folded blade.", refs: ["u1","U11"], dim: ["bottom","v",0,8.03,-2.4,[5,0]] },
+  { k: "T", g: "gap", v: "3.60", t: "Blade gap width", how: "The slot the blade folds into, measured across the thickness.", refs: ["u8","u10","s6","s8"], dim: ["bottom","v",7.53,11.13,6.2,[GAP,GAP]] },
+  { k: "Z", g: "gap", v: "11.50", t: "Blade gap depth", how: "How far the slot goes in from the blade-side edge.", refs: ["u6","u9","U8","U9"], dim: ["bottom","h",0,GAP,6.2,[7.53,7.53]] },
+  { k: "AA", g: "gap", v: "7.30", t: "Blade gap length up the side", how: "On the blade side: from the bottom edge (s4) up to the top end of the slot (s7). The blade swings out through this slot on the rivet pivot; fully open, it points straight out of the dome top.", refs: ["S7","S8","s7","s4"], dim: ["side","v",GAPTOP,EDGE,2.9,[lx(11.13),lx(11.13)]] },
+  { k: "AF", g: "head", v: "1.44", t: "Bottom face set in from the rivet face", how: "Looking at the underside: how far the flat bottom face (dashed u20) is set in from the rivet face.", refs: ["u20","u1","u2"], dim: ["bottom","v",0,AF_IN,29.2,[30,29]] },
+  { k: "AE", g: "head", v: "2.80", f: "ind", t: "Logo-face skirt thickness at the U4 end", how: "The part of the logo face that hangs down in a V below the bottom face. Wall thickness at the bottom edge, read in a tight spot. The body notch is cut 3.0 deep everywhere; the fit test settles it. Body v4 leaves the whole V open in the logo half, so it no longer depends on this.", refs: ["s12","s13","S5","S15"], dim: ["side","h",0,AE_T,32.6,[S_C,S_C]] },
+  { k: "AG", g: "head", v: "1.53", f: "ind", t: "Between the 2.80 part and the base", how: "Taken as the skirt thickness in the short stretch between the 2.80 part and the base. It may instead be a distance along the width. Needs a re-measure. Body v4 leaves the whole V open in the logo half, so it no longer depends on this.", refs: ["U16","u5"], dim: ["bottom","v",T-1.53,T,11.3,[10.9,10.9]] },
+  { k: "AH", g: "head", v: "≈10", f: "ind", t: "Length of the 2.80 part", how: "Runs from U4 towards U6. Hard to read. Not used by the body. Body v4 leaves the whole V open in the logo half, so it no longer depends on this.", refs: ["U4","U6","u5"], dim: ["bottom","h",0.9,10.9,18.2,[T,T]] },
+  { k: "AI", g: "head", v: null, t: "Skirt thickness on the tab side of the base", how: "Same thing as AE, measured at the U3 end, past the base. Not measured yet. Body v4 leaves the whole V open in the logo half, so it no longer depends on this.", refs: ["U3","u4"], dim: null },
+  // ----- sheet 02: body v4. Proposed sizes are red with (PROP.); sizes worked out from the measurements are (DERIVED). -----
+  { k: "HA", g: "split", v: "10.20", f: "prop", t: "Glue plane, from the rivet face", how: "The body is cut in two on this plane, through the tab socket and the blade slot, so the hook is never forced into a closed socket.", refs: ["x1"], dim: ["xs","v",0,SPLIT,BW_ + 2.6,[BW_ - 0.2,BW_ - 0.2]] },
+  { k: "HB", g: "split", v: "5.60", f: "der", t: "Logo half thickness", how: "15.80 (C) less the glue plane (HA). The thin half: print it with a brim.", refs: ["x1"], dim: ["xs","v",SPLIT,T,BW_ + 2.6,[BW_ - 0.2,BW_ - 0.2],[0,0]] },
+  { k: "HC", g: "split", v: "Rivet half first", f: "prop", t: "Assembly", how: "Lay the head in the rivet half, logo face up, blade folded: tab, hook, base and blade all drop into pockets open on the glue face. Then close the logo half over it and glue. Everything under the skirt's V is open in the logo half, so it goes straight down over the skirt.", refs: ["r1","l1"], dim: null },
+  { k: "HD", g: "sock", v: "7.54", f: "der", t: "Socket width", how: "Tab width H (7.04) plus 0.25 each side (fit test B). A is 0.15, C is 0.35.", refs: ["r2","l2"], dim: ["rv","h",SK0,SK1,BASE_BOT - 2.6,[BASE_BOT,BASE_BOT]] },
+  { k: "HE", g: "sock", v: "6.00", f: "der", t: "Socket thickness", how: "Tab thickness L (5.50) plus 0.25 each side. It straddles the glue plane: 2.50 in the rivet half, 3.50 in the logo half.", refs: ["x2"], dim: ["xs","v",SKY0,SKY1,SK0 - 1.4,[SK0,SK0]] },
+  { k: "HF", g: "sock", v: "15.20", f: "der", t: "Socket depth below the bottom face", how: "Tab length F (14.60) plus 0.60 below the tip.", refs: ["r2"], dim: ["rv","v",BASE_BOT,SKD,SK1 + 2.6,[SK1,SK1]] },
+  { k: "HG", g: "sock", v: "0.25", f: "prop", t: "Tab clearance per side", how: "Fit test v4 comes in three versions, marked by grooves on the tab-side edge: A tight 0.15 (1 groove), B standard 0.25 (2), C loose 0.35 (3; also 0.15 more room at the rivet-face lip).", refs: ["r2","l2"], dim: null },
+  { k: "HH", g: "sock", v: "2.05", f: "der", t: "Hook catch width", how: "Hook depth (I − H = 1.80) plus clearance. On the blade side of the socket, at its bottom.", refs: ["r3","l3"], dim: ["rv","h",CT0,SK0,SKD + 2.6,[SKD,SKD]] },
+  { k: "HI", g: "sock", v: "1.90", f: "der", t: "Hook catch height", how: "The hook's height (1.40) plus clearance above and below.", refs: ["r3","l3"], dim: ["lv","v",CTZ,SKD,CT0 - 2.6,[CT0,CT0]] },
+  { k: "HJ", g: "slot", v: "10.60", f: "prop", t: "Blade slot depth from the blade side", how: "Blade width P (10.00) plus 0.60. Open on the blade side and at the top, so the blade still swings out on the rivet.", refs: ["r4","l4"], dim: ["rv","h",0,SLX,SLZ + 2.6,[SLZ,SLZ]] },
+  { k: "HK", g: "slot", v: "3.60", f: "der", t: "Blade slot thickness", how: "Same as the head's blade gap T, 7.53 to 11.13 from the rivet face. The glue plane runs through it.", refs: ["x3"], dim: ["xs","v",SLY0,SLY1,SLX + 1.4,[SLX,SLX]] },
+  { k: "HL", g: "slot", v: "63.26", f: "der", t: "Blade slot length from the dome tip", how: "Folded blade tip (E + N = 62.46) plus 0.80.", refs: ["r4"], dim: ["rv","v",BASE_BOT,SLZ,-2.6,[0,0]] },
+  { k: "HM", g: "pins", v: "2.0", f: "prop", t: "Pin hole diameter", how: "For a 1.75 piece of filament, 6 long: 3 into each half. Two pins line the halves up while the glue sets. Loose pins: a dab of glue. Tight: open the holes with a 2 mm drill.", refs: ["r5","l5","x4"], dim: ["xs","h",11,13,SPLIT + 4.4,[SPLIT + 3,SPLIT + 3]] },
+  { k: "HN", g: "face", v: "0.20", f: "prop", t: "Room under the skirt's V", how: "The logo half starts 0.20 below the skirt's V (S at the centre). The 2.80 skirt thickness (AE) is no longer needed: the V is left open.", refs: ["a1","l1"], dim: null },
+  { k: "HO", g: "face", v: "0.80", f: "prop", t: "Button panel depth", how: "Three panels in the OEM layout, now on the logo face (v3 had them on the rivet face).", refs: ["a3"], dim: null },
+  { k: "HP", g: "face", v: "4.50", f: "prop", t: "Keyring hole", how: "Through both halves, 5.5 up from the keyring end.", refs: ["a4"], dim: ["lf","h",RING[0] - RING[2],RING[0] + RING[2],RING[1] + 4,[RING[1],RING[1]],[0,18]] },
+  { k: "HQ", g: "whole", v: "31.90", t: "Overall width", how: "Read from the model.", refs: ["a1"], dim: ["lf","h",0,BW_,BEND + 2.6,[BEND,BEND]] },
+  { k: "HR", g: "whole", v: "44.12", t: "Overall length", how: "Read from the model: from the top of the rivet-face lip (D) to the keyring end.", refs: ["a2"], dim: ["lf","v",D_C,BEND,-2.6,[BW_ / 2,0]] },
+  { k: "HS", g: "whole", u: "g", v: "≈ 20", f: "der", t: "Mass in PETG, both halves", how: "About 14 g for the rivet half and 6 g for the logo half at solid fill. Not weighed. Fit test v4: about 8 g a pair.", refs: ["r1","l1"], dim: null },
+  // questions that are not a size: answered by a choice, in the same entry box
+  { k: "FIT", g: "q02", kind: "choice", opts: ["A", "B", "C", "none"], t: "Which fit test sits flush?", how: "Print fit test v4 A, B and C (one, two and three grooves on the tab-side edge), glue each round the head, and keep the one that sits flush without play. None: say what was wrong in the note.", refs: ["r1","l1"], dim: null },
+  { k: "GLUE", g: "q02", kind: "choice", opts: ["thick CA", "epoxy"], t: "Which glue for the two halves?", how: "Thick CA (superglue) sets fast. Two-part epoxy is stronger and gives time to line the halves up on the pins.", refs: ["r1","l1"], dim: null },
+
+];
+// what each measurement runs FROM and TO, in words, and which part of the calipers (or what else) to USE
+const FTU = {"AE": ["The outside of the logo-face skirt, at the U4 end", "Its inside face", "Outside jaws gripping the skirt edge"], "AG": ["The outside of the skirt, between the 2.80 part and the base", "Its inside face", "Outside jaws, tips only"], "AH": ["U4, the corner", "Where the 2.80-thick part ends, towards U6", "Caliper jaws laid flat along the edge"], "AI": ["The outside of the logo-face skirt, at the U3 end", "Its inside face, past the base", "Outside jaws gripping the skirt edge"]};
+for (const m of M) if (FTU[m.k]) [m.from, m.to, m.tool] = FTU[m.k];
+const BYK = Object.fromEntries(M.map(m => [m.k, m]));
+// ENT holds the values typed into the page (kept in the page's database, "entries/<letter>"). A measurement with an
+// entry reads "ent": measured, waiting for a cross-check before it is written into M as confirmed.
+let ENT = {};
+// PUBLIC build. This page is published read-only: the database it would save
+// measurements to belongs to the working copy and does not exist here, and
+// without this it falls back to the browser, which looks like it saved and did
+// not. With PUBLIC on there is no YOUR MEASUREMENT box and no entries bar, and
+// the sheet is a drawing you read rather than one you fill in.
+const PUBLIC = true;
+const CAN_ENTER = m => !PUBLIC && m.f !== "prop" && m.f !== "der";
+const KIND = m => m.kind || "num";                                // "num" (a number in m.u or mm), "yn" (yes / no), "choice" (one of m.opts), "text"
+const OPTS = m => m.opts || (KIND(m) === "yn" ? ["yes", "no"] : null);   // answers given as buttons
+const ST = m => (ENT[m.k] && CAN_ENTER(m)) ? "ent" : (!m.v || m.f) ? "unk" : "ok";
+const UNIT = m => m.u && m.u !== "mm" ? " " + m.u : "";
+const VAL = m => ST(m) === "ent" ? ENT[m.k].value + (KIND(m) === "num" ? UNIT(m) : "") : !m.v ? "TBD" : m.v + UNIT(m) + (m.f === "ind" ? " (IND.)" : m.f === "prop" ? " (PROP.)" : m.f === "der" ? " (DERIVED)" : "");
+const USED = {};
+for (const m of M) for (const r of m.refs) (USED[r] = USED[r] || []).push(m.k);
+// ---------- the card grid of each sheet ----------
+// per sheet: the arrangements tried when fitting the screen, the unfitted fallbacks by width, and the share of the grid each view deserves
+const GRID = {
+  "01": {
+    bentos: [
+      [["front", "back", "side"], ["bottom"]],
+      [["front", "back", ["side"]], ["bottom"]],
+      [["front", "back"], ["side", "bottom"]],
+      [["front", "back", "side", "bottom"]],
+      [["front"], ["back"], ["side", "bottom"]],
+    ],
+    natural: [[1300, [["front", "back", "side"], ["bottom"]]], [820, [["front", "back"], ["side", "bottom"]]], [0, [["front"], ["back"], ["side"], ["bottom"]]]],
+  },
+  "02": {
+    bentos: [
+      [["lf", "rv", "lv"], ["xs"]],
+      [["lf", "rv", "lv", "xs"]],
+      [["lf", "rv"], ["lv", "xs"]],
+      [["lf", "rv", ["lv", "xs"]]],
+      [["lf"], ["rv"], ["lv", "xs"]],
+    ],
+    natural: [[1300, [["lf", "rv", "lv"], ["xs"]]], [820, [["lf", "rv"], ["lv", "xs"]]], [0, [["lf"], ["rv"], ["lv"], ["xs"]]]],
+  },
+};
+const SHARE = { front: .3, back: .3, side: .2, bottom: .2, lf: .28, rv: .28, lv: .24, xs: .2 };
+
+// ---------- dimension drawing ----------
+// A dimension is drawn from its touch points on the object (where the caliper jaws go) out along extension lines to
+// the dimension line. A short one (under DIM_SHORT px on screen) puts its arrows outside, pointing in, and its label off
+// to the side on a leader so nothing covers the gap. One under DIM_DETAIL drawing units also gets a ring on its view
+// and a magnified close-up in the SELECTED panel.
+const DIM_SHORT = 46, DIM_DETAIL = 60;
+function dimGeom(m) {
+  const [v, kind, a, b, at, ext] = m.dim, Q = (x, y) => P(v, x, y);
+  const t1 = kind === "v" ? Q(ext[0], a) : Q(a, ext[0]), t2 = kind === "v" ? Q(ext[1], b) : Q(b, ext[1]);
+  const e1 = kind === "v" ? Q(at, a) : Q(a, at), e2 = kind === "v" ? Q(at, b) : Q(b, at);
+  const len = Math.hypot(e2[0] - e1[0], e2[1] - e1[1]) || 1;
+  return { v, t1, t2, e1, e2, len, u: [(e2[0] - e1[0]) / len, (e2[1] - e1[1]) / len],
+    c: [(t1[0] + t2[0] + e1[0] + e2[0]) / 4, (t1[1] + t2[1] + e1[1] + e2[1]) / 4] };
+}
+// f = drawing units per screen px (1 on a card, 1/zoom in a close-up), so arrows, bars and labels keep their screen size
+function dimInto(g, m, f, G) {
+  const off = m.dim[6] || [0, 0], [ux, uy] = G.u, nx = -uy, ny = ux;
+  const L = (p, q, cls) => { const l = el("line", { x1: p[0], y1: p[1], x2: q[0], y2: q[1] }, g); if (cls) l.setAttribute("class", cls); return l; };
+  const head = (tp, dx, dy) => { const s = 11 * f, w = 4.2 * f;
+    el("path", { class: "ah", d: `M${tp[0]},${tp[1]} L${tp[0] - dx * s + nx * w},${tp[1] - dy * s + ny * w} L${tp[0] - dx * s - nx * w},${tp[1] - dy * s - ny * w} Z` }, g); };
+  L(G.t1, G.e1, "ext"); L(G.t2, G.e2, "ext");
+  for (const tp of [G.t1, G.t2]) L([tp[0] - nx * 9 * f, tp[1] - ny * 9 * f], [tp[0] + nx * 9 * f, tp[1] + ny * 9 * f], "jaw");   // where a jaw touches
+  let mx = (G.e1[0] + G.e2[0]) / 2, my = (G.e1[1] + G.e2[1]) / 2;
+  const label = m.k + " " + VAL(m), w = (16 + label.length * 8.6) * f, h = 24 * f;
+  if (G.len / f >= DIM_SHORT) {
+    L(G.e1, G.e2); head(G.e1, -ux, -uy); head(G.e2, ux, uy); mx += off[0] * f; my += off[1] * f;
+  } else {
+    const o = 26 * f;
+    L([G.e1[0] - ux * o, G.e1[1] - uy * o], G.e1); L([G.e2[0] + ux * o, G.e2[1] + uy * o], G.e2); L(G.e1, G.e2, "thin");
+    head(G.e1, ux, uy); head(G.e2, -ux, -uy);
+    let px2, py2;
+    if (off[0] || off[1]) { px2 = mx + off[0] * f; py2 = my + off[1] * f; }
+    else {
+      let ox = G.e1[0] - G.t1[0], oy = G.e1[1] - G.t1[1], ol = Math.hypot(ox, oy);
+      if (ol < 1e-6) { ox = nx; oy = ny; ol = 1; }
+      ox /= ol; oy /= ol;
+      const dd = 22 * f + (Math.abs(ox) > .7 ? w / 2 : h / 2);
+      px2 = mx + ox * dd; py2 = my + oy * dd;
+    }
+    L([mx, my], [px2, py2], "lead"); mx = px2; my = py2;
+  }
+  const pill = el("g", { class: "pill" }, g);
+  el("rect", { x: mx - w / 2, y: my - h / 2, width: w, height: h }, pill);
+  const tx = el("text", { x: mx, y: my + 5 * f }, pill); tx.textContent = label; tx.style.fontSize = (14 * f) + "px";
+}
+function drawDim(m) {
+  for (const L of Object.values(LAY)) L.dim.replaceChildren();
+  if (!m || !m.dim) return;
+  const G = dimGeom(m), gDim = LAY[G.v].dim;
+  gDim.setAttribute("class", "dim" + (ST(m) === "unk" ? " unk" : ""));
+  if (G.len < DIM_DETAIL) el("circle", { class: "ring", cx: G.c[0], cy: G.c[1], r: Math.max(G.len * .8, 22) }, gDim);
+  dimInto(gDim, m, 1, G);
+}
+// the close-up: the view's own linework, magnified around the measurement, tags and lettering left out
+function closeUp(m) {
+  if (!m.dim) return null;
+  const G = dimGeom(m); if (G.len >= DIM_DETAIL) return null;
+  const k = Math.min(10, 150 / G.len), W = 340, H = 170, fig = document.createElement("figure");
+  fig.className = "dz";
+  fig.innerHTML = `<figcaption><span>DETAIL ${esc(m.k)}</span><span>${k >= 3 ? Math.round(k) : k.toFixed(1)} : 1</span></figcaption>`;
+  const s = document.createElementNS(NS, "svg");
+  s.setAttribute("viewBox", [G.c[0] - W / 2 / k, G.c[1] - H / 2 / k, W / k, H / k].map(n => n.toFixed(2)).join(" "));
+  s.setAttribute("preserveAspectRatio", "xMidYMid slice"); s.setAttribute("role", "img");
+  s.setAttribute("aria-label", `Close-up of ${m.k}: ${m.t}`);
+  const c = LAY[G.v].g.cloneNode(true); c.removeAttribute("id");
+  c.querySelectorAll("text, .tag, .lead, .pt, .callout, path.hit").forEach(n => n.remove());
+  s.appendChild(c);
+  dimInto(el("g", { class: "dim" + (ST(m) === "unk" ? " unk" : "") }, s), m, 1 / k, G);
+  fig.appendChild(s); return fig;
+}
+
+// ---------- cards: a bento grid of view cards ----------
+// Each view is a card. The grid is solved from the drawings' own proportions, so the cards tile the sheet exactly
+// with even gutters. On a screen with room, the arrangement that best matches the free rectangle is chosen and
+// stretched to fill it: the drawings then fill their cards and run off the edges a little (what is cut off is
+// shown when the card is opened). Closed, a card shows the drawing alone. Open, it rolls out from its own cell
+// in every direction and shows each tag, note and caption.
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DUR = 420;                    // ms, the same as the cards' CSS transition
+const CGAP = 14, SHADOW = 5;        // gutter between cards; room kept for the cards' offset shadow
+const BORDER = 2, HEAD = 34, CAPH = 22;   // px a card adds around its drawing: borders, title strip, caption line
+const LBL = 12.5;                   // size of the lettering inside the drawings, in drawing units
+const KMIN = .78, KMAX = 1.28;      // how far a card may be stretched away from its drawing's proportions
+const OPEN_MAX = 1.5;               // the largest an open drawing is shown, in px per drawing unit
+const PAN_BELOW = .48, PAN_AT = .6; // an open drawing that would come out smaller than this is shown larger and panned instead
+const padBox = (b, p) => [b.x - p, b.y - p, b.width + 2 * p, b.height + 2 * p];
+const unionBox = (a, b) => { const x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]); return [x, y, Math.max(a[0] + a[2], b[0] + b[2]) - x, Math.max(a[1] + a[3], b[1] + b[3]) - y]; };
+const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+const px = n => n.toFixed(1) + "px";
+// the cards' easing, cubic-bezier(.2,.8,.2,1), so the drawing inside moves in step with its card
+const bez = p => {
+  if (p <= 0) return 0; if (p >= 1) return 1;
+  const B = (a, b, t) => 3 * (1 - t) * (1 - t) * t * a + 3 * (1 - t) * t * t * b + t * t * t;
+  let lo = 0, hi = 1; for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2; B(.2, .2, m) < p ? lo = m : hi = m; }
+  return B(.8, 1, (lo + hi) / 2);
+};
+
+// The arrangements (BENTOS), the widths for the unfitted grid (NATURAL) and each view's share (SHARE) come with the sheet's content.
+// stretches tried when fitting an arrangement to the screen
+const KS = Array.from({ length: 21 }, (_, i) => Math.exp(Math.log(KMIN) + Math.log(KMAX / KMIN) * i / 20));
+
+let openV = null, ready = false, cur = null;
+let sheet = SHEETS[0].n;
+const act = () => Object.keys(VIEWS).filter(v => VIEWS[v].sheet === sheet);   // the views on the sheet in front
+const GR = () => GRID[sheet];
+const MS = () => M.filter(m => GSHEET[m.g] === sheet);
+
+// ----- the drawing inside a card -----
+function setVB(v, b) { const L = LAY[v]; L.vb = b; L.svg.setAttribute("viewBox", b.map(n => n.toFixed(1)).join(" ")); }
+function tweenVB(v, to, instant, dur = DUR) {
+  const L = LAY[v]; cancelAnimationFrame(L.raf);
+  if (instant || reduce || !L.vb || L.vb.every((n, i) => Math.abs(n - to[i]) < .5)) { setVB(v, to); return; }
+  const from = L.vb.slice(), t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur), e = bez(p); setVB(v, from.map((n, i) => n + (to[i] - n) * e)); if (p < 1) L.raf = requestAnimationFrame(step); };
+  L.raf = requestAnimationFrame(step);
+}
+function dimBox(v) { const g = LAY[v].dim; if (!g.childNodes.length) return null; const d = g.getBBox(); return d.width || d.height ? padBox(d, 14) : null; }
+// a closed card: the drawing is scaled to fill the card and held on its focus; what does not fit runs off the edge
+function cropBox(v, pw, ph) {
+  const L = LAY[v], B = L.core, F = FOCUS(v), D = dimBox(v);
+  let s = Math.max(pw / B[2], ph / B[3]);
+  if (D) s = Math.min(s, pw / D[2], ph / D[3]);   // a selected measurement is never cut off
+  const cw = pw / s, chh = ph / s;
+  const axis = (f, lo, span, size, dlo, dsize) => {
+    let c = size >= span ? lo + span / 2 : clamp(f, lo + size / 2, lo + span - size / 2);
+    if (D) c = clamp(c, dlo + dsize - size / 2, dlo + size / 2);
+    return c - size / 2;
+  };
+  return [axis(F[0], B[0], B[2], cw, D && D[0], D && D[2]), axis(F[1], B[1], B[3], chh, D && D[1], D && D[3]), cw, chh];
+}
+// under the pointer, a closed card steps back to show the whole drawing, cut-off parts included
+function peekBox(v, pw, ph) {
+  const B = LAY[v].core, s = Math.min(pw / B[2], ph / B[3]), w = pw / s, h = ph / s;
+  return [B[0] + B[2] / 2 - w / 2, B[1] + B[3] / 2 - h / 2, w, h];
+}
+function frame(v, peek, instant, dur) {   // set a closed card's drawing: cropped to fill, or whole while peeking
+  const L = LAY[v], c = L.cell, pw = c.w - BORDER, ph = c.h - cur.CH[v];
+  const vb = peek && !dimBox(v) ? peekBox(v, pw, ph) : cropBox(v, pw, ph);
+  letter(v, vb, pw / vb[2]); tweenVB(v, vb, instant, dur);
+}
+// an open card: the whole drawing with every tag, as large as the sheet column and the screen allow
+function capOpen(L, w) { const p = L.cd.cloneNode(true); p.className = "cd probe"; p.style.width = (w - BORDER) + "px"; bento.appendChild(p); const h = p.offsetHeight; p.remove(); return h; }
+function openRect(v, W, H) {
+  const L = LAY[v], c = L.cell, D = dimBox(v), Z = D ? unionBox(L.full, D) : L.full, az = Z[2] / Z[3];
+  const hmax = Math.max(360, viewH() - 24), wmin = Math.min(W, Math.max(c.w, 320));
+  let w = clamp(Z[2] * OPEN_MAX + BORDER, wmin, W), ch = HEAD + capOpen(L, w) + BORDER, h = ch + (w - BORDER) / az, pan = null;   // a small drawing is not blown up past OPEN_MAX
+  if (h > hmax) {
+    h = hmax;
+    for (let i = 0; i < 2; i++) { w = clamp((h - ch) * az + BORDER, wmin, W); ch = HEAD + capOpen(L, w) + BORDER; }
+  }
+  h = Math.max(h, c.h);
+  if (Math.min((w - BORDER) / Z[2], (h - ch) / Z[3]) < PAN_BELOW) {   // too small to read: full width, drawn larger, panned inside the card
+    w = W; ch = HEAD + capOpen(L, w) + BORDER; h = Math.max(c.h, Math.min(hmax, ch + Z[3] * PAN_AT));
+    pan = [Math.max(w - BORDER, Z[2] * PAN_AT), Math.max(h - ch, Z[3] * PAN_AT)];
+  }
+  const Hb = Math.max(H, h), x = clamp(c.x + c.w / 2 - w / 2, 0, W - w), y = clamp(c.y + c.h / 2 - h / 2, 0, Hb - h);
+  const pw = w - BORDER, ph = h - ch, [ew, eh] = pan || [pw, ph]; let [zx, zy, zw, zh] = Z;
+  if (zw / zh > ew / eh) { const nh = zw * eh / ew; zy -= (nh - zh) / 2; zh = nh; } else { const nw = zh * ew / eh; zx -= (nw - zw) / 2; zw = nw; }
+  return { x, y, w, h, pw, ph, pan, vb: [zx, zy, zw, zh] };
+}
+// a panned drawing is moved so the selected measurement, or else the view's focus, sits in the middle of the card
+function panTo(v, r, jump) {
+  const L = LAY[v], D = dimBox(v), [fx, fy] = D ? [D[0] + D[2] / 2, D[1] + D[3] / 2] : FOCUS(v);
+  L.cb.scrollTo({ left: (fx - r.vb[0]) * r.pan[0] / r.vb[2] - r.pw / 2, top: (fy - r.vb[1]) * r.pan[1] / r.vb[3] - r.ph / 2, behavior: jump || reduce ? "auto" : "smooth" });
+}
+// Lettering inside a drawing is kept on a closed card only where it can be read and is not cut by the card's edge.
+function letter(v, vb, scale) {
+  const show = LBL * scale >= 6, x0 = vb[0] + 3, y0 = vb[1] + 3, x1 = vb[0] + vb[2] - 3, y1 = vb[1] + vb[3] - 3;
+  for (const [t, b] of LAY[v].letters) t.classList.toggle("out", !(show && b.x >= x0 && b.y >= y0 && b.x + b.width <= x1 && b.y + b.height <= y1));
+}
+function measure() {   // two outlines of each drawing: with everything on it (open), and its linework alone (closed)
+  for (const L of act().map(v => LAY[v])) {
+    const c = L.card.classList, was = c.contains("open"), ts = [...L.g.querySelectorAll(".face-txt, .unk-txt, .ok-txt")];
+    ts.forEach(t => t.classList.remove("out"));
+    c.add("open"); const f = L.g.getBBox();
+    c.remove("open"); const letters = ts.map(t => [t, t.getBBox()]);
+    c.add("bare"); const k = L.g.getBBox(); c.remove("bare");
+    c.toggle("open", was);
+    if (!f.width || !k.width) continue;
+    L.full = padBox(f, 16); L.core = padBox(k, 16); L.letters = letters;
+  }
+  ready = act().every(v => LAY[v].full);
+  layout(true, true);
+}
+
+// ----- the grid -----
+// Every card's width is a * h + b for a shared row height h; h is solved so the row is exactly W wide.
+// k stretches every card away from its drawing's proportions by the same amount (k > 1 flatter, k < 1 taller).
+function solve(rows, W, k, AR, CH) {
+  const cells = {}; let y = 0;
+  for (const row of rows) {
+    let sa = 0, sb = 0;
+    const lin = row.map(n => {
+      let a, b;
+      if (!Array.isArray(n)) { a = AR[n] * k; b = BORDER - a * CH[n]; }
+      else { const s = n.reduce((t, v) => t + 1 / (AR[v] * k), 0), c = n.reduce((t, v) => t + CH[v], 0) + (n.length - 1) * CGAP; a = 1 / s; b = BORDER - c / s; }
+      sa += a; sb += b; return [a, b];
+    });
+    const h = (W - CGAP * (row.length - 1) - sb) / sa;
+    let x = 0;
+    for (let i = 0; i < row.length; i++) {
+      const n = row[i], w = lin[i][0] * h + lin[i][1];
+      if (!(w > BORDER + 1)) return null;
+      if (!Array.isArray(n)) cells[n] = { x, y, w, h };
+      else { let yy = y; for (const v of n) { const hv = CH[v] + (w - BORDER) / (AR[v] * k); cells[v] = { x, y: yy, w, h: hv }; yy += hv + CGAP; } }
+      x += w + CGAP;
+    }
+    y += h + CGAP;
+  }
+  return { cells, H: y - CGAP };
+}
+const roomy = (r, CH) => Object.entries(r.cells).every(([v, c]) => c.w - BORDER >= 150 && c.h - CH[v] >= 48);
+// Fit one arrangement to a height. A little cropping is cheap and more costs steeply; a grid that ends above the bottom
+// of the screen costs something (the page simply carries on below it); one that runs past the bottom costs a lot; and a
+// grid that gives a simple drawing the biggest card, or a busy one the smallest, costs too.
+function fitRows(rows, W, Ht, AR, CH) {
+  if (!Ht) { const r = solve(rows, W, 1, AR, CH); return r && { k: 1, score: 0, ...r }; }
+  let out = null;
+  const tryK = k => {
+    const r = solve(rows, W, k, AR, CH); if (!r || !roomy(r, CH)) return r;
+    const c = Math.abs(Math.log(k)), f = Math.log(r.H / Ht), area = Object.values(r.cells).reduce((t, q) => t + q.w * q.h, 0);
+    const odd = Object.entries(r.cells).reduce((t, [v, q]) => t + SHARE[v] * Math.abs(Math.log(q.w * q.h / area / SHARE[v])), 0);
+    const score = .5 * c + 6 * c * c + (f > 0 ? 5 * f : -2.4 * f) + .5 * odd;
+    if (!out || score < out.score) out = { k, score, ...r };
+    return r;
+  };
+  KS.forEach(tryK); tryK(1);
+  const tall = solve(rows, W, KMIN, AR, CH), flat = solve(rows, W, KMAX, AR, CH);
+  if (tall && flat && tall.H > Ht && flat.H < Ht) {   // an exact fit lies within reach
+    let lo = Math.log(KMIN), hi = Math.log(KMAX);
+    for (let i = 0; i < 26; i++) { const m = (lo + hi) / 2, r = solve(rows, W, Math.exp(m), AR, CH); if (!r) break; r.H > Ht ? lo = m : hi = m; }
+    tryK(Math.exp((lo + hi) / 2));
+  }
+  return out;
+}
+function pick(W, Ht) {
+  const AR = {}, CH = {};
+  for (const v of act()) { const L = LAY[v]; AR[v] = L.core[2] / L.core[3]; CH[v] = HEAD + BORDER; }
+  let best = null;
+  if (Ht) for (const rows of GR().bentos) { const r = fitRows(rows, W, Ht, AR, CH); if (r && (!best || r.score < best.score)) best = { rows, ...r }; }
+  if (!best) {
+    Ht = 0;
+    for (const [minW, rows] of GR().natural) { if (W < minW) continue; const r = fitRows(rows, W, 0, AR, CH); if (r && (roomy(r, CH) || !minW)) { best = { rows, ...r }; break; } }
+  }
+  // each card then answers to the size it got: a large card carries a caption line under its title
+  const cap = {}, CH2 = {};
+  for (const v of act()) { const c = best.cells[v]; cap[v] = c.w - BORDER >= 300 && c.h - CH[v] >= 150; CH2[v] = HEAD + (cap[v] ? CAPH : 0) + BORDER; }
+  const r2 = fitRows(best.rows, W, Ht, AR, CH2);
+  return r2 ? { rows: best.rows, ...r2, cap, CH: CH2, W, Ht0: Ht } : { ...best, cap: {}, CH, W, Ht0: Ht };
+}
+// the free rectangle: from the top of the drawing column to the bottom of the screen
+const viewH = () => Math.min(innerHeight, (window.screen && screen.availHeight) || innerHeight);
+const sheetEl = bento.parentElement, asideEl = document.querySelector("aside"), wideMain = matchMedia("(min-width: 961px)");
+const toolbarEl = sheetEl.querySelector(".toolbar"), legendEl = sheetEl.querySelector(".legend");
+// what the drawing column carries around the grid: toolbar, legend, the grid's margins and the column's border
+const around = () => { const c = getComputedStyle(bento); return toolbarEl.offsetHeight + legendEl.offsetHeight + parseFloat(c.marginTop) + parseFloat(c.marginBottom) + 2; };
+function fitTarget(W) {
+  if (W < 480) return 0;
+  const h = Math.round(viewH() - (sheetEl.getBoundingClientRect().top + scrollY) - 12 - around() - SHADOW);
+  return h >= 300 ? h : 0;
+}
+function layout(instant, repick) {
+  const W = bento.clientWidth - SHADOW; if (W < 60 || !ready) return;
+  if (instant) bento.classList.add("no-anim");
+  const Ht = fitTarget(W);
+  if (repick || !cur || cur.W !== W || cur.Ht !== Ht || cur.sheet !== sheet) {
+    cur = pick(W, Ht); cur.Ht = Ht; cur.sheet = sheet;
+    Object.assign(bento.dataset, { arrangement: JSON.stringify(cur.rows).replace(/"/g, ""), stretch: cur.k.toFixed(3), fitted: cur.Ht0 ? "yes" : "no" });
+  }
+  for (const v of act()) {
+    const L = LAY[v], c = L.cell = cur.cells[v];
+    L.card.classList.toggle("cap", !!cur.cap[v]);
+    if (v === openV) continue;
+    if (L.panned) { L.panned = false; L.cb.classList.remove("pan"); L.svg.style.width = L.svg.style.height = ""; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+    Object.assign(L.card.style, { left: px(c.x), top: px(c.y), width: px(c.w), height: px(c.h) });
+    frame(v, L.peek, instant);
+  }
+  let H = cur.H;
+  if (openV) {
+    const r = openRect(openV, W, H), L = LAY[openV]; H = Math.max(H, r.y + r.h);
+    Object.assign(L.card.style, { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h) });
+    L.cb.classList.toggle("pan", !!r.pan); L.svg.style.width = r.pan ? px(r.pan[0]) : ""; L.svg.style.height = r.pan ? px(r.pan[1]) : "";
+    tweenVB(openV, r.vb, instant || !!r.pan);
+    if (r.pan) { panTo(openV, r, !L.panned || instant); L.panned = true; } else if (L.panned) { L.panned = false; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+  }
+  bento.style.height = px(H + SHADOW);
+  // the schedule column ends level with the drawing column when the grid is fitted to the screen
+  const colH = cur.Ht0 && wideMain.matches ? px(cur.H + SHADOW + around()) : "";
+  asideEl.style.height = asideEl.style.maxHeight = colH;
+  if (instant) { bento.getBoundingClientRect(); bento.classList.remove("no-anim"); }
+}
+function syncButtons() {
+  document.querySelectorAll("[data-zoom]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.zoom === (openV || "all"))));
+  for (const [v, L] of Object.entries(LAY)) { const o = v === openV; L.cxl.textContent = o ? "Close" : "Open"; L.cx.setAttribute("aria-expanded", String(o)); L.cx.setAttribute("aria-label", (o ? "Close " : "Open ") + VNAME[v]); }
+}
+function settle(L) { clearTimeout(L.timer); L.card.classList.add("closing"); L.timer = setTimeout(() => L.card.classList.remove("closing"), DUR + 40); }
+let homeY = null, revealT = 0;   // where the page stood before a card was opened; it goes back there on close
+function reveal() {   // keep the open card on screen once it has finished growing
+  clearTimeout(revealT); const v = openV; if (!v) return;
+  revealT = setTimeout(() => { if (openV === v) LAY[v].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" }); }, reduce ? 0 : DUR + 20);
+}
+function openCard(v) {
+  if (openV === v) return;
+  if (openV) { const P0 = LAY[openV]; P0.card.classList.remove("open"); settle(P0); } else homeY = scrollY;
+  const L = LAY[v]; openV = v; clearTimeout(L.timer); L.peek = false;
+  L.card.classList.remove("closing"); L.card.classList.add("open"); syncButtons(); layout(); reveal();
+}
+function closeCard() {
+  if (!openV) return;
+  const L = LAY[openV], r = L.card.getBoundingClientRect(), seen = r.bottom > 0 && r.top < innerHeight; openV = null; clearTimeout(revealT);
+  L.card.classList.remove("open"); settle(L); syncButtons(); layout();
+  if (homeY !== null && seen && Math.abs(scrollY - homeY) > 4) scrollTo({ top: homeY, behavior: reduce ? "auto" : "smooth" });
+  homeY = null;
+}
+// a closed card under the pointer shows its whole drawing
+for (const [v, L] of Object.entries(LAY)) {
+  const peek = on => e => { if (e.pointerType !== "mouse" || !ready || !cur || L.peek === on) return; L.peek = on; if (v !== openV && !L.card.classList.contains("closing")) frame(v, on, false, 260); };
+  L.card.addEventListener("pointerenter", peek(true)); L.card.addEventListener("pointerleave", peek(false));
+}
+// how many measurements live on each view, on the card's title strip
+function cardCounts() { for (const [v, L] of Object.entries(LAY)) {
+  const ms = M.filter(m => (m.dim ? m.dim[0] : VIEW_OF[m.refs[0]]) === v), open = ms.filter(m => ST(m) === "unk"), prop = open.filter(m => m.f === "prop");
+  if (!ms.length) { L.cs.hidden = true; continue; }
+  L.cs.innerHTML = open.length ? `${open.length}<span class="w"> ${prop.length === open.length ? "PROP." : "OPEN"}</span>` : `${ms.length}<span class="w"> DIMS</span>`;
+  L.cs.classList.toggle("unk", open.length > 0);
+  L.cs.title = open.length ? `${open.length} of ${ms.length} measurements on this view are not confirmed` : `${ms.length} measurements on this view, all confirmed`;
+} }
+cardCounts();
+let lastW = 0, lastH = 0;
+new ResizeObserver(() => { const w = bento.clientWidth; if (w !== lastW) { lastW = w; ready ? layout(true, true) : measure(); } }).observe(bento);   // also the first time the sheet becomes visible
+addEventListener("resize", () => { const h = viewH(); if (Math.abs(h - lastH) > 1) { lastH = h; layout(true, true); } });
+bento.classList.add("enter"); setTimeout(() => bento.classList.remove("enter"), 1100);
+document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => b.dataset.zoom === "all" ? closeCard() : openCard(b.dataset.zoom)));
+const auto = document.getElementById("autozoom");
+document.getElementById("showlabels").addEventListener("change", e => bento.classList.toggle("labels-off", !e.target.checked));
+
+// ---------- selection ----------
+const detail = document.getElementById("detail");
+let current = null;
+function clearOn() { document.querySelectorAll(".on").forEach(n => n.classList.remove("on")); }
+function chipFor(id) {
+  const b = document.createElement("button");
+  b.className = "chip " + (BYK[id] ? "m-chip" : /^[a-z]/.test(id) ? "ed-chip" : "pt-chip");
+  b.textContent = id; b.addEventListener("click", () => BYK[id] ? selectM(id) : selectItem(id));
+  return b;
+}
+function renderDetail(html, chips, chipLabel) {
+  detail.innerHTML = html;
+  if (chips && chips.length) {
+    const lab = document.createElement("div"); lab.className = "meta"; lab.textContent = chipLabel; detail.appendChild(lab);
+    const wrap = document.createElement("div"); wrap.className = "chips"; chips.forEach(c => wrap.appendChild(chipFor(c))); detail.appendChild(wrap);
+  }
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function refit() { layout(); reveal(); }
+function selectM(k, opts = {}) {
+  const m = BYK[k]; if (!m) return;
+  if (GSHEET[m.g] !== sheet) setSheet(GSHEET[m.g], { keepHash: true });
+  current = k; clearOn(); bento.classList.add("has-sel", "m-sel");
+  m.refs.forEach(r => nodes[r]?.classList.add("on"));
+  drawDim(m);
+  const view = m.dim ? m.dim[0] : VIEW_OF[m.refs[0]];
+  const narrowNow = matchMedia("(max-width: 960px)").matches;   // on a phone, entering stays in the panel instead of jumping to the card
+  if (auto.checked && view && !(opts.stay && narrowNow)) openCard(view);
+  if (opts.stay && narrowNow) layout(); else refit();
+  renderMDetail(m); showPanel("sel"); detail.scrollTop = 0; syncNav();
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", String(r.dataset.k === k)));
+  if (opts.fromList && view && matchMedia("(max-width: 960px)").matches) LAY[view].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  try { history.replaceState(null, "", "#" + k); } catch (e) {}
+}
+function valLine(m) {
+  const st = ST(m);
+  if (st === "ent") return `${esc(VAL(m))}${KIND(m) === "num" && !UNIT(m) ? " mm" : ""} · entered, waiting for a cross-check`;
+  return !m.v ? (KIND(m) === "num" ? "TBD · not measured yet" : "TBD · not answered yet") : m.v + " " + (m.u || "mm") + (m.f === "prop" ? " (PROP.) · proposed, not fit-tested" : m.f === "der" ? " (DERIVED) · worked out, not measured or tested" : m.f ? " (IND.) · not confirmed" : "");
+}
+function renderMDetail(m) {
+  const st = ST(m), view = m.dim ? m.dim[0] : VIEW_OF[m.refs[0]];
+  renderDetail(`<div class="top"><div class="badge ${st}">${m.k}</div><div><h2>${esc(m.t)}</h2>
+    <div class="val ${st}" id="val-line">${valLine(m)}</div></div></div>
+    ${m.from || m.to || m.tool ? `<dl class="ftu">${m.from ? `<dt>FROM</dt><dd>${esc(m.from)}</dd>` : ""}${m.to ? `<dt>TO</dt><dd>${esc(m.to)}</dd>` : ""}${m.tool ? `<dt>USE</dt><dd>${esc(m.tool)}</dd>` : ""}</dl>` : ""}
+    <div id="dz-slot" hidden></div>
+    <p>${esc(m.how)}</p><div class="meta">${VNAME[view] || ""}</div>${entryHTML(m)}`, m.refs, KIND(m) === "num" ? "Between" : "On the drawing");
+  const fig = closeUp(m), slot = document.getElementById("dz-slot");
+  if (fig && slot) { slot.replaceWith(fig); } else slot?.remove();
+  wireEntry(m);
+}
+// ---------- entries: type a value where you click ----------
+const fmtWhen = at => { try { return new Date(at).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" }); } catch (e) { return ""; } };
+function entryHTML(m) {
+  if (!CAN_ENTER(m)) return "";
+  const e = ENT[m.k], kind = KIND(m), unit = kind === "num" ? (m.u || "mm") : "";
+  const opts = OPTS(m), field = opts
+    ? `<div class="yn" role="group" aria-label="Your answer">${opts.map(a => `<button type="button" class="btn" data-yn="${a}" aria-pressed="${!!e && e.value === a}">${a}</button>`).join("")}</div>`
+    : `<div class="er"><input id="entry-val" aria-label="Value of ${m.k}" autocomplete="off" ${kind === "num" ? 'inputmode="decimal" enterkeyhint="next" placeholder="e.g. 12.4"' : 'enterkeyhint="next" placeholder="Describe it"'} value="${e ? esc(e.value) : ""}">${unit ? `<span class="un">${esc(unit)}</span>` : ""}<button class="btn" type="submit">Save</button></div>`;
+  return `<form class="entry" id="entry-form" novalidate><div class="el">${kind === "num" ? "YOUR MEASUREMENT" : "YOUR ANSWER"}${m.v && !m.f ? " · RE-MEASURE" : ""}</div>${field}
+    <input id="entry-note" aria-label="Note for ${m.k}" placeholder="${kind === "num" ? "Note (optional): what you measured across" : "Note (optional)"}" autocomplete="off" enterkeyhint="next" value="${e && e.note ? esc(e.note) : ""}">
+    <div class="es" id="entry-status">${e ? `Entered ${fmtWhen(e.at)} · waiting for a cross-check` : "Enter saves it and moves to the next open measurement."}</div>
+    ${e ? '<button type="button" class="chip" id="entry-clear">Clear entry</button>' : ""}</form>`;
+}
+function scheduleOrder() { return GROUPS.filter(g => g[2] === sheet).flatMap(([gk]) => M.filter(m => m.g === gk)); }
+function nextOpen(k) {
+  const L = scheduleOrder(), i = L.findIndex(m => m.k === k);
+  for (let j = 1; j < L.length; j++) { const m = L[(i + j) % L.length]; if (CAN_ENTER(m) && ST(m) === "unk") return m.k; }
+  return null;
+}
+function focusEntry() {
+  const el = document.getElementById("entry-val") || detail.querySelector("[data-yn]"); if (!el) return;
+  const wide = !matchMedia("(max-width: 960px)").matches;
+  el.focus({ preventScroll: wide });
+  if (wide) { const r = el.getBoundingClientRect(), d = detail.getBoundingClientRect(); if (r.bottom > d.bottom - 8) detail.scrollTop += r.bottom - d.bottom + 56; }   // the box stays in sight inside the panel
+}
+function wireEntry(m) {
+  const f = document.getElementById("entry-form"); if (!f) return;
+  const val = document.getElementById("entry-val"), note = document.getElementById("entry-note"), st = document.getElementById("entry-status");
+  const say = (s, err) => { st.textContent = s; st.classList.toggle("err", !!err); };
+  const go = async raw => {
+    let v = String(raw ?? "").trim();
+    if (KIND(m) === "num") v = v.replace(",", ".");
+    if (!v) { say(OPTS(m) ? `Pick ${OPTS(m).length === 2 ? "one" : "one of them"}.` : "Type the value first, then press Enter.", true); focusEntry(); return; }
+    if (KIND(m) === "num" && !/^\d+(\.\d+)?$/.test(v)) { say(`Type a number in ${m.u || "mm"}, like 12.4.`, true); focusEntry(); return; }
+    say("Saving…");
+    const where = await saveEntry(m.k, { value: v, note: note.value.trim() });
+    if (!where) { say("Not saved. Use Copy entries below and paste them into the chat.", true); return; }
+    const nx = nextOpen(m.k);
+    selectM(nx || m.k, { stay: true }); focusEntry();
+    if (!nx) document.getElementById("entry-status").textContent = "Every open measurement on this sheet now has an entry.";
+  };
+  f.addEventListener("submit", e => { e.preventDefault(); go(val ? val.value : f.querySelector('[data-yn][aria-pressed="true"]')?.dataset.yn); });
+  f.querySelectorAll("[data-yn]").forEach(b => b.addEventListener("click", () => go(b.dataset.yn)));
+  document.getElementById("entry-clear")?.addEventListener("click", async () => { await clearEntry(m.k); selectM(m.k, { stay: true }); focusEntry(); });
+}
+// where entries are kept: the page's database when this view has it, else this browser only (copy them into the chat)
+let edb = null, eMode = "wait", eLast = "";
+const LSKEY = "blueprint-entries:" + document.title;
+const lsRead = () => { try { return JSON.parse(localStorage.getItem(LSKEY) || "{}") || {}; } catch (e) { return {}; } };
+const lsWrite = o => { try { localStorage.setItem(LSKEY, JSON.stringify(o)); return true; } catch (e) { return false; } };
+async function saveEntry(k, { value, note }) {
+  const body = { k, value, note, at: new Date().toISOString(), sheet: GSHEET[BYK[k].g] };
+  ENT = { ...ENT, [k]: body }; eLast = `Saved ${k} = ${value}`; onEntries();
+  if (edb) {
+    for (let tries = 0; tries < 2; tries++) {
+      try { await edb.doc("entries/" + k).set(body); return "db"; }
+      catch (e) { if (e && e.code === "unavailable" && !tries) { await new Promise(r => setTimeout(r, 400 + Math.random() * 600)); continue; } break; }
+    }
+  }
+  const o = lsRead(); o[k] = body; return lsWrite(o) ? "local" : null;
+}
+async function clearEntry(k) {
+  const { [k]: _, ...rest } = ENT; ENT = rest; eLast = `Cleared ${k}`; onEntries();
+  const o = lsRead(); delete o[k]; lsWrite(o);
+  if (edb) try { await edb.doc("entries/" + k).delete(); } catch (e) {}
+}
+function entriesText() {
+  const ks = Object.keys(ENT).filter(k => BYK[k]);
+  if (!ks.length) return "";
+  const out = [`${document.title}: my entries`];
+  for (const S of SHEETS) {
+    const rows = GROUPS.filter(g => g[2] === S.n).flatMap(([gk]) => M.filter(m => m.g === gk && ENT[m.k]));
+    if (!rows.length) continue;
+    out.push("", `Sheet ${S.n} · ${S.name}`);
+    for (const m of rows) { const e = ENT[m.k]; out.push(`${m.k} = ${e.value}${KIND(m) === "num" ? " " + (m.u || "mm") : ""}${e.note ? " (" + e.note + ")" : ""}`); }
+  }
+  return out.join("\n");
+}
+function syncLine() {
+  const n = Object.keys(ENT).filter(k => BYK[k]).length;
+  const where = eMode === "db" ? "Entries save to the page" : eMode === "local" ? "Entries are kept in this browser only: copy them into the chat" : "Connecting…";
+  const es = document.getElementById("esync");
+  if (es) es.textContent = `${where} · ${n} entered${eLast ? " · " + eLast : ""}`;
+}
+function onEntries() {
+  renderList(); cardCounts(); syncLine();
+  const m = current && BYK[current];
+  if (m) {
+    drawDim(m);
+    if (!detail.contains(document.activeElement)) renderMDetail(m);
+    else { const vl = document.getElementById("val-line"); if (vl) { vl.className = "val " + ST(m); vl.innerHTML = valLine(m); } }
+  }
+}
+document.getElementById("ecopy").addEventListener("click", async () => {
+  const s = entriesText(), ta = document.getElementById("ecopy-text");
+  if (!s) { eLast = "Nothing entered yet"; syncLine(); return; }
+  try { await navigator.clipboard.writeText(s); eLast = "Copied: paste it into the chat"; ta.hidden = true; }
+  catch (e) { ta.value = s; ta.hidden = false; ta.focus(); ta.select(); eLast = "Selected below: copy it and paste it into the chat"; }
+  syncLine();
+});
+function selectItem(id) {
+  current = id; clearOn(); bento.classList.add("has-sel"); bento.classList.remove("m-sel"); drawDim(null);
+  nodes[id]?.classList.add("on"); refit();
+  const used = USED[id] || [];
+  const kind = /^[a-z]/.test(id) ? "Edge" : "Point";
+  const name = NAMES[id] ? " · " + NAMES[id] : "";
+  renderDetail(`<div class="top"><div class="badge item">${id}</div><div><h2>${kind} ${id}${esc(name)}</h2>
+    <div class="meta">${VNAME[VIEW_OF[id]]}</div></div></div>
+    <p>${used.length ? "Used by these measurements:" : "No measurement uses this yet. If you measure to it, tell me which two points or edges you measured between."}</p>`,
+    used, "");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+  showPanel("sel"); detail.scrollTop = 0; syncNav();
+}
+function clearSel() {
+  current = null; clearOn(); bento.classList.remove("has-sel", "m-sel"); drawDim(null); refit();
+  detail.replaceChildren(); showPanel("list");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+}
+// the right column holds one panel at a time: the schedule ("list"), or the selection ("sel")
+const asideP = document.querySelector("aside");
+let listTop = 0;
+function showPanel(w) {
+  if (asideP.dataset.show === w) return;
+  const L = document.getElementById("list");
+  if (w === "sel") listTop = L.scrollTop;
+  asideP.dataset.show = w;
+  if (w === "list") L.scrollTop = listTop;
+}
+// previous / next: through the schedule in its order, keeping to the filter that is on
+const navList = () => scheduleOrder().filter(m => filter === "all" || filter === ST(m));
+function syncNav() {
+  const m = current && BYK[current], Ls = navList(), i = m ? Ls.indexOf(m) : -1;
+  document.getElementById("sel-pos").textContent = m ? (i >= 0 ? `${i + 1} / ${Ls.length}` : `– / ${Ls.length}`) : "";
+  for (const id of ["sel-prev", "sel-next"]) document.getElementById(id).disabled = !m || !Ls.length || (Ls.length === 1 && i === 0);
+}
+function stepM(d) {
+  const all = scheduleOrder(), Ls = navList(), n = all.length; if (!Ls.length || !n) return;
+  const i = all.findIndex(m => m.k === current);
+  for (let j = 1; j <= n; j++) { const m = all[(((i + d * j) % n) + n) % n]; if (Ls.includes(m)) { selectM(m.k, { stay: true }); return; } }
+}
+document.getElementById("sel-prev").addEventListener("click", () => stepM(-1));
+document.getElementById("sel-next").addEventListener("click", () => stepM(1));
+document.getElementById("sel-back").addEventListener("click", () => {
+  const k = current; clearSel();
+  const r = k && document.querySelector(`.row[data-k="${k}"]`);
+  if (r) { r.classList.add("last"); r.scrollIntoView({ block: "nearest" }); r.focus({ preventScroll: true }); }
+});
+bento.addEventListener("click", e => {
+  const card = e.target.closest(".card"); if (!card) return;
+  const v = card.dataset.view;
+  if (e.target.closest(".cx")) { openV === v ? closeCard() : openCard(v); return; }
+  const g = e.target.closest(".pt, .edge");
+  if (g && openV === v) { selectItem(g.dataset.id); return; }
+  if (openV !== v) { openCard(v); return; }
+  if (!e.target.closest(".pill") && current) clearSel();
+});
+
+// ---------- index ----------
+const list = document.getElementById("list");
+let filter = "all";
+function renderList() {
+  list.replaceChildren();
+  for (const [gk, gname] of GROUPS.filter(g => g[2] === sheet)) {
+    const items = M.filter(m => m.g === gk && (filter === "all" || filter === ST(m)));
+    if (!items.length) continue;
+    const h = document.createElement("div"); h.className = "group"; h.textContent = gname; list.appendChild(h);
+    for (const m of items) {
+      const b = document.createElement("button"); b.className = "row" + (ST(m) === "unk" ? " unk" : ST(m) === "ent" ? " ent" : ""); b.dataset.k = m.k; b.setAttribute("role", "listitem");
+      b.setAttribute("aria-current", String(current === m.k));
+      b.innerHTML = `<span class="k">${m.k}</span><span class="d">${esc(m.t)}</span><span class="v">${esc(VAL(m))}${ST(m) === "ent" ? '<i class="et">ENTERED</i>' : ""}</span>`;
+      b.addEventListener("click", () => selectM(m.k, { fromList: true, noScroll: true }));
+      list.appendChild(b);
+    }
+  }
+  const ms = MS(), ok = ms.filter(m => ST(m) === "ok").length, ent = ms.filter(m => ST(m) === "ent").length;
+  document.getElementById("count").textContent = `${ok}/${ms.length} CONFIRMED${ent ? ` · ${ent} ENTERED` : ""}`;
+}
+list.addEventListener("keydown", e => {
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  const rows = [...list.querySelectorAll(".row")]; const i = rows.indexOf(document.activeElement); if (i < 0) return;
+  e.preventDefault(); const n = rows[Math.max(0, Math.min(rows.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))];
+  n.focus(); selectM(n.dataset.k, { noScroll: true });
+});
+document.querySelectorAll(".filter:not(#m3-flt) button").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f; document.querySelectorAll(".filter:not(#m3-flt) button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList();
+}));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (current) clearSel(); closeCard(); } });
+
+const themeBtn = document.getElementById("theme"), root = document.documentElement;
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const syncTheme = () => { const d = isDark(); themeBtn.textContent = d ? "Paper sheet" : "Dark sheet"; themeBtn.setAttribute("aria-pressed", String(d)); };
+themeBtn.addEventListener("click", () => { const next = isDark() ? "light" : "dark"; root.dataset.theme = next; try { localStorage.setItem("sheet-theme", next); } catch (e) {} syncTheme(); });
+try { const saved = localStorage.getItem("sheet-theme"); if (saved === "dark" || saved === "light") root.dataset.theme = saved; } catch (e) {}
+new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncTheme);
+syncTheme();
+// ---------- sheets: tabs beside the paper / dark sheet button ----------
+const tabsEl = document.getElementById("sheets");
+const TABS = SHEETS.map(S => {
+  const b = document.createElement("button"); b.type = "button"; b.setAttribute("role", "tab"); b.id = "tab-" + S.n; b.dataset.n = S.n;
+  b.title = `Sheet ${S.n} · ${S.name}`; b.innerHTML = `<span>${S.n}</span><span class="nm">${esc(S.name)}</span>`;
+  b.addEventListener("click", () => setSheet(S.n)); tabsEl.appendChild(b); return b;
+});
+tabsEl.addEventListener("keydown", e => {
+  if (e.key !== "ArrowRight" && e.key !== "ArrowLeft") return;
+  const i = SHEETS.findIndex(S => S.n === sheet), j = (i + (e.key === "ArrowRight" ? 1 : -1) + SHEETS.length) % SHEETS.length;
+  e.preventDefault(); setSheet(SHEETS[j].n); TABS[j].focus();
+});
+// keyed notes: a drawer under the header behind the Notes button, open or shut for every sheet alike
+const notesBtn = document.getElementById("notes-btn"), notesEl = document.getElementById("notes");
+function syncNotes() {
+  const open = notesBtn.getAttribute("aria-expanded") === "true";
+  notesEl.hidden = !open;
+  notesEl.querySelectorAll(".kns[data-sheet]").forEach(k => k.hidden = k.dataset.sheet !== sheet);
+  document.getElementById("notes-n").textContent = sheet;
+  const n = notesEl.querySelectorAll(`.kns[data-sheet="${sheet}"] .kn`).length;
+  notesBtn.innerHTML = `Notes<span class="nc">${n}</span>`;
+  notesBtn.title = open ? "Hide the keyed notes" : `Show the ${n} keyed notes of sheet ${sheet}`;
+}
+function setNotes(open) {
+  notesBtn.setAttribute("aria-expanded", String(open)); syncNotes();
+  try { localStorage.setItem("sheet-notes", open ? "open" : "shut"); } catch (e) {}
+  if (ready) layout(true, true);   // the grid fits the screen below the drawer
+}
+notesBtn.addEventListener("click", () => setNotes(notesBtn.getAttribute("aria-expanded") !== "true"));
+document.getElementById("notes-x").addEventListener("click", () => { setNotes(false); notesBtn.focus(); });
+try { if (localStorage.getItem("sheet-notes") === "open") notesBtn.setAttribute("aria-expanded", "true"); } catch (e) {}
+// the header line under the title: revision and status, read from the sheet's title block (which only prints)
+function sheetMeta(n) {
+  const tb = document.querySelector(`.furniture[data-sheet="${n}"] .tb`); if (!tb) return "";
+  const rev = [...tb.querySelectorAll(".m")].map(x => x.textContent).find(t => /^REV /.test(t)) || "";
+  const st = (tb.querySelector(".st")?.textContent || "").replace(/^STATUS:\s*/, "");
+  return `${esc(rev.replace(/$/, ""))}${st ? ` · <b>${esc(st)}</b>` : ""}`;
+}
+function applySheet() {
+  const S = SHEETS.find(x => x.n === sheet);
+  document.getElementById("sh-meta").innerHTML = sheetMeta(sheet);
+  syncNotes();
+  document.getElementById("sh-num").textContent = S.n;
+  document.getElementById("sh-title").textContent = S.title;
+  document.getElementById("sh-sub").textContent = S.sub;
+  for (const b of TABS) { const on = b.dataset.n === sheet; b.setAttribute("aria-selected", String(on)); b.tabIndex = on ? 0 : -1; }
+  for (const [v, L] of Object.entries(LAY)) L.card.hidden = VIEWS[v].sheet !== sheet;
+  document.querySelectorAll("[data-zoom][data-sheet]").forEach(b => b.hidden = b.dataset.sheet !== sheet);
+  document.querySelectorAll(".furniture[data-sheet]").forEach(f => f.hidden = f.dataset.sheet !== sheet);
+  document.dispatchEvent(new CustomEvent("sheetchange", { detail: sheet }));
+}
+function setSheet(n, opts = {}) {
+  if (n === sheet) return;
+  if (current) { current = null; clearOn(); bento.classList.remove("has-sel", "m-sel"); drawDim(null); }
+  if (openV) { const L = LAY[openV]; L.card.classList.remove("open"); openV = null; homeY = null; }
+  sheet = n; cur = null; ready = false; applySheet(); syncButtons(); renderList(); clearSel();
+  bento.classList.remove("enter"); void bento.offsetWidth; bento.classList.add("enter"); setTimeout(() => bento.classList.remove("enter"), 1100);
+  measure();
+  if (!opts.keepHash) try { history.replaceState(null, "", "#sheet-" + n); } catch (e) {}
+}
+applySheet();
+renderList();
+measure(); syncButtons();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); });
+const start = (location.hash || "").slice(1), startSheet = /^sheet-(\d+)(-3d)?$/.exec(start);
+if (startSheet && SHEETS.some(S => S.n === startSheet[1])) setSheet(startSheet[1], { keepHash: true });
+if (BYK[start]) selectM(start); else clearSel();
+ENT = PUBLIC ? {} : lsRead(); syncLine();
+if (!PUBLIC) document.querySelector(".ebar")?.removeAttribute("hidden");
+if (!PUBLIC) (async () => {
+  const db = window.claude && window.claude.use ? await window.claude.use("db").catch(() => null) : null;
+  if (!db) { eMode = "local"; onEntries(); return; }
+  edb = db; eMode = "db";
+  const local = lsRead();   // entries made earlier where the store was out of reach: move them into it
+  db.collection("entries").onSnapshot(snap => {
+    const next = {};
+    for (const d of snap.docs) { const x = d.data(); if (x && BYK[d.id] && x.value !== undefined) next[d.id] = x; }
+    ENT = next; onEntries();
+  }, () => { eMode = "local"; edb = null; ENT = { ...ENT, ...lsRead() }; onEntries(); });
+  for (const [k, body] of Object.entries(local)) if (BYK[k]) try { await db.doc("entries/" + k).set(body); delete local[k]; } catch (e) {}
+  lsWrite(local);
+})();
+})();
+</script>
+<script>
+/* ---------- 3D: the models of each sheet, behind the 2D / 3D switch ----------
+   A sheet gets its models once its 2D work is done; until then its 3D button stays off.
+   Add a model by adding an entry to PARTS (with its sheet) and publishing its GLB as base64 text
+   at models/<id>.glb.b64.txt (artifacts do not serve .glb). The model is in metres, Y up. */
+(() => {
+const PARTS = [
+  {
+    id: "body-v4", sheet: "02", n: "02.1", title: "Body v4 · the two halves apart", btn: "Body v4",
+    type: "Parametric model · two parts, glued",
+    status: "Modelled · not yet printed",
+    desc: "The rivet half (back) and the logo half (front), pulled 8 mm apart along the thickness so the pockets show. The head lies in the rivet half with its blade folded; the logo half closes over it and is glued, lined up by two filament pins. Built by build_mazda_body_v4.py, with the mirroring of v3 corrected and the buttons on the logo face.",
+    glb: "models/body-v4.glb.b64.txt", yaw: 2.45, pitch: 0.38,
+    rows: [
+      { g: "Model", k: "5A", d: "Overall width", v: "31.9", axis: "x", why: "Read from the model." },
+      { g: "Model", k: "5B", d: "Overall length", v: "44.1", axis: "y", why: "Read from the model: lip top to keyring end." },
+      { g: "Model", k: "5C", d: "Thickness, glued", v: "15.8", why: "Rivet half 10.2 plus logo half 5.6. Shown apart here, so not drawn on the model." },
+      { g: "Model", k: "5D", d: "Rivet half, mass in PETG", v: "≈ 14", u: "g", f: "der", why: "Worked out from the volume at solid fill. Not weighed." },
+      { g: "Model", k: "5E", d: "Logo half, mass in PETG", v: "≈ 6", u: "g", f: "der", why: "Worked out from the volume at solid fill. Not weighed." },
+      { g: "Model", k: "5F", d: "Tab clearance (B standard)", v: "0.25", f: "prop", why: "Per side. A 0.15 and C 0.35 are the other two versions. Not yet tried on the key." }
+    ]
+  },
+  {
+    id: "fit-v4", sheet: "02", n: "02.2", title: "Fit test v4 · the two halves apart", btn: "Fit test v4",
+    type: "Test piece · the joint end only",
+    status: "To print first",
+    desc: "The top 20 mm of body v4, enough to hold the head's tab, hook and blade. Print A, B and C (one, two and three grooves on the tab-side edge), glue each round the head, and keep the one that sits flush without play.",
+    glb: "models/fit-test-v4.glb.b64.txt", yaw: 2.45, pitch: 0.5,
+    rows: [
+      { g: "Model", k: "6A", d: "Overall width", v: "31.9", axis: "x", why: "Read from the model." },
+      { g: "Model", k: "6B", d: "Height", v: "20.1", axis: "y", why: "From the lip top down to 2.5 below the tab socket." },
+      { g: "Model", k: "6C", d: "Mass in PETG, a pair", v: "≈ 8", u: "g", f: "der", why: "About 5.7 g and 2.2 g at solid fill. Not weighed." }
+    ]
+  }
+];
+const MVIEWS = [
+  { t: "Side", dir: [1, 0, 0], up: [0, 1, 0] },
+  { t: "Plan", dir: [0, 1, 0], up: [0, 0, -1] },
+  { t: "End", dir: [0, 0, 1], up: [0, 1, 0] }
+];
+const MARK = { prop: "(PROP.)", der: "(DERIVED)" };
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const ALLROWS = PARTS.flatMap(p => p.rows.map(r => Object.assign(r, { part: p })));
+const valText = r => `${r.v}${r.u ? " " + r.u : ""}${r.f ? " " + MARK[r.f] : ""}`;
+const root = document.documentElement;
+const cssVar = n => getComputedStyle(root).getPropertyValue(n).trim();
+
+/* ---------- the switch ---------- */
+const modeEl = $("#mode"), models = $("#models"), sheet2d = $("section.sheet"), aside = $("aside");
+let mode = "2d", sheet = $("#sh-num").textContent.trim(), shown = "all";
+const partsOf = n => PARTS.filter(p => p.sheet === n);
+function setMode(m) {
+  if (m === "3d" && !partsOf(sheet).length) m = "2d";
+  mode = m;
+  modeEl.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === m)));
+  sheet2d.hidden = m === "3d"; models.hidden = m !== "3d";
+  document.querySelectorAll(".p2d").forEach(e => e.hidden = m === "3d");
+  document.querySelectorAll(".p3d").forEach(e => e.hidden = m !== "3d");
+  if (m === "3d") { aside.style.height = aside.style.maxHeight = ""; start(); show(shown); }
+}
+function syncSwitch() {
+  const has = partsOf(sheet).length > 0, b3 = modeEl.querySelector('[data-mode="3d"]');
+  b3.disabled = !has;
+  b3.title = has ? "The models on this sheet, to turn and measure" : "No model on this sheet yet: the 3D view follows the 2D work";
+  vbar.querySelectorAll(".vb").forEach(b => b.hidden = b.dataset.sheet && b.dataset.sheet !== sheet);
+  document.querySelectorAll(".m3-part").forEach(s => s.dataset.sheet !== sheet && (s.hidden = true));
+  shown = "all";
+  if (mode === "3d") has ? show("all") : setMode("2d");
+  renderRows(); renderSel();
+}
+modeEl.addEventListener("click", e => { const b = e.target.closest("button"); if (b && !b.disabled) setMode(b.dataset.mode); });
+document.addEventListener("sheetchange", e => { sheet = e.detail; if (selected && selected.part.sheet !== sheet) selected = null; syncSwitch(); });
+
+/* ---------- build the parts ---------- */
+const partsEl = $("#m3-parts"), vbar = $("#m3-vbar");
+PARTS.forEach(p => {
+  const nOpen = p.rows.filter(r => r.f).length;
+  const b = document.createElement("button");
+  b.className = "btn vb"; b.type = "button"; b.dataset.show = p.id; b.dataset.sheet = p.sheet; b.textContent = `${p.n} ${p.btn}`; b.setAttribute("aria-pressed", "false");
+  vbar.insertBefore(b, vbar.querySelector(".sep"));
+  const s = document.createElement("section");
+  s.className = "m3-part"; s.id = p.id; s.dataset.sheet = p.sheet; s.hidden = true;
+  s.innerHTML = `
+    <div class="m3-ph"><span class="pn">${p.n}</span><div><h2>${esc(p.title)}</h2><div class="pt">${esc(p.type)}</div></div><div class="st">${esc(p.status)}</div></div>
+    <div class="m3-pd"><p>${esc(p.desc)}</p></div>
+    <div class="m3-bento">
+      <div class="m3-card v">
+        <div class="m3-ch"><span class="cn">${p.n}.0</span><span class="ct">Model · drag to turn</span><span class="cs">${p.rows.length} SIZES · ${nOpen} OPEN</span><button class="m3-cx" type="button" aria-expanded="false"><span class="cxl">Open</span> <span class="m3-cxi"></span></button></div>
+        <div class="m3-cb">
+          <div class="m3-viewer" role="img" aria-label="${esc(p.title)}, 3D model. Drag sideways to turn it."><div class="m3-vload">LOADING MODEL</div></div>
+          <div class="m3-pill"></div>
+          <button class="m3-reset" type="button">Reset</button>
+          <div class="m3-vnote"></div>
+          <div class="m3-axes">ORTHOGRAPHIC · TO SCALE</div>
+        </div>
+      </div>
+      ${MVIEWS.map((w, i) => `
+      <div class="m3-card pic r${i + 1}" data-view="${i}">
+        <div class="m3-ch"><span class="cn">${p.n}.${i + 1}</span><span class="ct">${esc(w.t)}</span><button class="m3-cx" type="button" aria-expanded="false"><span class="cxl">Open</span> <span class="m3-cxi"></span></button></div>
+        <div class="m3-cb"><div class="m3-dv"><img alt="${esc(p.title)}, ${esc(w.t.toLowerCase())} view, drawn from the model"><svg class="m3-dims" aria-hidden="true"></svg><div class="m3-vload">DRAWING</div></div></div>
+      </div>`).join("")}
+    </div>`;
+  partsEl.appendChild(s);
+});
+function toggleCard(card) {
+  const bento = card.closest(".m3-bento"), willOpen = !card.classList.contains("open");
+  bento.querySelectorAll(".m3-card.open").forEach(c => { c.classList.remove("open"); $(".m3-cx", c).setAttribute("aria-expanded", "false"); $(".cxl", c).textContent = "Open"; });
+  if (willOpen) { card.classList.add("open"); $(".m3-cx", card).setAttribute("aria-expanded", "true"); $(".cxl", card).textContent = "Close"; }
+  bento.classList.toggle("has-open", willOpen);
+  if (willOpen && card.getBoundingClientRect().top < 0) card.scrollIntoView({ block: "start", behavior: "smooth" });
+}
+partsEl.addEventListener("click", e => {
+  const dk = e.target.closest(".dk");
+  if (dk) { const r = ALLROWS.find(x => x.k === dk.dataset.k); select(selected === r ? null : r); return; }
+  const cx = e.target.closest(".m3-cx"); if (cx) { toggleCard(cx.closest(".m3-card")); return; }
+  const pic = e.target.closest(".m3-card.pic"); if (pic) toggleCard(pic);
+});
+document.addEventListener("keydown", e => { if (e.key === "Escape") document.querySelectorAll(".m3-card.open").forEach(toggleCard); });
+function show(id) {
+  shown = id;
+  vbar.querySelectorAll(".vb").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.show === id)));
+  document.querySelectorAll(".m3-part").forEach(s => s.hidden = s.dataset.sheet !== sheet || (id !== "all" && s.id !== id));
+  renderRows();
+  VIEWERS.forEach(v => v.resize());
+}
+vbar.addEventListener("click", e => { const b = e.target.closest(".vb"); if (b) show(b.dataset.show); });
+
+/* ---------- part schedule ---------- */
+let filter = "all", selected = null;
+function renderRows() {
+  let html = "";
+  partsOf(sheet).forEach(p => {
+    if (shown !== "all" && shown !== p.id) return;
+    html += `<div class="m3-grp part-h">${p.n} · ${esc(p.title)}</div>`;
+    p.rows.forEach(r => {
+      const hide = (filter === "unk" && !r.f) || (filter === "ok" && r.f);
+      html += `<button type="button" class="m3-row${selected === r ? " m3-on" : ""}" data-k="${r.k}"${hide ? " hidden" : ""}><span class="rk">${r.k}</span><span class="rd">${esc(r.d)}</span><span class="rv${r.f ? " u" : ""}">${esc(valText(r))}</span></button>`;
+    });
+  });
+  $("#m3-rows").innerHTML = html;
+  const scope = ALLROWS.filter(r => r.part.sheet === sheet && (shown === "all" || r.part.id === shown));
+  $("#m3-cnt").textContent = `${scope.filter(r => !r.f).length}/${scope.length} CONFIRMED`;
+}
+$("#m3-flt").addEventListener("click", e => {
+  const b = e.target.closest("button"); if (!b) return;
+  filter = b.dataset.f; $("#m3-flt").querySelectorAll("button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderRows();
+});
+$("#m3-rows").addEventListener("click", e => { const b = e.target.closest(".m3-row"); if (!b) return; const r = ALLROWS.find(x => x.k === b.dataset.k); select(selected === r ? null : r); });
+function renderSel() {   // same markup as the 2D SELECTED panel
+  const el = $("#m3-sel"), scope = ALLROWS.filter(r => r.part.sheet === sheet);
+  if (!selected) {
+    const need = scope.filter(r => r.f).length;
+    el.innerHTML = `<div class="top"><div class="badge item">mm</div><div><h2>Pick a size</h2>
+      <div class="meta">Sheet ${sheet} models · ${scope.length - need} confirmed · ${need} open</div></div></div>
+      <p>Choose one from the schedule. An overall size is drawn on its model and on the views; the rest say where the number came from.</p>`;
+    return;
+  }
+  const r = selected, st = r.f ? "unk" : "ok";
+  el.innerHTML = `<div class="top"><div class="badge ${st}">${r.k}</div><div><h2>${esc(r.d)}</h2>
+    <div class="val ${st}">${esc(valText(r))}${r.u ? "" : " mm"}</div></div></div>
+    <p>${esc(r.why)}</p><div class="meta">${esc(r.part.n + " · " + r.part.btn)}${r.axis ? " · drawn on the model" : ""}</div>`;
+}
+function select(r) {
+  selected = r; renderRows(); renderSel();
+  VIEWERS.forEach(v => v.showDim(r && r.part.id === v.part.id && r.axis ? r : null));
+  if (r && r.axis) {
+    if (shown !== "all" && shown !== r.part.id) show(r.part.id);
+    const card = document.querySelector(`#${r.part.id} .m3-card.v`), rect = card.getBoundingClientRect();
+    if (rect.bottom < 60 || rect.top > innerHeight - 60) card.scrollIntoView({ block: "center", behavior: "smooth" });
+  }
+}
+
+/* ---------- viewers ---------- */
+const VIEWERS = [];
+function makeViewer(part, THREE) {
+  const sec = document.getElementById(part.id);
+  const cb = $(".m3-card.v .m3-cb", sec), host = $(".m3-viewer", cb), pill = $(".m3-pill", cb), note = $(".m3-vnote", cb);
+  const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+  host.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.001, 10);
+  const pivot = new THREE.Group(); scene.add(pivot);
+  const sun = new THREE.DirectionalLight(0xffffff, 1); scene.add(sun);
+  /* three flat tones, like the drawings: near face, far face, shadowed side */
+  const grad = new THREE.DataTexture(new Uint8Array([178, 178, 178, 255, 214, 214, 214, 255, 255, 255, 255, 255]), 3, 1, THREE.RGBAFormat);
+  grad.minFilter = grad.magFilter = THREE.NearestFilter; grad.needsUpdate = true;
+  const fill = new THREE.MeshToonMaterial({ color: 0xffffff, gradientMap: grad, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 });
+  const edgeMat = new THREE.LineBasicMaterial({ color: 0x000000 });
+  const outline = new THREE.ShaderMaterial({
+    side: THREE.BackSide,
+    uniforms: { col: { value: new THREE.Color() }, px: { value: 1.1 }, res: { value: new THREE.Vector2(1, 1) } },
+    vertexShader: `uniform float px; uniform vec2 res;
+      void main(){ vec4 p = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+        vec3 n = normalize(normalMatrix * normal); vec2 d = (projectionMatrix * vec4(n, 0.0)).xy;
+        float l = length(d); if (l > 1e-5) p.xy += d / l * px * 2.0 / res * p.w; gl_Position = p; }`,
+    fragmentShader: `uniform vec3 col; void main(){ gl_FragColor = vec4(col, 1.0); }`
+  });
+  const dimMat = new THREE.LineBasicMaterial({ color: 0x000000, depthTest: false, transparent: true });
+  let model = null, box = null, dim = null, dimMid = null;
+  let yaw = part.yaw, pitch = part.pitch, vyaw = 0, dirty = true, visible = false, dragging = false, last = 0;
+  const center = new THREE.Vector3(), size = new THREE.Vector3();
+  function recolour() {
+    fill.color.set(cssVar("--model-fill")); edgeMat.color.set(cssVar("--model-line"));
+    outline.uniforms.col.value.set(cssVar("--model-line")); dimMat.color.set(cssVar("--link"));
+    dirty = true; if (model) drawViews();
+  }
+  function resize() {
+    const w = host.clientWidth, h = host.clientHeight; if (!w || !h) return;
+    renderer.setSize(w, h, false); outline.uniforms.res.value.set(w, h); fit(); dirty = true; drawViews();
+  }
+  function fit() {
+    if (!box) return;
+    const w = host.clientWidth || 1, h = host.clientHeight || 1, a = w / h;
+    const r = size.length() / 2 * (dim ? 1.32 : 1.12), hh = a >= 1 ? r : r / a;
+    cam.left = -hh * a; cam.right = hh * a; cam.top = hh; cam.bottom = -hh; cam.updateProjectionMatrix();
+  }
+  function place() {
+    cam.position.set(Math.sin(yaw) * Math.cos(pitch), Math.sin(pitch), Math.cos(yaw) * Math.cos(pitch));
+    cam.lookAt(0, 0, 0);
+    sun.position.copy(cam.position).add(new THREE.Vector3(0.55, 0.9, 0.2).applyQuaternion(cam.quaternion));
+  }
+  function draw() {
+    place();
+    if (dimRow && dimSide !== (cam.position.x >= 0 ? 1 : -1) + "," + (cam.position.z >= 0 ? 1 : -1)) buildDim();
+    renderer.render(scene, cam);
+    if (dimMid) { const p = dimMid.clone().applyMatrix4(pivot.matrixWorld).project(cam); pill.style.left = ((p.x + 1) / 2 * host.clientWidth) + "px"; pill.style.top = ((1 - p.y) / 2 * host.clientHeight) + "px"; }
+  }
+  const reduceMotion = () => matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function loop(t) {
+    requestAnimationFrame(loop);
+    if (!visible || !model || mode !== "3d") return;
+    const dt = Math.min(0.05, (t - last) / 1000 || 0); last = t;
+    if (!dragging) {
+      if (Math.abs(vyaw) > 0.0005) { yaw += vyaw; vyaw *= 0.92; dirty = true; }
+      else if ($("#m3-spin").checked && !reduceMotion()) { yaw += dt * 0.25; dirty = true; }
+    }
+    if (dirty) { draw(); dirty = false; }
+  }
+  let sx = 0, sy = 0, syaw = 0, spitch = 0, lx = 0;
+  host.addEventListener("pointerdown", e => { dragging = true; host.classList.add("drag"); host.setPointerCapture(e.pointerId); sx = lx = e.clientX; sy = e.clientY; syaw = yaw; spitch = pitch; vyaw = 0; });
+  host.addEventListener("pointermove", e => {
+    if (!dragging) return;
+    const k = Math.PI / Math.max(260, host.clientWidth * 0.8);
+    yaw = syaw - (e.clientX - sx) * k;
+    if (e.pointerType !== "touch") pitch = Math.max(-1.2, Math.min(1.35, spitch + (e.clientY - sy) * k));
+    vyaw = -(e.clientX - lx) * k; lx = e.clientX; dirty = true;
+  });
+  const end = () => { dragging = false; host.classList.remove("drag"); };
+  host.addEventListener("pointerup", end); host.addEventListener("pointercancel", end);
+  host.addEventListener("dblclick", () => reset()); $(".m3-reset", cb).addEventListener("click", () => reset());
+  function reset() { yaw = part.yaw; pitch = part.pitch; vyaw = 0; dirty = true; }
+  let dimRow = null, dimSide = "";
+  function showDim(r) { viewGeo.forEach((g, i) => g && dimsSvg(i)); dimRow = r; dimSide = ""; buildDim(); fit(); dirty = true; }
+  function buildDim() {
+    if (dim) { pivot.remove(dim); dim.geometry.dispose(); dim = null; dimMid = null; }
+    pill.style.display = "none";
+    const r = dimRow;
+    if (r && box) {
+      const sx = cam.position.x >= 0 ? 1 : -1, sz = cam.position.z >= 0 ? 1 : -1; dimSide = sx + "," + sz;
+      const h = size.clone().multiplyScalar(0.5), X = sx * h.x, Z = sz * h.z, V = THREE.Vector3;
+      const o = Math.max(size.x, size.y, size.z) * 0.14, t = o * 0.32;
+      let a, b, e1, e2;
+      if (r.axis === "x") { a = new V(-h.x, -h.y, Z + sz * o); b = new V(h.x, -h.y, Z + sz * o); e1 = [new V(-h.x, -h.y, Z), a]; e2 = [new V(h.x, -h.y, Z), b]; }
+      if (r.axis === "z") { a = new V(X + sx * o, -h.y, -h.z); b = new V(X + sx * o, -h.y, h.z); e1 = [new V(X, -h.y, -h.z), a]; e2 = [new V(X, -h.y, h.z), b]; }
+      if (r.axis === "y") { a = new V(X + sx * o, -h.y, -Z); b = new V(X + sx * o, h.y, -Z); e1 = [new V(X, -h.y, -Z), a]; e2 = [new V(X, h.y, -Z), b]; }
+      const dir = b.clone().sub(a).normalize(), perp = r.axis === "y" ? new V(1, 0, 0) : new V(0, 1, 0);
+      const tick = dir.clone().add(perp).normalize().multiplyScalar(t);
+      const g = new THREE.BufferGeometry().setFromPoints([a, b, ...e1, ...e2, a.clone().sub(tick), a.clone().add(tick), b.clone().sub(tick), b.clone().add(tick)]);
+      dim = new THREE.LineSegments(g, dimMat); dim.renderOrder = 10; pivot.add(dim);
+      dimMid = a.clone().add(b).multiplyScalar(0.5); pill.textContent = r.v; pill.style.display = "block";
+    }
+  }
+  /* the drawn views: one shared renderer paints each into an image */
+  const dvs = [...sec.querySelectorAll(".m3-card.pic .m3-dv")], viewGeo = [];
+  let viewTimer = 0;
+  function drawViews() { clearTimeout(viewTimer); viewTimer = setTimeout(() => dvs.forEach((_, i) => drawView(i)), 60); }
+  function drawView(i) {
+    const el = dvs[i], W = el.clientWidth, H = el.clientHeight;
+    if (!model || W < 20 || H < 20) return;
+    const SR = sharedRenderer(THREE), dpr = Math.min(devicePixelRatio || 1, 2);
+    SR.setPixelRatio(dpr); SR.setSize(W, H, false);
+    const w = MVIEWS[i], c = new THREE.OrthographicCamera(-1, 1, 1, -1, -10, 10);
+    c.up.set(...w.up); c.position.set(...w.dir); c.lookAt(0, 0, 0); c.updateMatrixWorld();
+    const inv = c.matrixWorldInverse, half = size.clone().multiplyScalar(0.5);
+    let x0 = Infinity, x1 = -Infinity, y0 = Infinity, y1 = -Infinity;
+    for (const sx of [-1, 1]) for (const sy of [-1, 1]) for (const sz of [-1, 1]) {
+      const q = new THREE.Vector3(sx * half.x, sy * half.y, sz * half.z).applyMatrix4(inv);
+      x0 = Math.min(x0, q.x); x1 = Math.max(x1, q.x); y0 = Math.min(y0, q.y); y1 = Math.max(y1, q.y);
+    }
+    const pl = 16, pr = 46, pt = 16, pb = 40, k = Math.min((W - pl - pr) / (x1 - x0), (H - pt - pb) / (y1 - y0));
+    const ex = (W - pl - pr - (x1 - x0) * k) / 2, ey = (H - pt - pb - (y1 - y0) * k) / 2;
+    c.left = x0 - (pl + ex) / k; c.right = c.left + W / k; c.top = y1 + (pt + ey) / k; c.bottom = c.top - H / k; c.updateProjectionMatrix();
+    const keepRes = outline.uniforms.res.value.clone(); outline.uniforms.res.value.set(W, H);
+    if (dim) dim.visible = false;
+    sun.position.copy(c.position).add(new THREE.Vector3(0.55, 0.9, 0.2).applyQuaternion(c.quaternion));
+    SR.render(scene, c);
+    if (dim) dim.visible = true;
+    outline.uniforms.res.value.copy(keepRes); dirty = true;
+    el.querySelector("img").src = SR.domElement.toDataURL("image/png");
+    const ld = el.querySelector(".m3-vload"); if (ld) ld.remove();
+    const axisOf = v => { const a = [Math.abs(v.x), Math.abs(v.y), Math.abs(v.z)]; return "xyz"[a.indexOf(Math.max(...a))]; };
+    viewGeo[i] = { W, H, X0: (x0 - c.left) * k, X1: (x1 - c.left) * k, Y0: (c.top - y1) * k, Y1: (c.top - y0) * k,
+      h: axisOf(new THREE.Vector3(1, 0, 0).applyQuaternion(c.quaternion)), v: axisOf(new THREE.Vector3(0, 1, 0).applyQuaternion(c.quaternion)) };
+    dimsSvg(i);
+  }
+  function dimsSvg(i) {
+    const g = viewGeo[i], svg = dvs[i].querySelector("svg"); if (!g) return;
+    svg.setAttribute("viewBox", `0 0 ${g.W} ${g.H}`);
+    const row = ax => part.rows.find(r => r.axis === ax), tick = (x, y) => `<line x1="${x - 4}" y1="${y + 4}" x2="${x + 4}" y2="${y - 4}"/>`;
+    let out = "";
+    const rh = row(g.h), rv = row(g.v);
+    if (rh) {
+      const y = g.Y1 + 20, on = selected === rh, tw = rh.v.length * 6.6 + 10, cx = (g.X0 + g.X1) / 2;
+      out += `<g class="dk${on ? " m3-on" : ""}" data-k="${rh.k}"><line x1="${g.X0}" y1="${g.Y1 + 4}" x2="${g.X0}" y2="${y + 5}"/><line x1="${g.X1}" y1="${g.Y1 + 4}" x2="${g.X1}" y2="${y + 5}"/>
+        <line x1="${g.X0 - 4}" y1="${y}" x2="${g.X1 + 4}" y2="${y}"/>${tick(g.X0, y)}${tick(g.X1, y)}
+        <rect class="bg" x="${cx - tw / 2}" y="${y + 3}" width="${tw}" height="15"/><text x="${cx}" y="${y + 14}" text-anchor="middle">${rh.v}</text>
+        <rect class="hit" x="${g.X0}" y="${y - 6}" width="${Math.max(10, g.X1 - g.X0)}" height="26"/></g>`;
+    }
+    if (rv) {
+      const x = g.X1 + 20, on = selected === rv, tw = rv.v.length * 6.6 + 10, cy = (g.Y0 + g.Y1) / 2;
+      out += `<g class="dk${on ? " m3-on" : ""}" data-k="${rv.k}"><line x1="${g.X1 + 4}" y1="${g.Y0}" x2="${x + 5}" y2="${g.Y0}"/><line x1="${g.X1 + 4}" y1="${g.Y1}" x2="${x + 5}" y2="${g.Y1}"/>
+        <line x1="${x}" y1="${g.Y0 - 4}" x2="${x}" y2="${g.Y1 + 4}"/>${tick(x, g.Y0)}${tick(x, g.Y1)}
+        <g transform="translate(${x + 11} ${cy}) rotate(-90)"><rect class="bg" x="${-tw / 2}" y="-8" width="${tw}" height="15"/><text x="0" y="3" text-anchor="middle">${rv.v}</text></g>
+        <rect class="hit" x="${x - 6}" y="${g.Y0}" width="26" height="${Math.max(10, g.Y1 - g.Y0)}"/></g>`;
+    }
+    svg.innerHTML = out;
+  }
+  dvs.forEach(el => new ResizeObserver(drawViews).observe(el));
+  new IntersectionObserver(es => { visible = es[0].isIntersecting; if (visible) dirty = true; }, { rootMargin: "120px" }).observe(host);
+  new ResizeObserver(resize).observe(host);
+  const loader = new THREE.GLTFLoader();
+  fetch(part.glb).then(r => { if (!r.ok) throw 0; return r.text(); }).then(t => {
+    const bin = atob(t.trim()), buf = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) buf[i] = bin.charCodeAt(i);
+    loader.parse(buf.buffer, "", onModel, () => fail());
+  }).catch(() => fail());
+  function onModel(gltf) {
+    model = gltf.scene;
+    const meshes = []; model.traverse(o => { if (o.isMesh) meshes.push(o); });
+    meshes.forEach(m => {
+      if (!m.geometry.attributes.normal) m.geometry.computeVertexNormals();
+      m.material = fill;
+      m.add(new THREE.LineSegments(new THREE.EdgesGeometry(m.geometry, 28), edgeMat));
+      m.add(new THREE.Mesh(m.geometry, outline));
+    });
+    box = new THREE.Box3().setFromObject(model); box.getCenter(center); box.getSize(size);
+    model.position.sub(center); pivot.add(model);
+    const ld = $(".m3-vload", host); if (ld) ld.remove();
+    const ax = a => (part.rows.find(r => r.axis === a) || { v: (size[a] * 1000).toFixed(1) }).v;
+    note.textContent = `${ax("x")} × ${ax("y")} mm`;
+    recolour(); resize(); drawViews();
+    if (selected && selected.part.id === part.id && selected.axis) showDim(selected);
+  }
+  function fail() { host.innerHTML = `<div class="m3-fail">3D VIEW UNAVAILABLE<br>THE 2D SHEET HAS THE DRAWINGS</div>`; $(".m3-reset", cb).hidden = true; }
+  requestAnimationFrame(loop);
+  const v = { part, recolour, resize, showDim };
+  VIEWERS.push(v);
+  return v;
+}
+let SR_ = null;
+function sharedRenderer(THREE) { if (!SR_) SR_ = new THREE.WebGLRenderer({ antialias: true, alpha: true, preserveDrawingBuffer: true }); return SR_; }
+function loadScript(src) { return new Promise((ok, no) => { const s = document.createElement("script"); s.src = src; s.onload = ok; s.onerror = no; document.head.appendChild(s); }); }
+let started = null;
+function start() {   // three.js loads the first time the 3D view is opened
+  if (started) return started;
+  started = loadScript("https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js")
+    .then(() => loadScript("https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"))
+    .then(() => {
+      const THREE = window.THREE, c = document.createElement("canvas");
+      if (!THREE || !THREE.GLTFLoader || !(c.getContext("webgl2") || c.getContext("webgl"))) throw 0;
+      PARTS.forEach(p => { try { makeViewer(p, THREE); } catch (e) { failPart(p); } });
+    }).catch(() => PARTS.forEach(failPart));
+  return started;
+}
+function failPart(p) { const h = document.querySelector(`#${p.id} .m3-viewer`); if (h) h.innerHTML = `<div class="m3-fail">3D VIEW UNAVAILABLE<br>THE 2D SHEET HAS THE DRAWINGS</div>`; }
+const recolourAll = () => VIEWERS.forEach(v => v.recolour());
+new MutationObserver(recolourAll).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", recolourAll);
+syncSwitch();
+if (/(^|-)3d$/.test((location.hash || "").slice(1)) && partsOf(sheet).length) setMode("3d");
+})();
+</script>

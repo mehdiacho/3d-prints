@@ -1,0 +1,615 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>01 Charger plug and rear port blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper:#F7F5F0; --ink-primary:#1C1C1A; --ink-secondary:#6B6862; --rule:#C9C4B8; --fill-structure:#D9D4C9;
+  --alert:#B0453A; --alert-fill:rgba(176,69,58,0.045);
+  --font-display:Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif; --font-mono:'JetBrains Mono','SF Mono',Menlo,Consolas,monospace;
+}
+* { box-sizing:border-box; }
+html, body { margin:0; background:#4A4844; }
+.desk { padding:12mm; }
+.sheet { position:relative; width:594mm; height:420mm; background:var(--paper); color:var(--ink-primary);
+  font-family:var(--font-display); overflow:hidden; transform-origin:top left; -webkit-font-smoothing:antialiased; }
+.border { position:absolute; inset:8mm; border:0.25mm solid var(--ink-secondary); pointer-events:none; }
+.num { position:absolute; left:15mm; top:11mm; font-family:var(--font-mono); font-size:54pt; font-weight:600; line-height:.86; letter-spacing:-.02em; }
+.title { position:absolute; left:62mm; top:16mm; font-size:22pt; font-weight:700; letter-spacing:.2em; line-height:1; white-space:nowrap; }
+.sub { position:absolute; left:63mm; top:29mm; font-size:11pt; letter-spacing:.2em; color:var(--ink-secondary); white-space:nowrap; }
+.label { position:absolute; right:15mm; top:16mm; font-size:13pt; font-weight:600; letter-spacing:.3em; white-space:nowrap; }
+.meta { position:absolute; right:15mm; top:29mm; font-family:var(--font-mono); font-size:10pt; color:var(--ink-secondary); white-space:nowrap; }
+.hrule { position:absolute; left:15mm; right:15mm; top:44mm; height:.5mm; background:var(--ink-primary); }
+svg.draw { position:absolute; left:0; top:0; width:594mm; height:420mm; }
+.panel { position:absolute; width:180mm; border:.25mm solid var(--ink-secondary); }
+.panel > .ph { padding:2.3mm 4mm 1.8mm; border-bottom:.25mm solid var(--ink-secondary); font-size:10pt; font-weight:600; letter-spacing:.22em; color:var(--ink-secondary); }
+.panel > .pb { padding:3mm 4mm; font-size:10pt; line-height:1.3; }
+.grp { font-size:10pt; font-weight:600; letter-spacing:.22em; color:var(--ink-secondary); border-bottom:.2mm solid var(--rule); margin:1.6mm 0 .8mm; padding-bottom:.5mm; }
+.grp:first-child { margin-top:0; }
+.row { display:flex; gap:2mm; align-items:baseline; white-space:nowrap; }
+.row .k { font-family:var(--font-mono); font-weight:700; width:9mm; flex:none; }
+.row .r { font-family:var(--font-mono); width:25mm; flex:none; color:var(--ink-secondary); }
+.row .d { flex:1; overflow:hidden; text-overflow:clip; color:var(--ink-primary); }
+.row .v { font-family:var(--font-mono); font-weight:600; flex:none; text-align:right; }
+.row.unk .k, .row.unk .v { color:var(--alert); }
+.note { display:flex; gap:3mm; margin-bottom:2mm; }
+.note:last-child { margin-bottom:0; }
+.note .n { font-family:var(--font-mono); font-weight:700; width:5mm; flex:none; }
+.note b { font-weight:700; } .note i { font-style:normal; color:var(--ink-secondary); }
+.sr { display:flex; gap:3mm; margin-bottom:1.6mm; }
+.sr:last-child { margin-bottom:0; }
+.sr .tag { font-family:var(--font-mono); font-weight:600; width:16mm; flex:none; }
+.open { position:absolute; left:15mm; top:320mm; width:175mm; height:85mm; border:.35mm solid var(--alert); background:var(--alert-fill); }
+.open .oh { display:flex; align-items:baseline; gap:3mm; padding:2.4mm 4mm 1.9mm; border-bottom:.25mm solid var(--alert); }
+.open .oh b { font-size:11pt; font-weight:700; letter-spacing:.22em; color:var(--alert); }
+.open .oh span { font-size:10pt; letter-spacing:.14em; color:var(--ink-secondary); }
+.open .ob { padding:2.6mm 4mm; display:flex; flex-direction:column; gap:1.5mm; }
+.oi { display:flex; gap:3.5mm; align-items:baseline; font-size:10pt; line-height:1.25; }
+.oi .ref { font-family:var(--font-mono); font-weight:700; color:var(--alert); width:11mm; flex:none; }
+.tb { position:absolute; left:399mm; top:315mm; width:180mm; height:90mm; border:.45mm solid var(--ink-primary); display:flex; flex-direction:column; background:var(--paper); }
+.tb > div { flex:none; border-bottom:.25mm solid var(--ink-secondary); padding:0 5mm; display:flex; align-items:center; }
+.tb .p { height:16mm; font-size:12pt; font-weight:700; letter-spacing:.16em; }
+.tb .t { height:22mm; gap:5mm; }
+.tb .t .n { font-family:var(--font-mono); font-size:22pt; font-weight:600; }
+.tb .t .s { font-size:14pt; font-weight:600; letter-spacing:.1em; }
+.tb .m { height:14mm; font-family:var(--font-mono); font-size:10pt; }
+.tb .st { flex:1; border-bottom:0; background:var(--fill-structure); font-size:11.5pt; font-weight:700; letter-spacing:.14em; }
+@page { size:594mm 420mm; margin:0; }
+@media print { html, body { background:var(--paper); } .desk { padding:0; } .sheet { transform:none !important; } .desk { height:auto !important; } }
+</style></head>
+<body><div class="desk"><section class="sheet" id="sheet">
+<div class="border"></div>
+<div class="num">01</div>
+<div class="title">PLUG AND REAR PORT — POINTS, EDGES, MEASUREMENTS</div>
+<div class="sub">NOT TO SCALE · ALL DIMS IN mm · DRAWN FROM PHOTOS, NOTHING MEASURED YET</div>
+<div class="label">LAPTOP CHARGER BRACE</div>
+<div class="meta">ALIENWARE m15 R7 · BARREL PLUG</div>
+<div class="hrule"></div>
+<svg class="draw" viewBox="0 0 594 420" xmlns="http://www.w3.org/2000/svg">
+<text x="22.00" y="54.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="4.6" font-weight="700" text-anchor="start" fill="#1C1C1A" letter-spacing="0.6" >1  PLUG, SIDE ON</text>
+<text x="22.00" y="59.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >PLUG LYING ON THE DESK · METAL TIP ON THE LEFT · CABLE TO THE RIGHT</text>
+<text x="22.00" y="63.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#B0453A" letter-spacing="0" >NOT TO SCALE (IND.) · PROPORTIONS FROM PHOTOS</text>
+<text x="22.00" y="160.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="4.6" font-weight="700" text-anchor="start" fill="#1C1C1A" letter-spacing="0.6" >2  LAPTOP FROM ABOVE</text>
+<text x="22.00" y="165.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >KEYBOARD TOWARDS YOU · REAR EDGE AT THE TOP</text>
+<text x="22.00" y="169.40" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >VENT CORNER ON THE LEFT · PLUG IN</text>
+<text x="22.00" y="173.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#B0453A" letter-spacing="0" >NOT TO SCALE (IND.) · PROPORTIONS FROM PHOTOS</text>
+<text x="204.00" y="160.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="4.6" font-weight="700" text-anchor="start" fill="#1C1C1A" letter-spacing="0.6" >3  LAPTOP REAR FACE</text>
+<text x="204.00" y="165.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >REAR FACE TOWARDS YOU · KEYBOARD SIDE UP</text>
+<text x="204.00" y="169.40" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >MIRRORED FROM VIEW 2: VENT CORNER ON THE RIGHT</text>
+<text x="204.00" y="173.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#B0453A" letter-spacing="0" >NOT TO SCALE (IND.) · PROPORTIONS FROM PHOTOS</text>
+<text x="198.00" y="262.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="4.6" font-weight="700" text-anchor="start" fill="#1C1C1A" letter-spacing="0.6" >4  SECTION THROUGH THE JACK</text>
+<text x="198.00" y="267.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="400" text-anchor="start" fill="#6B6862" letter-spacing="0.3" >LOOKING FROM THE VENT CORNER · KEYBOARD LEFT · REAR FACE RIGHT · PLUG IN</text>
+<text x="198.00" y="271.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#B0453A" letter-spacing="0" >NOT TO SCALE (IND.) · PROPORTIONS FROM PHOTOS</text>
+<path d="M42.04,93.42 L80.80,93.42 L80.80,118.58 L42.04,118.58 L40.00,116.54 L40.00,95.46 Z" fill="#ECEAE5" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M80.80,90.70 L85.22,87.30 L172.60,87.30 L172.60,124.70 L85.22,124.70 L80.80,121.30 Z" fill="#D9D4C9" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M172.60,86.28 L181.78,86.28 L184.50,89.34 L184.50,122.66 L181.78,125.72 L172.60,125.72 Z" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M184.50,99.54 L188.58,97.84 L191.98,100.56 L196.40,99.20 L196.40,112.80 L192.66,114.16 L187.90,111.78 L184.50,113.14 Z" fill="rgba(176,69,58,0.07)" stroke="#B0453A" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M196.40,91.04 L257.60,95.12 L257.60,116.88 L196.40,120.96 Z" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M205.24,91.63 L205.24,120.37" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M214.08,92.22 L214.08,119.78" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M222.92,92.81 L222.92,119.19" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M231.76,93.40 L231.76,118.60" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M257.60,96.65 L312.00,96.65" fill="none" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M257.60,115.35 L312.00,115.35" fill="none" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M312.00,92.57 L309.28,102.60 L314.72,109.40 L312.00,119.43" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<line x1="26.40" y1="106.00" x2="322.20" y2="106.00" stroke="#6B6862" stroke-width="0.25" stroke-dasharray="9 2.4 2.4 2.4"/>
+<text x="57.00" y="140.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >METAL SLEEVE</text>
+<text x="133.50" y="140.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >BLACK BODY</text>
+<text x="230.40" y="140.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >STRAIN RELIEF</text>
+<text x="288.20" y="140.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >CABLE</text>
+<text x="166.60" y="148.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="end" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >LIGHT RING</text>
+<text x="202.40" y="148.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="start" fill="#B0453A" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >TORN (IND.)</text>
+<line x1="178.55" y1="126.52" x2="171.35" y2="146.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="190.45" y1="114.62" x2="197.65" y2="146.60" stroke="#B0453A" stroke-width="0.15"/>
+<path d="M40.00,224.00 L166.00,224.00 L166.00,242.00 L36.00,242.00 L36.00,228.00 L37.20,225.20 Z" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M166.00,222.00 L165.00,230.00 L167.00,237.00 L166.00,244.00" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M34.00,242.00 L76.00,242.80 L116.00,241.20 L168.00,242.00" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M45.00,224.00 L94.00,224.00 L94.00,226.20 L45.00,226.20 Z" fill="#D9D4C9" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M46.20,226.20 L47.40,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M48.60,226.20 L49.80,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M51.00,226.20 L52.20,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M53.40,226.20 L54.60,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M55.80,226.20 L57.00,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M58.20,226.20 L59.40,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M60.60,226.20 L61.80,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M63.00,226.20 L64.20,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M65.40,226.20 L66.60,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M67.80,226.20 L69.00,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M70.20,226.20 L71.40,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M72.60,226.20 L73.80,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M75.00,226.20 L76.20,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M77.40,226.20 L78.60,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M79.80,226.20 L81.00,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M82.20,226.20 L83.40,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M84.60,226.20 L85.80,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M87.00,226.20 L88.20,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M89.40,226.20 L90.60,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M91.80,226.20 L93.00,224.00" fill="none" stroke="#1C1C1A" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M36.00,238.00 L165.50,238.00" fill="none" stroke="#B0453A" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M42.00,240.20 L42.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M44.50,240.20 L44.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M47.00,240.20 L47.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M49.50,240.20 L49.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M52.00,240.20 L52.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M54.50,240.20 L54.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M57.00,240.20 L57.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M59.50,240.20 L59.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M62.00,240.20 L62.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M64.50,240.20 L64.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M67.00,240.20 L67.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M69.50,240.20 L69.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M72.00,240.20 L72.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M74.50,240.20 L74.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M77.00,240.20 L77.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M79.50,240.20 L79.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M82.00,240.20 L82.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M84.50,240.20 L84.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M87.00,240.20 L87.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M89.50,240.20 L89.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M92.00,240.20 L92.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M94.50,240.20 L94.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M97.00,240.20 L97.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M99.50,240.20 L99.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M102.00,240.20 L102.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M104.50,240.20 L104.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M107.00,240.20 L107.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M109.50,240.20 L109.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M112.00,240.20 L112.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M114.50,240.20 L114.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M117.00,240.20 L117.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M119.50,240.20 L119.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M122.00,240.20 L122.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M124.50,240.20 L124.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M127.00,240.20 L127.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M129.50,240.20 L129.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M132.00,240.20 L132.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M134.50,240.20 L134.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M137.00,240.20 L137.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M139.50,240.20 L139.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M142.00,240.20 L142.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M144.50,240.20 L144.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M147.00,240.20 L147.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M149.50,240.20 L149.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M152.00,240.20 L152.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M154.50,240.20 L154.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M157.00,240.20 L157.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M159.50,240.20 L159.50,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M162.00,240.20 L162.00,242.60" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M40.00,229.00 L49.00,229.00 L49.00,235.00 L44.00,235.00 Z" fill="#ECEAE5" stroke="#B0453A" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M104.00,193.50 C104.00,185.00 106.00,186.00 118.00,186.00 L160.00,186.00" fill="none" stroke="#1C1C1A" stroke-width="5.5"/>
+<path d="M104.00,193.50 C104.00,185.00 106.00,186.00 118.00,186.00 L160.00,186.00" fill="none" stroke="#F7F5F0" stroke-width="4.3"/>
+<path d="M160.00,181.80 L159.20,185.00 L160.80,187.00 L160.00,190.20" fill="none" stroke="#6B6862" stroke-width="0.35"/>
+<path d="M98.50,224.00 L98.50,197.00 L109.50,197.00 L109.50,224.00 Z" fill="#D9D4C9" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M98.20,197.00 L98.20,194.30 L99.10,193.50 L108.90,193.50 L109.80,194.30 L109.80,197.00 Z" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M128.00,224.00 L128.00,202.00 L146.00,202.00 L146.00,224.00" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.6" stroke-linejoin="round"/>
+<path d="M133.00,202.00 L134.00,195.00 L140.00,195.00 L141.00,202.00" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.5" stroke-linejoin="round"/>
+<line x1="116.00" y1="222.40" x2="116.00" y2="225.60" stroke="#1C1C1A" stroke-width="0.5"/>
+<line x1="32.00" y1="182.00" x2="168.00" y2="182.00" stroke="#B0453A" stroke-width="0.45" stroke-dasharray="6 2.4 1.4 2.4"/>
+<line x1="34.00" y1="182.00" x2="36.20" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="38.10" y1="182.00" x2="40.30" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="42.20" y1="182.00" x2="44.40" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="46.30" y1="182.00" x2="48.50" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="50.40" y1="182.00" x2="52.60" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="54.50" y1="182.00" x2="56.70" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="58.60" y1="182.00" x2="60.80" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="62.70" y1="182.00" x2="64.90" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="66.80" y1="182.00" x2="69.00" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="70.90" y1="182.00" x2="73.10" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="75.00" y1="182.00" x2="77.20" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="79.10" y1="182.00" x2="81.30" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="83.20" y1="182.00" x2="85.40" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="87.30" y1="182.00" x2="89.50" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="91.40" y1="182.00" x2="93.60" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="95.50" y1="182.00" x2="97.70" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="99.60" y1="182.00" x2="101.80" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="103.70" y1="182.00" x2="105.90" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="107.80" y1="182.00" x2="110.00" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="111.90" y1="182.00" x2="114.10" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="116.00" y1="182.00" x2="118.20" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="120.10" y1="182.00" x2="122.30" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="124.20" y1="182.00" x2="126.40" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="128.30" y1="182.00" x2="130.50" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="132.40" y1="182.00" x2="134.60" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="136.50" y1="182.00" x2="138.70" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="140.60" y1="182.00" x2="142.80" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="144.70" y1="182.00" x2="146.90" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="148.80" y1="182.00" x2="151.00" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="152.90" y1="182.00" x2="155.10" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="157.00" y1="182.00" x2="159.20" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="161.10" y1="182.00" x2="163.30" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="165.20" y1="182.00" x2="167.40" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<line x1="169.30" y1="182.00" x2="171.50" y2="179.80" stroke="#B0453A" stroke-width="0.2"/>
+<text x="168.00" y="178.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#B0453A" letter-spacing="0" >WALL (IND.)</text>
+<text x="67.00" y="234.20" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >TOP DECK</text>
+<text x="137.00" y="214.20" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >HDMI</text>
+<text x="44.00" y="212.20" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="start" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >VENT ON REAR FACE</text>
+<line x1="60.00" y1="223.00" x2="60.00" y2="213.50" stroke="#6B6862" stroke-width="0.15"/>
+<path d="M371.50,221.00 L214.00,221.00 L214.00,188.00 L371.50,188.00 L376.00,192.50 L376.00,216.50 Z" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M214.00,223.25 L215.20,210.50 L212.80,200.00 L214.00,185.75" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M214.90,194.00 L358.75,194.00 L361.47,194.36 L364.00,195.41 L366.17,197.08 L367.84,199.25 L368.89,201.78 L369.25,204.50 L368.89,207.22 L367.84,209.75 L366.17,211.92 L364.00,213.59 L361.47,214.64 L358.75,215.00 L214.90,215.00" fill="none" stroke="#1C1C1A" stroke-width="0.6" stroke-linejoin="round"/>
+<path d="M214.90,195.50 L358.75,195.50 L361.08,195.81 L363.25,196.71 L365.11,198.14 L366.54,200.00 L367.44,202.17 L367.75,204.50 L367.44,206.83 L366.54,209.00 L365.11,210.86 L363.25,212.29 L361.08,213.19 L358.75,213.50 L214.90,213.50" fill="none" stroke="#6B6862" stroke-width="0.3" stroke-linejoin="round"/>
+<path d="M357.38,209.87 L359.50,208.65 L361.62,209.87 L361.62,212.33 L359.50,213.55 L357.38,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M352.42,209.87 L354.54,208.65 L356.66,209.87 L356.66,212.33 L354.54,213.55 L352.42,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M347.46,209.87 L349.58,208.65 L351.70,209.87 L351.70,212.33 L349.58,213.55 L347.46,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M342.50,209.87 L344.62,208.65 L346.75,209.87 L346.75,212.33 L344.62,213.55 L342.50,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M337.54,209.87 L339.66,208.65 L341.79,209.87 L341.79,212.33 L339.66,213.55 L337.54,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M332.58,209.87 L334.70,208.65 L336.83,209.87 L336.83,212.33 L334.70,213.55 L332.58,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M327.62,209.87 L329.75,208.65 L331.87,209.87 L331.87,212.33 L329.75,213.55 L327.62,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M322.66,209.87 L324.79,208.65 L326.91,209.87 L326.91,212.33 L324.79,213.55 L322.66,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M317.71,209.87 L319.83,208.65 L321.95,209.87 L321.95,212.33 L319.83,213.55 L317.71,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M312.75,209.87 L314.87,208.65 L316.99,209.87 L316.99,212.33 L314.87,213.55 L312.75,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M307.79,209.87 L309.91,208.65 L312.03,209.87 L312.03,212.33 L309.91,213.55 L307.79,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M302.83,209.87 L304.95,208.65 L307.07,209.87 L307.07,212.33 L304.95,213.55 L302.83,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M297.87,209.87 L299.99,208.65 L302.11,209.87 L302.11,212.33 L299.99,213.55 L297.87,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M292.91,209.87 L295.03,208.65 L297.16,209.87 L297.16,212.33 L295.03,213.55 L292.91,212.33 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M354.90,205.60 L357.02,204.37 L359.14,205.60 L359.14,208.05 L357.02,209.28 L354.90,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M349.94,205.60 L352.06,204.37 L354.18,205.60 L354.18,208.05 L352.06,209.28 L349.94,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M344.98,205.60 L347.10,204.37 L349.23,205.60 L349.23,208.05 L347.10,209.28 L344.98,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M340.02,205.60 L342.14,204.37 L344.27,205.60 L344.27,208.05 L342.14,209.28 L340.02,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M335.06,205.60 L337.18,204.37 L339.31,205.60 L339.31,208.05 L337.18,209.28 L335.06,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M330.10,205.60 L332.23,204.37 L334.35,205.60 L334.35,208.05 L332.23,209.28 L330.10,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M325.14,205.60 L327.27,204.37 L329.39,205.60 L329.39,208.05 L327.27,209.28 L325.14,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M320.18,205.60 L322.31,204.37 L324.43,205.60 L324.43,208.05 L322.31,209.28 L320.18,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M315.23,205.60 L317.35,204.37 L319.47,205.60 L319.47,208.05 L317.35,209.28 L315.23,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M310.27,205.60 L312.39,204.37 L314.51,205.60 L314.51,208.05 L312.39,209.28 L310.27,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M305.31,205.60 L307.43,204.37 L309.55,205.60 L309.55,208.05 L307.43,209.28 L305.31,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M300.35,205.60 L302.47,204.37 L304.59,205.60 L304.59,208.05 L302.47,209.28 L300.35,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M295.39,205.60 L297.51,204.37 L299.64,205.60 L299.64,208.05 L297.51,209.28 L295.39,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M290.43,205.60 L292.55,204.37 L294.68,205.60 L294.68,208.05 L292.55,209.28 L290.43,208.05 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M357.38,201.32 L359.50,200.10 L361.62,201.32 L361.62,203.78 L359.50,205.00 L357.38,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M352.42,201.32 L354.54,200.10 L356.66,201.32 L356.66,203.78 L354.54,205.00 L352.42,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M347.46,201.32 L349.58,200.10 L351.70,201.32 L351.70,203.78 L349.58,205.00 L347.46,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M342.50,201.32 L344.62,200.10 L346.75,201.32 L346.75,203.78 L344.62,205.00 L342.50,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M337.54,201.32 L339.66,200.10 L341.79,201.32 L341.79,203.78 L339.66,205.00 L337.54,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M332.58,201.32 L334.70,200.10 L336.83,201.32 L336.83,203.78 L334.70,205.00 L332.58,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M327.62,201.32 L329.75,200.10 L331.87,201.32 L331.87,203.78 L329.75,205.00 L327.62,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M322.66,201.32 L324.79,200.10 L326.91,201.32 L326.91,203.78 L324.79,205.00 L322.66,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M317.71,201.32 L319.83,200.10 L321.95,201.32 L321.95,203.78 L319.83,205.00 L317.71,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M312.75,201.32 L314.87,200.10 L316.99,201.32 L316.99,203.78 L314.87,205.00 L312.75,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M307.79,201.32 L309.91,200.10 L312.03,201.32 L312.03,203.78 L309.91,205.00 L307.79,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M302.83,201.32 L304.95,200.10 L307.07,201.32 L307.07,203.78 L304.95,205.00 L302.83,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M297.87,201.32 L299.99,200.10 L302.11,201.32 L302.11,203.78 L299.99,205.00 L297.87,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M292.91,201.32 L295.03,200.10 L297.16,201.32 L297.16,203.78 L295.03,205.00 L292.91,203.78 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M354.90,197.05 L357.02,195.82 L359.14,197.05 L359.14,199.50 L357.02,200.73 L354.90,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M349.94,197.05 L352.06,195.82 L354.18,197.05 L354.18,199.50 L352.06,200.73 L349.94,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M344.98,197.05 L347.10,195.82 L349.23,197.05 L349.23,199.50 L347.10,200.73 L344.98,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M340.02,197.05 L342.14,195.82 L344.27,197.05 L344.27,199.50 L342.14,200.73 L340.02,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M335.06,197.05 L337.18,195.82 L339.31,197.05 L339.31,199.50 L337.18,200.73 L335.06,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M330.10,197.05 L332.23,195.82 L334.35,197.05 L334.35,199.50 L332.23,200.73 L330.10,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M325.14,197.05 L327.27,195.82 L329.39,197.05 L329.39,199.50 L327.27,200.73 L325.14,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M320.18,197.05 L322.31,195.82 L324.43,197.05 L324.43,199.50 L322.31,200.73 L320.18,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M315.23,197.05 L317.35,195.82 L319.47,197.05 L319.47,199.50 L317.35,200.73 L315.23,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M310.27,197.05 L312.39,195.82 L314.51,197.05 L314.51,199.50 L312.39,200.73 L310.27,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M305.31,197.05 L307.43,195.82 L309.55,197.05 L309.55,199.50 L307.43,200.73 L305.31,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M300.35,197.05 L302.47,195.82 L304.59,197.05 L304.59,199.50 L302.47,200.73 L300.35,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M295.39,197.05 L297.51,195.82 L299.64,197.05 L299.64,199.50 L297.51,200.73 L295.39,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<path d="M290.43,197.05 L292.55,195.82 L294.68,197.05 L294.68,199.50 L292.55,200.73 L290.43,199.50 Z" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.25" stroke-linejoin="round"/>
+<circle cx="274.00" cy="204.50" r="8.25" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.7"/>
+<circle cx="274.00" cy="204.50" r="5.70" fill="#ECEAE5" stroke="#1C1C1A" stroke-width="0.5"/>
+<circle cx="274.00" cy="204.50" r="1.20" fill="#1C1C1A" stroke="#1C1C1A" stroke-width="0.2"/>
+<circle cx="256.00" cy="204.50" r="2.40" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.5"/>
+<line x1="254.50" y1="204.50" x2="257.50" y2="204.50" stroke="#1C1C1A" stroke-width="0.3"/>
+<line x1="256.00" y1="203.00" x2="256.00" y2="206.00" stroke="#1C1C1A" stroke-width="0.3"/>
+<path d="M238.00,214.25 L214.90,214.25" fill="none" stroke="#1C1C1A" stroke-width="0.6" stroke-linejoin="round"/>
+<path d="M238.00,214.25 L238.00,194.75 L214.90,194.75" fill="none" stroke="#1C1C1A" stroke-width="0.6" stroke-linejoin="round"/>
+<text x="225.25" y="205.70" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >HDMI</text>
+<text x="343.00" y="185.80" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >KEYBOARD SIDE</text>
+<text x="343.00" y="226.00" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >UNDERSIDE</text>
+<path d="M216.00,346.00 L243.20,346.00 L244.56,348.55 L253.74,348.55 L255.10,346.00 L280.60,346.00 L284.00,342.60 L284.00,312.00 L280.60,308.60 L260.20,308.60 L258.50,310.81 L216.00,310.81 Z" fill="#E9E6DE" stroke="none" stroke-width="0" stroke-linejoin="round"/>
+<path d="M255.10,346.00 L280.60,346.00 L284.00,342.60 L284.00,312.00 L280.60,308.60 L260.20,308.60" fill="none" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M260.20,308.60 L258.50,310.81 L216.00,310.81" fill="none" stroke="#B0453A" stroke-width="0.45" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M216.00,346.00 L243.20,346.00 L244.56,348.55 L253.74,348.55 L255.10,346.00" fill="none" stroke="#B0453A" stroke-width="0.45" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M216.00,350.25 L214.64,335.80 L217.36,322.20 L216.00,306.90" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M284.00,334.27 L261.90,334.27 L261.90,320.33 L284.00,320.33" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="2.4 1.8"/>
+<path d="M284.00,336.65 L285.53,336.65 L285.53,317.95 L284.00,317.95" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.5" stroke-linejoin="round"/>
+<path d="M264.62,321.01 L284.00,321.01 L284.00,333.59 L264.62,333.59" fill="#ECEAE5" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="2.4 1.8"/>
+<path d="M284.00,319.65 L286.21,317.95 L329.90,317.95 L329.90,336.65 L286.21,336.65 L284.00,334.95 Z" fill="#D9D4C9" stroke="#1C1C1A" stroke-width="0.9" stroke-linejoin="round"/>
+<path d="M329.90,317.44 L334.49,317.44 L335.85,318.97 L335.85,335.63 L334.49,337.16 L329.90,337.16 Z" fill="#F7F5F0" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M335.85,324.07 L337.89,323.22 L339.59,324.58 L341.80,323.90 L341.80,330.70 L339.93,331.38 L337.55,330.19 L335.85,330.87 Z" fill="rgba(176,69,58,0.07)" stroke="#B0453A" stroke-width="0.35" stroke-linejoin="round" stroke-dasharray="6 2.4 1.4 2.4"/>
+<path d="M341.80,319.82 L372.40,321.86 L372.40,332.74 L341.80,334.78 Z" fill="#E9E6DE" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M346.22,320.11 L346.22,334.49" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M350.64,320.41 L350.64,334.19" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M355.06,320.70 L355.06,333.90" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M359.48,321.00 L359.48,333.60" fill="none" stroke="#1C1C1A" stroke-width="0.35" stroke-linejoin="round"/>
+<path d="M372.40,331.98 L382.60,331.98" fill="none" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M372.40,322.62 L382.60,322.62" fill="none" stroke="#1C1C1A" stroke-width="0.7" stroke-linejoin="round"/>
+<path d="M382.60,334.01 L381.58,329.00 L383.62,325.60 L382.60,320.58" fill="none" stroke="#6B6862" stroke-width="0.35" stroke-linejoin="round"/>
+<line x1="199.85" y1="327.30" x2="386.00" y2="327.30" stroke="#6B6862" stroke-width="0.25" stroke-dasharray="9 2.4 2.4 2.4"/>
+<text x="238.10" y="320.85" font-family="Archivo,'Helvetica Neue',Helvetica,Arial,sans-serif" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0.5" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >LAPTOP</text>
+<line x1="40.00" y1="92.22" x2="40.00" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="38.60" y1="77.40" x2="41.40" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="80.80" y1="86.10" x2="80.80" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="79.40" y1="77.40" x2="82.20" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="40.00" y1="76.00" x2="80.80" y2="76.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="60.40" y="74.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >B</text>
+<line x1="79.40" y1="77.40" x2="82.20" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="172.60" y1="85.08" x2="172.60" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="171.20" y1="77.40" x2="174.00" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="80.80" y1="76.00" x2="172.60" y2="76.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="126.70" y="74.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >E</text>
+<line x1="171.20" y1="77.40" x2="174.00" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="184.50" y1="85.08" x2="184.50" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="183.10" y1="77.40" x2="185.90" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="172.60" y1="76.00" x2="184.50" y2="76.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="178.55" y="74.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >G</text>
+<line x1="183.10" y1="77.40" x2="185.90" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="196.40" y1="89.84" x2="196.40" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="195.00" y1="77.40" x2="197.80" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="184.50" y1="76.00" x2="196.40" y2="76.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="190.45" y="74.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >H</text>
+<line x1="195.00" y1="77.40" x2="197.80" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="257.60" y1="93.92" x2="257.60" y2="74.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="256.20" y1="77.40" x2="259.00" y2="74.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="196.40" y1="76.00" x2="257.60" y2="76.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="227.00" y="74.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >J</text>
+<line x1="57.30" y1="94.82" x2="60.10" y2="92.02" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="57.30" y1="119.98" x2="60.10" y2="117.18" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="58.70" y1="93.42" x2="58.70" y2="118.58" stroke="#B0453A" stroke-width="0.22"/>
+<text x="60.70" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >A</text>
+<line x1="94.70" y1="88.70" x2="97.50" y2="85.90" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="94.70" y1="126.10" x2="97.50" y2="123.30" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="96.10" y1="87.30" x2="96.10" y2="124.70" stroke="#B0453A" stroke-width="0.22"/>
+<text x="98.10" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >C</text>
+<line x1="159.30" y1="88.70" x2="162.10" y2="85.90" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="159.30" y1="126.10" x2="162.10" y2="123.30" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="160.70" y1="87.30" x2="160.70" y2="124.70" stroke="#B0453A" stroke-width="0.22"/>
+<text x="158.70" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >D</text>
+<line x1="280.00" y1="98.05" x2="282.80" y2="95.25" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="280.00" y1="116.75" x2="282.80" y2="113.95" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="281.40" y1="96.65" x2="281.40" y2="115.35" stroke="#B0453A" stroke-width="0.22"/>
+<text x="283.40" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >K</text>
+<line x1="177.15" y1="87.68" x2="179.95" y2="84.88" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="177.15" y1="127.12" x2="179.95" y2="124.32" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="178.55" y1="86.28" x2="178.55" y2="125.72" stroke="#B0453A" stroke-width="0.22"/>
+<text x="176.35" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >F</text>
+<line x1="198.20" y1="92.44" x2="201.00" y2="89.64" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="198.20" y1="122.36" x2="201.00" y2="119.56" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="199.60" y1="91.04" x2="199.60" y2="120.96" stroke="#B0453A" stroke-width="0.22"/>
+<text x="201.60" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >I</text>
+<line x1="94.00" y1="223.20" x2="94.00" y2="215.40" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="92.60" y1="218.40" x2="95.40" y2="215.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="97.10" y1="218.40" x2="99.90" y2="215.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="94.00" y1="217.00" x2="98.50" y2="217.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="90.75" y="218.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >V</text>
+<line x1="104.00" y1="224.80" x2="104.00" y2="249.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="102.60" y1="249.40" x2="105.40" y2="246.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="116.00" y1="226.40" x2="116.00" y2="249.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="114.60" y1="249.40" x2="117.40" y2="246.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="104.00" y1="248.00" x2="116.00" y2="248.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="110.00" y="246.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >W</text>
+<line x1="102.60" y1="255.90" x2="105.40" y2="253.10" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="128.00" y1="224.80" x2="128.00" y2="256.10" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="126.60" y1="255.90" x2="129.40" y2="253.10" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="104.00" y1="254.50" x2="128.00" y2="254.50" stroke="#B0453A" stroke-width="0.22"/>
+<text x="116.00" y="252.90" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >X</text>
+<line x1="36.00" y1="243.00" x2="36.00" y2="262.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="34.60" y1="262.40" x2="37.40" y2="259.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="102.60" y1="262.40" x2="105.40" y2="259.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="36.00" y1="261.00" x2="104.00" y2="261.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="70.00" y="259.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >U</text>
+<line x1="104.00" y1="248.00" x2="104.00" y2="262.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="112.10" y1="225.40" x2="114.90" y2="222.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="110.40" y1="193.50" x2="115.10" y2="193.50" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="112.10" y1="194.90" x2="114.90" y2="192.10" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="113.50" y1="224.00" x2="113.50" y2="193.50" stroke="#B0453A" stroke-width="0.22"/>
+<text x="115.50" y="210.05" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >M</text>
+<line x1="151.60" y1="225.40" x2="154.40" y2="222.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="146.60" y1="202.00" x2="154.60" y2="202.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="151.60" y1="203.40" x2="154.40" y2="200.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="153.00" y1="224.00" x2="153.00" y2="202.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="155.00" y="214.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >Y</text>
+<line x1="36.60" y1="224.00" x2="27.40" y2="224.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="27.60" y1="225.40" x2="30.40" y2="222.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="27.60" y1="183.40" x2="30.40" y2="180.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="29.00" y1="224.00" x2="29.00" y2="182.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="27.20" y="204.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >AD</text>
+<line x1="88.00" y1="195.70" x2="97.40" y2="195.70" stroke="#B0453A" stroke-width="0.3"/>
+<path d="M90.00,194.50 L88.00,195.70 L90.00,196.90 M95.40,194.50 L97.40,195.70 L95.40,196.90" fill="none" stroke="#B0453A" stroke-width="0.3"/>
+<text x="86.50" y="197.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >O</text>
+<line x1="376.80" y1="188.00" x2="388.10" y2="188.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="385.10" y1="189.40" x2="387.90" y2="186.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="376.80" y1="221.00" x2="388.10" y2="221.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="385.10" y1="222.40" x2="387.90" y2="219.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="386.50" y1="188.00" x2="386.50" y2="221.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="388.50" y="205.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P</text>
+<line x1="212.80" y1="194.00" x2="205.40" y2="194.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="205.60" y1="195.40" x2="208.40" y2="192.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="212.80" y1="215.00" x2="205.40" y2="215.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="205.60" y1="216.40" x2="208.40" y2="213.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="207.00" y1="194.00" x2="207.00" y2="215.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="205.20" y="205.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >Q</text>
+<line x1="265.75" y1="213.50" x2="265.75" y2="231.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="264.35" y1="231.40" x2="267.15" y2="228.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="282.25" y1="213.50" x2="282.25" y2="231.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="280.85" y1="231.40" x2="283.65" y2="228.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="265.75" y1="230.00" x2="282.25" y2="230.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="274.00" y="235.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S</text>
+<line x1="284.00" y1="308.10" x2="284.00" y2="295.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="282.60" y1="298.00" x2="285.40" y2="295.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="335.85" y1="316.44" x2="335.85" y2="295.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="334.45" y1="298.00" x2="337.25" y2="295.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="284.00" y1="296.60" x2="335.85" y2="296.60" stroke="#B0453A" stroke-width="0.22"/>
+<text x="309.93" y="295.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >M</text>
+<line x1="260.20" y1="307.60" x2="260.20" y2="301.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="258.80" y1="304.00" x2="261.60" y2="301.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="282.60" y1="304.00" x2="285.40" y2="301.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="260.20" y1="302.60" x2="284.00" y2="302.60" stroke="#B0453A" stroke-width="0.22"/>
+<text x="272.10" y="301.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >Z</text>
+<line x1="252.00" y1="310.00" x2="254.80" y2="307.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="252.00" y1="312.21" x2="254.80" y2="309.41" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="253.40" y1="308.60" x2="253.40" y2="310.81" stroke="#B0453A" stroke-width="0.22"/>
+<text x="251.40" y="307.11" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >AA</text>
+<line x1="214.50" y1="308.60" x2="208.40" y2="308.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="208.60" y1="310.00" x2="211.40" y2="307.20" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="214.50" y1="346.00" x2="208.40" y2="346.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="208.60" y1="347.40" x2="211.40" y2="344.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="210.00" y1="308.60" x2="210.00" y2="346.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="208.20" y="321.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P</text>
+<line x1="201.10" y1="328.70" x2="203.90" y2="325.90" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="214.50" y1="346.00" x2="200.90" y2="346.00" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="201.10" y1="347.40" x2="203.90" y2="344.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="202.50" y1="327.30" x2="202.50" y2="346.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="200.70" y="337.95" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R</text>
+<line x1="255.10" y1="349.40" x2="255.10" y2="358.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="253.70" y1="358.40" x2="256.50" y2="355.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="284.00" y1="346.80" x2="284.00" y2="358.60" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="282.60" y1="358.40" x2="285.40" y2="355.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="255.10" y1="357.00" x2="284.00" y2="357.00" stroke="#B0453A" stroke-width="0.22"/>
+<text x="269.55" y="355.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="middle" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >AB</text>
+<line x1="235.00" y1="347.40" x2="237.80" y2="344.60" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="235.00" y1="349.95" x2="237.80" y2="347.15" stroke="#B0453A" stroke-width="0.35"/>
+<line x1="236.40" y1="346.00" x2="236.40" y2="348.55" stroke="#B0453A" stroke-width="0.22"/>
+<text x="234.40" y="351.47" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="end" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >AC</text>
+<line x1="236.40" y1="348.55" x2="244.56" y2="348.55" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="284.91" y1="337.25" x2="296.51" y2="344.65" stroke="#B0453A" stroke-width="0.2"/>
+<text x="297.11" y="346.25" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >N</text>
+<line x1="285.53" y1="337.05" x2="290.03" y2="349.65" stroke="#B0453A" stroke-width="0.2"/>
+<text x="290.53" y="352.25" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.8" font-weight="700" text-anchor="start" fill="#B0453A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T</text>
+<line x1="104.00" y1="224.00" x2="96.40" y2="228.16" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="104.00" y1="193.50" x2="98.00" y2="191.10" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="274.00" y1="204.50" x2="276.00" y2="194.74" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="289.00" y1="204.50" x2="291.00" y2="216.18" stroke="#6B6862" stroke-width="0.15"/>
+<line x1="238.00" y1="204.50" x2="239.60" y2="211.70" stroke="#6B6862" stroke-width="0.15"/>
+<rect x="29.64" y="103.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="33.00" y="107.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p1</text>
+<rect x="51.94" y="123.08" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="55.30" y="126.88" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p2</text>
+<line x1="80.80" y1="121.30" x2="73.80" y2="131.30" stroke="#6B6862" stroke-width="0.15"/>
+<rect x="70.44" y="128.80" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="73.80" y="132.60" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p3</text>
+<rect x="128.44" y="129.20" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="131.80" y="133.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p4</text>
+<line x1="178.55" y1="125.72" x2="168.55" y2="133.72" stroke="#6B6862" stroke-width="0.15"/>
+<rect x="165.19" y="131.22" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="168.55" y="135.02" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p5</text>
+<line x1="190.45" y1="113.82" x2="201.45" y2="126.82" stroke="#6B6862" stroke-width="0.15"/>
+<rect x="198.09" y="124.32" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="201.45" y="128.12" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p6</text>
+<rect x="230.44" y="122.36" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="233.80" y="126.16" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p7</text>
+<rect x="272.04" y="121.85" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="275.40" y="125.65" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >p8</text>
+<rect x="156.64" y="221.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="160.00" y="225.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >t1</text>
+<rect x="54.64" y="175.00" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="58.00" y="178.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >t2</text>
+<rect x="79.64" y="235.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="83.00" y="239.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >t3</text>
+<rect x="88.64" y="200.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="92.00" y="204.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >t4</text>
+<rect x="300.64" y="185.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="304.00" y="189.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r1</text>
+<rect x="300.64" y="218.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="304.00" y="222.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r2</text>
+<rect x="327.64" y="191.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="331.00" y="195.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r3</text>
+<rect x="327.64" y="212.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="331.00" y="216.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r4</text>
+<line x1="269.50" y1="211.40" x2="257.50" y2="226.00" stroke="#6B6862" stroke-width="0.15"/>
+<rect x="254.14" y="223.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="257.50" y="227.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r5</text>
+<rect x="372.64" y="202.00" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="376.00" y="205.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >r6</text>
+<rect x="274.64" y="316.30" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="278.00" y="320.10" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >s1</text>
+<rect x="272.14" y="306.10" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="275.50" y="309.90" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >s2</text>
+<rect x="267.04" y="343.50" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="270.40" y="347.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >s3</text>
+<rect x="234.74" y="308.31" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="238.10" y="312.11" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >s4</text>
+<rect x="301.04" y="309.95" width="6.72" height="5" fill="#F7F5F0" stroke="#6B6862" stroke-width="0.25"/>
+<text x="304.40" y="313.75" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="500" text-anchor="middle" fill="#6B6862" letter-spacing="0" >s5</text>
+<circle cx="40.00" cy="93.42" r="0.9" fill="#1C1C1A"/>
+<text x="37.00" y="90.92" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P1</text>
+<circle cx="40.00" cy="118.58" r="0.9" fill="#1C1C1A"/>
+<text x="37.00" y="123.58" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P2</text>
+<circle cx="80.80" cy="93.42" r="0.9" fill="#1C1C1A"/>
+<text x="78.30" y="90.92" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P3</text>
+<circle cx="85.22" cy="87.30" r="0.9" fill="#1C1C1A"/>
+<text x="87.72" y="84.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P4</text>
+<circle cx="85.22" cy="124.70" r="0.9" fill="#1C1C1A"/>
+<text x="87.42" y="130.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P5</text>
+<circle cx="172.60" cy="87.30" r="0.9" fill="#1C1C1A"/>
+<text x="169.60" y="84.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P6</text>
+<circle cx="184.50" cy="89.34" r="0.9" fill="#1C1C1A"/>
+<text x="186.70" y="84.84" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P7</text>
+<circle cx="184.50" cy="122.66" r="0.9" fill="#1C1C1A"/>
+<text x="187.00" y="127.86" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P8</text>
+<circle cx="196.40" cy="91.04" r="0.9" fill="#1C1C1A"/>
+<text x="198.90" y="88.54" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P9</text>
+<circle cx="257.60" cy="95.12" r="0.9" fill="#1C1C1A"/>
+<text x="256.60" y="92.12" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P10</text>
+<circle cx="298.40" cy="96.65" r="0.9" fill="#1C1C1A"/>
+<text x="298.40" y="93.65" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P11</text>
+<circle cx="298.40" cy="115.35" r="0.9" fill="#1C1C1A"/>
+<text x="298.40" y="120.85" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >P12</text>
+<circle cx="36.00" cy="224.00" r="0.9" fill="#1C1C1A"/>
+<text x="33.50" y="229.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T1</text>
+<circle cx="94.00" cy="224.00" r="0.9" fill="#1C1C1A"/>
+<text x="91.50" y="221.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T2</text>
+<circle cx="104.00" cy="224.00" r="0.9" fill="#1C1C1A"/>
+<text x="94.50" y="229.20" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T3</text>
+<circle cx="104.00" cy="193.50" r="0.9" fill="#1C1C1A"/>
+<text x="96.50" y="190.50" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T4</text>
+<circle cx="116.00" cy="224.00" r="0.9" fill="#1C1C1A"/>
+<text x="113.50" y="229.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T5</text>
+<circle cx="128.00" cy="224.00" r="0.9" fill="#1C1C1A"/>
+<text x="129.80" y="229.40" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T6</text>
+<circle cx="146.00" cy="202.00" r="0.9" fill="#1C1C1A"/>
+<text x="148.20" y="200.50" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T7</text>
+<circle cx="152.00" cy="238.00" r="0.9" fill="#1C1C1A"/>
+<text x="153.50" y="235.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >T8</text>
+<circle cx="376.00" cy="188.00" r="0.9" fill="#1C1C1A"/>
+<text x="375.00" y="185.50" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R1</text>
+<circle cx="376.00" cy="221.00" r="0.9" fill="#1C1C1A"/>
+<text x="375.00" y="226.50" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R2</text>
+<circle cx="274.00" cy="204.50" r="0.9" fill="#1C1C1A"/>
+<text x="276.50" y="192.30" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R3</text>
+<circle cx="256.00" cy="204.50" r="0.9" fill="#1C1C1A"/>
+<text x="254.50" y="199.90" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R4</text>
+<circle cx="289.00" cy="204.50" r="0.9" fill="#1C1C1A"/>
+<text x="291.50" y="219.10" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R5</text>
+<circle cx="238.00" cy="204.50" r="0.9" fill="#1C1C1A"/>
+<text x="240.00" y="213.50" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >R6</text>
+<circle cx="284.00" cy="312.00" r="0.9" fill="#1C1C1A"/>
+<text x="286.60" y="312.20" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S1</text>
+<circle cx="284.00" cy="342.60" r="0.9" fill="#1C1C1A"/>
+<text x="281.00" y="349.80" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S2</text>
+<circle cx="260.20" cy="308.60" r="0.9" fill="#1C1C1A"/>
+<text x="261.80" y="314.00" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S3</text>
+<circle cx="255.10" cy="346.00" r="0.9" fill="#1C1C1A"/>
+<text x="256.70" y="343.60" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S4</text>
+<circle cx="335.85" cy="318.97" r="0.9" fill="#1C1C1A"/>
+<text x="338.25" y="315.97" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="start" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S5</text>
+<circle cx="285.53" cy="336.65" r="0.9" fill="#1C1C1A"/>
+<text x="282.33" y="341.85" font-family="'JetBrains Mono','SF Mono',Menlo,Consolas,monospace" font-size="3.6" font-weight="600" text-anchor="end" fill="#1C1C1A" letter-spacing="0" stroke="#F7F5F0" stroke-width="1.1" paint-order="stroke" stroke-linejoin="round" >S6</text>
+</svg>
+<div class="panel" style="left:399mm; top:48mm;"><div class="ph">MEASUREMENT SCHEDULE</div><div class="pb"><div class="grp">PLUG · VIEW 1</div><div class="row unk"><span class="k">A</span><span class="r">P1–P2</span><span class="d">Metal sleeve outside diameter</span><span class="v">7.4 (IND.)</span></div><div class="row unk"><span class="k">B</span><span class="r">P1→P3</span><span class="d">Sleeve length, tip to the body</span><span class="v">TBD</span></div><div class="row unk"><span class="k">C</span><span class="r">P4–P5</span><span class="d">Body diameter at the sleeve end</span><span class="v">TBD</span></div><div class="row unk"><span class="k">D</span><span class="r">p4 at P6</span><span class="d">Body diameter at the ring end</span><span class="v">TBD</span></div><div class="row unk"><span class="k">E</span><span class="r">P3→P6</span><span class="d">Body length, sleeve to light ring</span><span class="v">TBD</span></div><div class="row unk"><span class="k">F</span><span class="r">p5</span><span class="d">Light ring diameter</span><span class="v">TBD</span></div><div class="row unk"><span class="k">G</span><span class="r">P6→P7</span><span class="d">Light ring length</span><span class="v">TBD</span></div><div class="row unk"><span class="k">H</span><span class="r">P7→P9</span><span class="d">Torn gap, cable pulled straight</span><span class="v">TBD</span></div><div class="row unk"><span class="k">I</span><span class="r">at P9</span><span class="d">Strain relief diameter, thick end</span><span class="v">TBD</span></div><div class="row unk"><span class="k">J</span><span class="r">P9→P10</span><span class="d">Strain relief length</span><span class="v">TBD</span></div><div class="row unk"><span class="k">K</span><span class="r">P11–P12</span><span class="d">Cable diameter</span><span class="v">TBD</span></div><div class="grp">PLUG IN THE LAPTOP · VIEWS 2, 4</div><div class="row unk"><span class="k">M</span><span class="r">t1→T4</span><span class="d">Rear face to the ring end, plug pushed home</span><span class="v">TBD</span></div><div class="row unk"><span class="k">N</span><span class="r">s1→p3</span><span class="d">Sleeve left showing, plug pushed home</span><span class="v">TBD</span></div><div class="row unk"><span class="k">O</span><span class="r">at T4</span><span class="d">Side-to-side play of the ring end</span><span class="v">TBD</span></div><div class="grp">REAR FACE · VIEWS 2, 3</div><div class="row unk"><span class="k">P</span><span class="r">R1–R2</span><span class="d">Laptop thickness at the rear</span><span class="v">TBD</span></div><div class="row unk"><span class="k">Q</span><span class="r">r3–r4</span><span class="d">Height of the recessed strip</span><span class="v">TBD</span></div><div class="row unk"><span class="k">S</span><span class="r">r5</span><span class="d">Jack collar outside diameter</span><span class="v">TBD</span></div><div class="row unk"><span class="k">T</span><span class="r">S6→s1</span><span class="d">Collar proud of (+) or sunk in (−) the strip</span><span class="v">TBD</span></div><div class="row unk"><span class="k">U</span><span class="r">T1→T3</span><span class="d">Vent corner to jack centre</span><span class="v">TBD</span></div><div class="row unk"><span class="k">V</span><span class="r">T2→r5</span><span class="d">Vent end to the jack collar</span><span class="v">TBD</span></div><div class="row unk"><span class="k">W</span><span class="r">T3→T5</span><span class="d">Jack centre to screw centre</span><span class="v">TBD</span></div><div class="row unk"><span class="k">X</span><span class="r">T3→T6</span><span class="d">Jack centre to the HDMI plug</span><span class="v">TBD</span></div><div class="row unk"><span class="k">Y</span><span class="r">T6→T7</span><span class="d">HDMI plug sticks out of the rear face</span><span class="v">TBD</span></div><div class="grp">REAR PROFILE · VIEW 4</div><div class="row unk"><span class="k">R</span><span class="r">s3→axis</span><span class="d">Underside to the centre of the jack</span><span class="v">TBD</span></div><div class="row unk"><span class="k">Z</span><span class="r">s1→S3</span><span class="d">Rear face to the ridge on the top deck</span><span class="v">TBD</span></div><div class="row unk"><span class="k">AA</span><span class="r">s2→s4</span><span class="d">Step height at the ridge</span><span class="v">TBD</span></div><div class="row unk"><span class="k">AB</span><span class="r">s1→S4</span><span class="d">Rear face to the foot rib underneath</span><span class="v">TBD</span></div><div class="row unk"><span class="k">AC</span><span class="r">at S4</span><span class="d">Foot rib height</span><span class="v">TBD</span></div><div class="grp">ROOM BEHIND THE LAPTOP</div><div class="row unk"><span class="k">AD</span><span class="r">t1→t2</span><span class="d">Rear face to the wall, laptop on the desk</span><span class="v">TBD</span></div><div class="row unk"><span class="k">AE</span><span class="r">—</span><span class="d">Rear face to nearest obstruction, under the desk</span><span class="v">TBD</span></div></div></div>
+<div class="panel" style="left:399mm; top:250mm;"><div class="ph">KEYED NOTES</div><div class="pb"><div class="note"><span class="n">1</span><span><b>THE CABLE HAS ALREADY TORN AT THE LIGHT RING.</b> <i>The strain relief has pulled out of the head and the cores are bare. The brace has to carry the cable past the tear, not only hold the head.</i></span></div><div class="note"><span class="n">2</span><span><b>THE VENT STARTS RIGHT BESIDE THE JACK.</b> <i>Nothing may cover it. Any grip on the laptop goes above, below or towards the screw.</i></span></div><div class="note"><span class="n">3</span><span><b>THE PLUG LEAVES STRAIGHT OUT OF THE REAR.</b> <i>Against the wall the cable is forced over at the head. The brace should turn it through a set radius instead.</i></span></div><div class="note"><span class="n">4</span><span><b>THE LAPTOP HAS NO LID.</b> <i>The hinge pockets are open. A printed head is a later print on this same rear edge; the brace stays clear of it.</i></span></div></div></div>
+<div class="panel" style="left:15mm; top:270mm; width:175mm;"><div class="ph">READING THIS SHEET</div><div class="pb"><div class="sr"><span class="tag">P1</span><span>POINT. The capital letter is the view: P plug, T top, R rear, S section.</span></div><div class="sr"><span class="tag">p1</span><span>EDGE or surface. Lower-case, in a box. Same view letters.</span></div><div class="sr"><span class="tag">A</span><span>MEASUREMENT. Red on the drawing until it is measured.</span></div><div class="sr"><span class="tag">- - -</span><span>HIDDEN behind another part. A red broken line is drawn from a guess.</span></div><div class="sr"><span class="tag">x y z</span><span>x along the rear from the vent corner · y up from the underside · z out of the rear face.</span></div></div></div>
+<div class="open"><div class="oh"><b>OPEN</b><span>UNRESOLVED ON THIS SHEET</span></div><div class="ob"><div class="oi"><span class="ref">ALL</span><span>Nothing is measured. Check the drawing first, then measure A to AE by caliper. Scale bars follow.</span></div><div class="oi"><span class="ref">A</span><span>7.4 is the nominal size of this type of barrel plug, not a reading. Confirm.</span></div><div class="oi"><span class="ref">V4</span><span>Ridge, deck step, foot rib and hinge pocket are drawn from angled photos. Correct before measuring.</span></div><div class="oi"><span class="ref">GRIP</span><span>How the brace holds the laptop is not decided: clip over the rear edge, the screw at T5, or adhesive.</span></div><div class="oi"><span class="ref">TEAR</span><span>Bare cores at the tear. Insulate or replace the lead before it is braced: TBD.</span></div><div class="oi"><span class="ref">AE</span><span>Where the laptop sits under the desk, and what is behind the plug there: TBD.</span></div></div></div>
+<div class="tb">
+  <div class="p">3D PRINTS · LAPTOP CHARGER BRACE</div>
+  <div class="t"><span class="n">01</span><span class="s">PLUG AND REAR PORT BLUEPRINT</span></div>
+  <div class="m">NOT TO SCALE @ A2 · DIMS IN mm</div>
+  <div class="m">REV A · 2026-10-04</div>
+  <div class="st">STATUS: FIRST DRAWING — CHECK, THEN MEASURE</div>
+</div>
+</section></div>
+<script>
+(function () {
+  var s = document.getElementById('sheet'), d = s.parentNode;
+  function fit() {
+    if (window.matchMedia('print').matches) return;
+    var pad = 24, k = Math.min(1, (window.innerWidth - pad * 2) / s.offsetWidth);
+    s.style.transform = 'scale(' + k + ')';
+    d.style.padding = pad + 'px';
+    d.style.height = (s.offsetHeight * k + pad * 2) + 'px';
+  }
+  window.addEventListener('resize', fit); fit();
+})();
+</script>
+</body></html>

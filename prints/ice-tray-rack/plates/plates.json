@@ -1,0 +1,76 @@
+{
+ "plate1_bay_pegs_adaptors": {
+  "parts": [
+   "bay",
+   "foot_adaptor",
+   "foot_adaptor",
+   "foot_adaptor",
+   "foot_adaptor",
+   "peg",
+   "peg",
+   "peg",
+   "peg",
+   "peg",
+   "peg"
+  ],
+  "grams": 55.1,
+  "height": 54.0
+ },
+ "plate2_bay_pegs_feet": {
+  "parts": [
+   "bay",
+   "foot",
+   "foot",
+   "foot",
+   "foot",
+   "peg",
+   "peg",
+   "peg",
+   "peg",
+   "peg",
+   "peg"
+  ],
+  "grams": 52.3,
+  "height": 54.0
+ },
+ "plate3_bay_pegs_spouts": {
+  "parts": [
+   "bay",
+   "spout",
+   "spout",
+   "spout",
+   "spout",
+   "peg",
+   "peg",
+   "peg",
+   "peg"
+  ],
+  "grams": 47.1,
+  "height": 54.0
+ },
+ "plate4_bay_plugs": {
+  "parts": [
+   "bay",
+   "plug",
+   "plug",
+   "peg",
+   "peg"
+  ],
+  "grams": 41.1,
+  "height": 54.0
+ },
+ "plate5_trough": {
+  "parts": [
+   "splitter_trough"
+  ],
+  "grams": 74.3,
+  "height": 44.0
+ },
+ "plate6_catch_pan_cascade_only": {
+  "parts": [
+   "catch_pan"
+  ],
+  "grams": 37.1,
+  "height": 3.0
+ }
+}

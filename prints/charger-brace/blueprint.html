@@ -1,0 +1,1277 @@
+<title>Charger Brace Blueprint</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: Drafting Table sheet. Header band with the sheet numeral, the views on the left as a bento grid of cards (one SVG each; a card rolls out in place when opened),
+   measurement schedule docked on the right, then OPEN box, keyed notes and title block. Stacks on phones.
+   Light = the design system's paper. Dark = the same sheet with ink and paper swapped to warm tones (screen only). */
+:root {
+  --desk: #E9E5DC; --paper: #F7F5F0; --ink: #1C1C1A; --ink2: #6B6862; --rule: #C9C4B8;
+  --struct: #D9D4C9; --struct-tint: #E9E6DE; --shade: #ECEAE5;
+  --alert: #B0453A; --alert-fill: rgba(176, 69, 58, .05); --alert-fill-loud: rgba(176, 69, 58, .09);
+  --link: #2E6F9E; --link-soft: rgba(46, 111, 158, .12);
+  --display: Archivo, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --mono: "JetBrains Mono", "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; } }
+:root[data-theme="dark"] {
+  --desk: #151412; --paper: #22211E; --ink: #ECE8DF; --ink2: #A8A398; --rule: #45423C;
+  --struct: #4D4A43; --struct-tint: #37352F; --shade: #2C2B27;
+  --alert: #E5867A; --alert-fill: rgba(229, 134, 122, .07); --alert-fill-loud: rgba(229, 134, 122, .13);
+  --link: #7DB4DE; --link-soft: rgba(125, 180, 222, .16);
+  color-scheme: dark; }
+
+* { box-sizing: border-box; border-radius: 0; }
+html, body { height: 100%; }
+body { background: var(--desk); color: var(--ink); font-family: var(--display); font-size: 14px; line-height: 1.35; -webkit-font-smoothing: antialiased; }
+.wrap { padding-inline: 16px; padding-block: 14px 22px; max-width: 1680px; margin: 0 auto; display: flex; flex-direction: column; gap: 12px; }
+.frame { background: var(--paper); border: 1px solid var(--ink2); padding: 14px 16px 16px; display: flex; flex-direction: column; gap: 14px; min-width: 0; }
+
+/* sheet header: numeral, title, subtitle, right-hand label, closing rule */
+.sh { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 8px 22px; border-bottom: 2px solid var(--ink); padding-bottom: 12px; }
+.sh .num { font: 600 3.4rem/.86 var(--mono); letter-spacing: -.02em; }
+.sh .ttl { flex: 1 1 320px; min-width: 0; }
+.sh h1 { font-weight: 700; font-size: clamp(1rem, 1.9vw, 1.45rem); letter-spacing: .18em; line-height: 1.15; margin: 0 0 6px; text-wrap: balance; }
+.sh .sub { margin: 0; font-size: .78rem; letter-spacing: .18em; color: var(--ink2); }
+.sh .lab { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; margin-left: auto; }
+.sh .lab b { font-size: .86rem; font-weight: 600; letter-spacing: .28em; white-space: nowrap; }
+.sh .lab span { font: 400 .74rem var(--mono); color: var(--ink2); white-space: nowrap; }
+
+main { display: grid; grid-template-columns: minmax(0, 1fr) 380px; gap: 14px; min-height: 0; }
+@media (max-width: 960px) { main { grid-template-columns: minmax(0, 1fr); } }
+
+.sheet { border: 1px solid var(--ink2); display: flex; flex-direction: column; min-width: 0; overflow: hidden; }
+.toolbar { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; padding: 8px 10px; border-bottom: 1px solid var(--ink2); }
+.toolbar .sep { flex: 1; }
+.btn { font: 600 .74rem var(--display); letter-spacing: .16em; text-transform: uppercase; color: var(--ink); background: transparent;
+  border: 1px solid var(--ink2); padding: 6px 9px; cursor: pointer; }
+.btn:hover { border-color: var(--ink); }
+.btn[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.btn:focus-visible, .row:focus-visible, .chip:focus-visible, .filter button:focus-visible, .check input:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.check { font-size: .78rem; letter-spacing: .06em; color: var(--ink2); display: inline-flex; gap: 6px; align-items: center; cursor: pointer; }
+.check input { accent-color: var(--ink); }
+.svgbox { position: relative; flex: 1; min-height: 420px; }
+svg#draw { display: block; width: 100%; height: 100%; min-height: 420px; max-height: calc(100vh - 190px); touch-action: manipulation; background: var(--paper); }
+@media (max-width: 960px) { .svgbox { min-height: 0; } svg#draw { height: auto; aspect-ratio: 3 / 4; min-height: 0; max-height: 78vh; } }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .76rem; letter-spacing: .06em; color: var(--ink2); align-items: center; padding: 8px 10px; border-top: 1px solid var(--rule); }
+.legend i { display: inline-block; vertical-align: -1px; margin-right: 6px; }
+.lg-pt { width: 8px; height: 8px; border-radius: 50%; background: var(--ink); }
+.lg-ed { width: 20px; height: 11px; border: 1px solid var(--ink2); }
+.lg-dim { width: 20px; height: 2px; background: var(--link); vertical-align: 3px !important; }
+.lg-unk { width: 20px; height: 0; border-top: 2px dashed var(--alert); vertical-align: 3px !important; }
+
+/* drawing: ranked ink linework on paper; red only for what is not confirmed */
+.v-title { font: 700 17px var(--display); fill: var(--ink); letter-spacing: .12em; }
+.v-sub { font: 400 12px var(--display); fill: var(--ink2); letter-spacing: .08em; text-transform: uppercase; }
+.face-txt { font: 500 12.5px var(--display); fill: var(--ink2); letter-spacing: .14em; }
+.note { font: 400 11.5px var(--display); fill: var(--ink2); letter-spacing: .02em; }
+.unk-txt { font: 600 12.5px var(--mono); fill: var(--alert); }
+.s-head, .s-gap { fill: var(--paper); stroke: none; }
+.s-blade { fill: var(--shade); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-tab { fill: var(--struct); stroke: none; }
+.s-base, .s-hook { fill: var(--struct-tint); stroke: none; }
+.s-skirt { fill: var(--struct-tint); stroke: var(--ink2); stroke-width: 1.2; }
+.s-win { fill: var(--paper); stroke: var(--ink); stroke-width: 1.1; }
+.s-hidden { fill: none; stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-rivet { fill: var(--shade); stroke: var(--alert); stroke-width: 1.6; stroke-dasharray: 20 8 5 8; }
+.s-prov { fill: var(--alert-fill-loud); stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.edge path.vis { fill: none; stroke: var(--ink); stroke-width: 1.9; stroke-linejoin: round; stroke-linecap: round; transition: stroke .15s, stroke-width .15s, opacity .15s; }
+.edge.outline path.vis { stroke-width: 3.2; }
+.edge.dash path.vis { stroke: var(--ink2); stroke-dasharray: 8.6 6.5; stroke-width: 1.2; }
+.edge path.hit { fill: none; stroke: transparent; stroke-width: 14; cursor: pointer; }
+.edge .tag rect { fill: var(--paper); stroke: var(--ink2); stroke-width: 1; }
+.edge .tag text { font: 500 12px var(--mono); fill: var(--ink2); text-anchor: middle; }
+.edge .tag { cursor: pointer; }
+.pt circle { fill: var(--ink); }
+.pt .hitc { fill: transparent; cursor: pointer; }
+.pt text { font: 600 12.5px var(--mono); fill: var(--ink); paint-order: stroke; stroke: var(--paper); stroke-width: 3.5px; stroke-linejoin: round; cursor: pointer; }
+.pt line { stroke: var(--ink2); stroke-width: .6; }
+.labels-off .pt text, .labels-off .pt line, .labels-off .edge .tag { display: none; }
+.labels-off .pt.on text, .labels-off .pt.on line, .labels-off .edge.on .tag { display: inline; }
+
+.has-sel .pt, .has-sel .edge .tag { opacity: .3; }
+.has-sel .edge path.vis { opacity: .6; }
+.has-sel .pt.on, .has-sel .edge.on .tag, .has-sel .edge.on path.vis { opacity: 1; }
+.edge.on path.vis { stroke: var(--link); stroke-width: 4; stroke-dasharray: none; }
+.edge.on .tag rect { stroke: var(--link); fill: var(--link); }
+.edge.on .tag text { fill: var(--paper); }
+.pt.on circle { fill: var(--link); r: 5.5; }
+.pt.on text { fill: var(--link); font-size: 14px; }
+.pt.on line { stroke: var(--link); }
+
+.dim line { stroke: var(--link); stroke-width: 1.8; }
+.dim line.ext { stroke-width: .8; }
+.dim .pill rect { fill: var(--link); }
+.dim .pill text { font: 600 14px var(--mono); fill: var(--paper); text-anchor: middle; }
+.dim.unk line { stroke: var(--alert); } .dim.unk .pill rect { fill: var(--alert); }
+.arrowhead { fill: var(--link); }
+
+/* right column: panels */
+aside { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+@media (min-width: 961px) { aside { max-height: calc(100vh - 150px); position: sticky; top: calc(env(safe-area-inset-top, 0px) + 10px); } }
+.panel { border: 1px solid var(--ink2); min-width: 0; }
+.ph { padding: 8px 12px 6px; border-bottom: 1px solid var(--ink2); font-size: .74rem; font-weight: 600; letter-spacing: .22em; color: var(--ink2); }
+.detail { padding: 12px; display: grid; gap: 8px; }
+.detail .top { display: flex; align-items: center; gap: 12px; }
+.badge { font: 700 1.15rem var(--mono); min-width: 46px; height: 46px; padding: 0 6px; display: grid; place-items: center; flex: none; border: 1.5px solid currentColor; }
+.badge.ok { color: var(--ink); } .badge.unk { color: var(--alert); background: var(--alert-fill-loud); } .badge.item { color: var(--link); background: var(--link-soft); font-size: .95rem; }
+.detail h2 { font: 700 1rem/1.2 var(--display); letter-spacing: .02em; margin: 0; text-wrap: balance; }
+.detail .val { font: 600 1.02rem var(--mono); font-variant-numeric: tabular-nums; margin-top: 2px; }
+.detail .val.unk { color: var(--alert); }
+.detail p { margin: 0; font-size: .9rem; }
+.detail .meta { color: var(--ink2); font-size: .74rem; letter-spacing: .14em; text-transform: uppercase; }
+.chips { display: flex; flex-wrap: wrap; gap: 5px; }
+.chip { font: 600 .78rem var(--mono); border: 1px solid var(--ink2); background: transparent; color: var(--ink); padding: 2px 7px; cursor: pointer; }
+.chip.ed-chip { color: var(--ink2); } .chip.m-chip { color: var(--link); border-color: var(--link); }
+.chip:hover { border-color: var(--ink); }
+
+.index { display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
+.filter { display: flex; flex-wrap: wrap; gap: 4px; padding: 8px 12px; border-bottom: 1px solid var(--rule); align-items: center; }
+.filter button { font: 600 .7rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 4px 8px; cursor: pointer; }
+.filter button[aria-pressed="true"] { color: var(--ink); border-color: var(--ink); }
+.filter .count { color: var(--ink2); font: 500 .76rem var(--mono); margin-left: auto; }
+.list { overflow-y: auto; padding: 2px 0 8px; }
+.group { font-size: .7rem; font-weight: 600; letter-spacing: .22em; text-transform: uppercase; color: var(--ink2); padding: 10px 12px 4px; margin: 0 0 2px; border-bottom: 1px solid var(--rule); }
+.row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: baseline; width: 100%; text-align: left;
+  background: transparent; border: 0; border-left: 3px solid transparent; color: var(--ink); padding: 5px 12px 5px 9px; cursor: pointer; font: inherit; }
+.row:hover { background: var(--link-soft); }
+.row[aria-current="true"] { background: var(--link-soft); border-left-color: var(--link); }
+.row .k { font: 700 .82rem var(--mono); }
+.row .d { font-size: .86rem; min-width: 0; }
+.row .v { font: 600 .82rem var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.row.unk .k, .row.unk .v { color: var(--alert); }
+
+/* sheet furniture below the drawing: OPEN box, keyed notes, title block */
+.furniture { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; align-items: stretch; }
+@media (max-width: 960px) { .furniture { grid-template-columns: minmax(0, 1fr); } }
+.open { border: 1.5px solid var(--alert); background: var(--alert-fill); }
+.open .oh { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; padding: 8px 12px 6px; border-bottom: 1px solid var(--alert); }
+.open .oh b { font-size: .8rem; font-weight: 700; letter-spacing: .22em; color: var(--alert); }
+.open .oh span { font-size: .72rem; letter-spacing: .14em; color: var(--ink2); }
+.open .ob, .notes .pb { padding: 10px 12px; display: flex; flex-direction: column; gap: 7px; font-size: .86rem; line-height: 1.3; }
+.oi, .kn { display: flex; gap: 12px; align-items: baseline; }
+.oi .ref { font: 700 .82rem var(--mono); color: var(--alert); width: 44px; flex: none; }
+.kn .n { font: 700 .82rem var(--mono); width: 14px; flex: none; }
+.kn i { font-style: normal; color: var(--ink2); }
+.tb { border: 2px solid var(--ink); display: flex; flex-direction: column; }
+.tb > div { border-bottom: 1px solid var(--ink2); padding: 9px 14px; }
+.tb .p { font-size: .82rem; font-weight: 700; letter-spacing: .16em; }
+.tb .t { display: flex; align-items: baseline; gap: 14px; }
+.tb .t .n { font: 600 1.5rem var(--mono); }
+.tb .t .s { font-size: .94rem; font-weight: 600; letter-spacing: .1em; }
+.tb .m { font: 400 .76rem var(--mono); }
+.tb .st { flex: 1; border-bottom: 0; background: var(--struct); font-size: .8rem; font-weight: 700; letter-spacing: .14em; display: flex; align-items: center; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+/* charger brace drawing */
+.s-paper, .s-ring { fill: var(--paper); stroke: none; }
+.s-metal { fill: var(--shade); stroke: none; }
+.s-metal-line { fill: var(--shade); stroke: var(--ink); stroke-width: 1.2; }
+.ok-txt { font: 600 12.5px var(--mono); fill: var(--ink); }
+.s-body { fill: var(--struct); stroke: none; }
+.s-relief { fill: var(--struct-tint); stroke: none; }
+.s-relief-line { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 1.4; stroke-linejoin: round; }
+.s-thin { fill: none; stroke: var(--ink); stroke-width: 1.1; }
+.s-fine { fill: none; stroke: var(--ink2); stroke-width: .9; }
+.s-hex { fill: var(--shade); stroke: var(--ink2); stroke-width: .8; }
+.s-pin { fill: var(--ink); stroke: none; }
+.s-centre { fill: none; stroke: var(--ink2); stroke-width: .9; stroke-dasharray: 32 8 8 8; }
+.s-break { fill: none; stroke: var(--ink2); stroke-width: 1.1; }
+.s-socket { fill: var(--paper); stroke: var(--ink2); stroke-width: 1.2; stroke-dasharray: 8.6 6.5; }
+.s-provline { fill: none; stroke: var(--alert); stroke-width: 1.3; stroke-dasharray: 20 8 5 8; }
+.s-wallhatch { fill: none; stroke: var(--alert); stroke-width: .8; }
+.s-cable { fill: none; stroke: var(--ink); }
+.hatch-line { stroke: var(--ink2); stroke-width: 1.1; }
+.s-brace { fill: url(#hatch); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-brace-plan { fill: var(--struct-tint); stroke: var(--ink); stroke-width: 2.2; stroke-linejoin: round; }
+.s-addon { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; stroke-linejoin: round; }
+.s-ghost { fill: var(--shade); stroke: var(--ink2); stroke-width: .9; }
+.s-ghost-ring { fill: var(--paper); stroke: var(--ink2); stroke-width: .9; }
+.s-tie { fill: var(--struct); stroke: var(--ink); stroke-width: 1; }
+.s-window { fill: var(--paper); stroke: var(--ink); stroke-width: 1; }
+.callout circle { fill: var(--paper); stroke: var(--ink); stroke-width: 1.3; }
+.callout line { stroke: var(--ink2); stroke-width: .7; }
+.callout text { font: 700 12.5px var(--mono); fill: var(--ink); text-anchor: middle; }
+.legend-head { font: 700 12.5px var(--display); fill: var(--ink); letter-spacing: .06em; }
+/* Bento grid of view cards, after the Chroma bento: ruled cards with a title strip and a hard offset shadow,
+   the drawing filling the card and running off its edges. Positions are solved in script. */
+.sheet { align-self: start; }
+.bento { position: relative; margin: 14px 9px 9px 14px; transition: height .42s cubic-bezier(.2,.8,.2,1); }
+.card { position: absolute; left: 0; top: 0; border: 1px solid var(--ink); background: var(--paper); display: flex; flex-direction: column; overflow: hidden; cursor: pointer; margin: 0;
+  container: card / inline-size; box-shadow: 4px 4px 0 var(--struct);
+  transition: left .42s cubic-bezier(.2,.8,.2,1), top .42s cubic-bezier(.2,.8,.2,1), width .42s cubic-bezier(.2,.8,.2,1), height .42s cubic-bezier(.2,.8,.2,1), box-shadow .2s, transform .2s, opacity .3s; }
+.bento.no-anim, .bento.no-anim .card { transition: none; }
+.card:not(.open):hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--struct); }
+.card:not(.open):hover .cx { border-color: var(--ink); background: var(--ink); color: var(--paper); }
+.card:not(.open):active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--struct); }
+.card.closing { z-index: 4; }
+.card.open { z-index: 5; cursor: default; box-shadow: 0 0 0 1px var(--ink), 8px 8px 0 var(--struct); }
+.bento:has(.card.open) .card:not(.open) { opacity: .4; }
+@keyframes cardin { from { opacity: 0; transform: translateY(12px); } }
+.bento.enter .card { animation: cardin .45s cubic-bezier(.2,.8,.2,1) backwards; animation-delay: calc(var(--i, 0) * 40ms); }
+/* title strip: view number, title, how many measurements sit on the view, open / close */
+.ch { display: flex; align-items: center; gap: 9px; height: 34px; padding: 0 6px 0 10px; border-bottom: 1px solid var(--rule); flex: none; }
+.cn { font: 600 1.05rem/1 var(--mono); }
+.ct { font: 700 .72rem var(--display); letter-spacing: .14em; text-transform: uppercase; margin: 0; flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ct .ts { display: none; }
+.cs { font: 600 .68rem var(--mono); color: var(--ink2); white-space: nowrap; flex: none; }
+.cs.unk { color: var(--alert); }
+.cx { display: inline-flex; align-items: center; gap: 6px; height: 22px; font: 600 .62rem var(--display); letter-spacing: .14em; text-transform: uppercase; border: 1px solid var(--rule); background: transparent; color: var(--ink2); padding: 0 6px 0 7px; cursor: pointer; flex: none; transition: background .15s, color .15s, border-color .15s; }
+.cx:hover, .card.open .cx { border-color: var(--ink); color: var(--ink); }
+.cx:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.cxi { position: relative; width: 9px; height: 9px; flex: none; transition: transform .3s cubic-bezier(.2,.8,.2,1); }
+.cxi::before, .cxi::after { content: ""; position: absolute; background: currentColor; }
+.cxi::before { left: 0; right: 0; top: 4px; height: 1px; }
+.cxi::after { top: 0; bottom: 0; left: 4px; width: 1px; }
+.card.open .cxi { transform: rotate(45deg); }
+/* each card answers to its own width: a narrow card keeps the number, a short title and the open mark */
+@container card (max-width: 330px) { .cxl, .cs { display: none; } .cx { padding: 0 6px; } .ct .tl { display: none; } .ct .ts { display: inline; } }
+/* caption: how the object is held. One line on a large closed card, in full with the scale notes on an open one */
+.cd { flex: none; border-bottom: 1px solid var(--rule); font-size: .68rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink2); }
+.card:not(.open) .cd { display: none; }
+.card.cap:not(.open) .cd { display: block; height: 22px; line-height: 21px; padding: 0 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.card:not(.open) .cd :is(.ok-l, .unk-l) { display: none; }
+.card.open .cd, .cd.probe { display: flex; flex-wrap: wrap; gap: 2px 18px; padding: 6px 10px; }
+.cd.probe { position: absolute; left: 0; top: 0; visibility: hidden; pointer-events: none; }
+.cd .ok-l { font: 600 .7rem var(--mono); color: var(--ink); letter-spacing: 0; }
+.cd .unk-l { font: 600 .7rem var(--mono); color: var(--alert); letter-spacing: 0; }
+.cb { min-height: 0; flex: 1; }
+.cb.pan { overflow: auto; scrollbar-width: thin; scrollbar-color: var(--ink2) transparent; }   /* an open drawing too large for the card: drag or scroll it */
+.card svg { display: block; width: 100%; height: 100%; touch-action: manipulation; }
+/* closed cards show the drawing alone: tags, notes and legends appear when the card is open; a small card drops the lettering too */
+.card:not(.open) :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { display: none; }
+.card:not(.open) :is(.pt.on text, .edge.on .tag) { display: inline; }
+.card:not(.open) :is(.out, .callout), .card.bare :is(.face-txt, .unk-txt, .ok-txt) { display: none; }
+@keyframes tagin { 0%, 40% { opacity: 0; } }
+.card.open :is(.pt text, .pt line, .edge .tag, .edge .lead, .note, .coord, .v-sub, .legend-head, .lg) { animation: tagin .55s backwards; }
+@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }
+.open a, .sh a { color: var(--link); }
+@media (max-width: 480px) { .sh .lab { align-items: flex-start; margin-left: 0; } .sh .lab span { white-space: normal; } }
+.s-key { fill: var(--paper); stroke: var(--ink2); stroke-width: .7; }
+.s-cable5 { fill: none; stroke: var(--ink); stroke-width: 18; }
+.s-cable5-in { fill: none; stroke: var(--paper); stroke-width: 15; }
+.s-cable-in { fill: none; stroke: var(--paper); }
+.coord { font: 500 12.5px var(--mono); fill: var(--ink); }
+.edge.prov path.vis { stroke: var(--alert); stroke-width: 1.5; stroke-dasharray: 20 8 5 8; }
+.edge .lead { stroke: var(--ink2); stroke-width: .6; }
+.has-sel .edge .lead { opacity: .3; } .labels-off .edge .lead { display: none; }
+</style>
+
+<div class="wrap"><div class="frame">
+  <header class="sh">
+    <div class="num">01</div>
+    <div class="ttl">
+      <h1>PLUG AND REAR PORT — POINTS, EDGES, MEASUREMENTS</h1>
+      <p class="sub">ALL DIMS IN mm · DRAWN TO THE MEASURED VALUES · CLICK A MEASUREMENT TO PLACE IT</p>
+    </div>
+    <div class="lab">
+      <b>LAPTOP CHARGER BRACE</b>
+      <span>ALIENWARE m15 R7 · BARREL PLUG · CALIPER MEASURED</span>
+      <button class="btn" id="theme" type="button" aria-pressed="false">Dark sheet</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="sheet" aria-label="Drawing">
+      <div class="toolbar" role="toolbar" aria-label="Views">
+        <button class="btn" data-zoom="all" aria-pressed="true">Whole sheet</button>
+        <button class="btn" data-zoom="plug" aria-pressed="false">1 Plug</button>
+        <button class="btn" data-zoom="top" aria-pressed="false">2 Rear edge</button>
+        <button class="btn" data-zoom="rear" aria-pressed="false">3 Rear face</button>
+        <button class="btn" data-zoom="sect" aria-pressed="false">4 Section</button>
+        <button class="btn" data-zoom="whole" aria-pressed="false">5 Whole laptop</button>
+        <button class="btn" data-zoom="bsec" aria-pressed="false">6 Brace section</button>
+        <button class="btn" data-zoom="bplan" aria-pressed="false">7 Brace from above</button>
+        <span class="sep"></span>
+        <label class="check"><input type="checkbox" id="autozoom" checked> Open the view on selection</label>
+        <label class="check"><input type="checkbox" id="showlabels" checked> All tags</label>
+      </div>
+      <svg id="defs-svg" width="0" height="0" aria-hidden="true" focusable="false"></svg>
+      <div class="bento" id="bento"></div>
+      <div class="legend" aria-hidden="true">
+        <span><i class="lg-pt"></i>POINT (P3, T4)</span>
+        <span><i class="lg-ed"></i>EDGE (p4, s1)</span>
+        <span><i class="lg-dim"></i>SELECTED</span>
+        <span><i class="lg-unk"></i>NOT CONFIRMED / DRAWN FROM A GUESS</span>
+      </div>
+    </section>
+
+    <aside>
+      <div class="panel"><div class="ph">SELECTED</div><div class="detail" id="detail" aria-live="polite"></div></div>
+      <div class="panel index">
+        <div class="ph">MEASUREMENT SCHEDULE</div>
+        <div class="filter" role="group" aria-label="Filter measurements">
+          <button data-f="all" aria-pressed="true">All</button>
+          <button data-f="unk" aria-pressed="false">Open</button>
+          <button data-f="ok" aria-pressed="false">Confirmed</button>
+          <span class="count" id="count"></span>
+        </div>
+        <div class="list" id="list" role="list"></div>
+      </div>
+    </aside>
+  </main>
+
+  <div class="furniture">
+    <section class="open" aria-label="Open items">
+      <div class="oh"><b>OPEN</b><span>UNRESOLVED ON THIS SHEET</span></div>
+      <div class="ob">
+        <div class="oi"><span class="ref">AL</span><span>The rear face is drawn as a straight slope, 5 out over its 23 height. M, N and Y are placed from the face at jack height. A fit test settles it.</span></div>
+        <div class="oi"><span class="ref">V4</span><span>The trough is drawn as a smooth curve through three measured points: the ridge, the lowest line (14 on, 10 deep) and the end of the raised corner (6.6 deep).</span></div>
+        <div class="oi"><span class="ref">V5</span><span>Top vents, slots, the keyboard's width and far end, the touchpad and the far raised corner are drawn from photos. AG and AH are the published size.</span></div>
+        <div class="oi"><span class="ref">BRACE</span><span>Views 6 and 7 are a proposal. Every BA to BK size is provisional until the fit test of the plug clamp and the bar clip. The brace on its own, how it hooks and what it holds: <a href="part-sheet.html">sheet 02</a>.</span></div>
+        <div class="oi"><span class="ref">TEAR</span><span>The cores are bare at the tear. Insulate or replace the lead before it is braced: TBD.</span></div>
+      </div>
+    </section>
+    <section class="panel notes" aria-label="Keyed notes">
+      <div class="ph">KEYED NOTES</div>
+      <div class="pb">
+        <div class="kn"><span class="n">1</span><span><b>THE CABLE HAS ALREADY TORN AT THE LIGHT RING.</b> <i>The strain relief has pulled out of the head. The brace has to carry the cable past the tear, not only hold the head.</i></span></div>
+        <div class="kn"><span class="n">2</span><span><b>THE VENT ENDS 8 FROM THE COLLAR.</b> <i>The plug body comes within 6.5 of it. Nothing may cover it, so any grip goes above, below or towards the screw (17.4 away).</i></span></div>
+        <div class="kn"><span class="n">3</span><span><b>THE PLUG LEAVES STRAIGHT OUT OF THE REAR.</b> <i>The cable is forced over right at the head, which is what tore it. The brace should turn it through a set radius instead.</i></span></div>
+        <div class="kn"><span class="n">4</span><span><b>ONLY THE SLEEVE HOLDS THE PLUG.</b> <i>About 3 of the sleeve stays outside and the collar (8.1) is smaller than the body (11.2), so the body never seats on the laptop. The brace has to fill that gap.</i></span></div>
+        <div class="kn"><span class="n">5</span><span><b>THE REAR BAR HAS A TROUGH BEHIND IT.</b> <i>The bar is flat for 18.4, then the surface dips to 10 deep where the lid hinged. A clip over the bar can hook into that dip. A printed head is a later print there.</i></span></div>
+      </div>
+    </section>
+    <section class="tb" aria-label="Title block">
+      <div class="p">3D PRINTS · LAPTOP CHARGER BRACE</div>
+      <div class="t"><span class="n">01</span><span class="s">PLUG AND REAR PORT BLUEPRINT</span></div>
+      <div class="m">INTERACTIVE SHEET · DIMS IN mm · x ALONG THE REAR FROM THE VENT CORNER · y UP FROM THE UNDERSIDE · z OUT OF THE REAR FACE</div>
+      <div class="m">REV M · 2026-10-05</div>
+      <div class="st">STATUS: MEASURED — BRACE CONCEPT FOR REVIEW</div>
+    </section>
+  </div>
+</div></div>
+
+<script>
+(() => {
+const NS = "http://www.w3.org/2000/svg";
+const bento = document.getElementById("bento");
+// MEASURED by caliper (mm). The letter is the blueprint's measurement.
+const A = 7.5, B = 12.67, C = 11.2, D = 11.3, E = 23.5, F = 10.3, G = 2, H = 4.25, I = 10, J = 14.2, K = 6, AF = 7.95;
+const Pm = 23, Q = 18, R = 10.59, S = 8.1, U = 96.75, V = 8, W = 17.4, X = 43.8, Y = 28, Z = 18.4, AA = 6.6, AB = 48, AC = 4.25;
+const AI = 27.6, AJT = 46.1, AJB = 51.1, AL = 5, AM = 14, AN = 10, AK = 80.67, T = 0;   // AL = AJb - AJt
+// Approximate readings and published sizes, accepted as they are by Mehdi (4 Oct)
+const L = 2.5, N = 3, AGW = 356.2, AHD = 272.5;   // M is about 28.4 and agrees with N + E + G = 28.5. O (play) is 11.3.
+// NOT MEASURED. Drawing proportions only; do not use these for CAD.
+const VENT1 = 9, HDW = 18, RIBW = 8, SLOTS = 40, KB2 = 187, KBX = 24;
+const COLP = T, KB1 = AK;
+
+const SL = B, RS = A / 2, BL = E, RB = C / 2, RD = D / 2, RL = G, RR = F / 2, GAP = H, FL = J, RF1 = I / 2, RF2 = AF / 2, RC = K / 2;
+const U_BUMP = SL + BL - L, U_RING = SL + BL, U_GAP = U_RING + RL, U_REL = U_GAP + GAP, U_RELEND = U_REL + FL, CAB_END = U_RELEND + 14;
+const THK = Pm, ST1 = (Pm - Q) / 2, ST2 = ST1 + Q, JY = R, COL = S / 2, RIDGE = Z, CORNER = AI, SLOPE = AL;
+const JX = U, VENT2 = U - S / 2 - V, SCREW_X = U + W, HD1 = U + X, HD2 = HD1 + HDW;
+// z = 0 is the TOP of the rear face. The face slopes: its bottom edge stands SLOPE further out. FJ = where the face is at jack height.
+const FJ = SLOPE * (1 - JY / THK), OUT = FJ + N + BL + RL, HD_OUT = FJ + Y, ZC = OUT + GAP + FL;
+const LOWZ = -RIDGE - AM, RIBZ = SLOPE - AB, FRONT = SLOPE - AHD;
+const XR = 170, DECK = 50, XB = 170, ZL = -62;
+
+// each view: origin, signed scale per axis, title, captions, scale status, zoom box
+const VIEWS = {
+  plug: { ox: 130, oy: 256, sx: 14, sy: 14, title: "1  PLUG, SIDE ON", sub: ["plug lying on the desk · metal tip on the left", "cable to the right"], ok: "DRAWN TO THE MEASURED VALUES", unk: "TORN CORES (IND.)", short: "Plug", focus: [U_GAP, 0], box: [10, 22, 1300, 420] },
+  top:  { ox: 70, oy: 890, sx: 7, sy: -7, title: "2  REAR EDGE FROM ABOVE", sub: ["keyboard towards you · rear edge at the top", "vent corner on the left · plug in"], ok: "DRAWN TO THE MEASURED VALUES", unk: "HINGE POCKET, SLOTS AND HDMI WIDTH (IND.)", short: "Rear edge", focus: [JX + 15, 5], box: [10, 450, 1300, 830] },
+  rear: { ox: 1260, oy: 1560, sx: -7, sy: -7, title: "3  LAPTOP REAR FACE", sub: ["rear face towards you · keyboard side up", "mirrored from view 2: vent corner on the right"], ok: "DRAWN TO THE MEASURED VALUES", unk: "WHERE THE VENT STARTS, STRIP POSITION AND HDMI SIZE (IND.)", short: "Rear face", focus: [JX + 12, JY], box: [10, 1290, 1300, 360] },
+  sect: { ox: 450, oy: 1964, sx: 6, sy: -6, title: "4  SECTION THROUGH THE JACK", sub: ["looking from the vent corner · plug in", "keyboard to the left · rear face to the right"], ok: "PROFILE DRAWN TO THE MEASURED VALUES", unk: "CURVE OF THE TROUGH AND RIB WIDTH (IND.)", short: "Section", focus: [FJ, JY + 2], box: [10, 1660, 800, 404] },
+  whole: { ox: 126, oy: 2330, sx: 3, sy: -3, title: "5  WHOLE LAPTOP FROM ABOVE", sub: ["keyboard towards you · rear edge at the top", "vent corner at the top left · plug and HDMI in"], ok: "OUTLINE, REAR EDGE, REAR BAR, TROUGH AND CORNERS TO THE VALUES", unk: "VENTS, KEYBOARD AND TOUCHPAD FROM PHOTOS, NOT TO SCALE (IND.)", short: "Whole laptop", focus: [AGW / 2 - 30, -70], box: [10, 2074, 1300, 1120] },
+  bsec: { ox: 600, oy: 3566, sx: 8, sy: -8, title: "6  BRACE CONCEPT · SECTION", sub: ["the same cut as view 4, with the brace on the plug", "hatched = the brace, cut through its split line"], ok: "PROPOSED PART, DRAWN TO SCALE ON THE MEASURED LAPTOP AND PLUG", unk: "CONCEPT · NOT MODELLED OR FIT-TESTED YET (IND.)", short: "Brace section", focus: [12, JY + 4], box: [10, 3204, 1300, 430] },
+  bplan: { ox: -335, oy: 4290, sx: 6.5, sy: -6.5, title: "7  BRACE CONCEPT · FROM ABOVE", sub: ["keyboard towards you · rear edge across the middle", "vent on the left · HDMI on the right"], ok: "PROPOSED PART, DRAWN TO SCALE ON THE MEASURED LAPTOP AND PLUG", unk: "CONCEPT · NOT MODELLED OR FIT-TESTED YET (IND.)", short: "Brace from above", focus: [JX + 8, 25], box: [10, 3644, 1300, 850] },
+};
+const P = (v, x, y) => { const V = VIEWS[v]; return [V.ox + x * V.sx, V.oy + y * V.sy]; };
+const FOCUS = v => P(v, ...VIEWS[v].focus);   // the part of a view a closed card keeps in sight
+
+function el(tag, attrs = {}, parent) {
+  const e = document.createElementNS(NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  parent.appendChild(e); return e;
+}
+const seg = (v, pts, close) => "M" + pts.map(([x, y]) => P(v, x, y).map(n => n.toFixed(1)).join(",")).join(" L") + (close ? " Z" : "");
+// a polyline, or a list of polylines for an edge drawn in two parts (top and bottom of a round part)
+const d = (v, pts, close) => Array.isArray(pts[0][0]) ? pts.map(p => seg(v, p, close)).join(" ") : seg(v, pts, close);
+const circ = (cx, cy, r, n = 40) => Array.from({ length: n + 1 }, (_, i) => [cx + r * Math.cos(2 * Math.PI * i / n), cy + r * Math.sin(2 * Math.PI * i / n)]);
+
+// ---------- cards and static shapes ----------
+const defs = el("defs", {}, document.getElementById("defs-svg"));
+defs.innerHTML = `<marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse"><path class="arrowhead" d="M0,1 L10,5 L0,9 z"/></marker><pattern id="hatch" patternUnits="userSpaceOnUse" width="7" height="7" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="7" class="hatch-line"/></pattern>`;
+const LAY = {};   // per view: its card, its own svg, and layers for shapes, edges, points and the selected dimension
+for (const [i, [v, V]] of Object.entries(VIEWS).entries()) {
+  const [num, ...name] = V.title.split(/\s{2,}/);
+  const card = document.createElement("article"); card.className = "card"; card.dataset.view = v; card.style.setProperty("--i", i);
+  card.innerHTML = `<header class="ch"><span class="cn">${num}</span><h3 class="ct"><span class="tl">${name.join(" ")}</span><span class="ts">${V.short}</span></h3><span class="cs"></span><button class="cx" type="button" aria-expanded="false"><span class="cxl">Open</span><i class="cxi" aria-hidden="true"></i></button></header>
+    <div class="cd"><span class="cap">${V.sub.join(" · ")}</span>${V.ok ? `<span class="ok-l">${V.ok}</span>` : ""}<span class="unk-l">${V.unk}</span></div>
+    <div class="cb"><svg role="img" aria-label="${name.join(" ")}"></svg></div>`;
+  bento.appendChild(card);
+  const s = card.querySelector("svg"), g = el("g", {}, s), q = c => card.querySelector(c);
+  LAY[v] = { card, svg: s, g, cb: q(".cb"), cd: q(".cd"), cs: q(".cs"), cx: q(".cx"), cxl: q(".cxl"), shapes: el("g", {}, g), edges: el("g", {}, g), pts: el("g", {}, g), dim: el("g", { class: "dim" }, s) };
+}
+const gS = v => LAY[v].shapes;
+function shape(v, pts, cls, close = true) { return el("path", { d: d(v, pts, close), class: cls }, gS(v)); }
+function txt(v, x, y, s, cls, anchor = "middle", dx = 0, dy = 0) { const [px, py] = P(v, x, y); const t = el("text", { x: px + dx, y: py + dy, class: cls, "text-anchor": anchor }, gS(v)); t.textContent = s; }
+
+// the plug, drawn in any view through T(u, r): u along the axis from the tip, r from the axis
+const bodyPts = [[SL, -RB], [U_BUMP, -RB], [U_BUMP, -RD], [U_RING, -RD], [U_RING, RD], [U_BUMP, RD], [U_BUMP, RB], [SL, RB]];
+const ringPts = [[U_RING, -RR], [U_GAP - .4, -RR], [U_GAP, -RR + .4], [U_GAP, RR - .4], [U_GAP - .4, RR], [U_RING, RR]];
+const tornPts = [[U_GAP, -1.9], [U_GAP + 1.4, -2.4], [U_GAP + 2.6, -1.6], [U_REL, -2], [U_REL, 2], [U_GAP + 2.8, 2.4], [U_GAP + 1.2, 1.7], [U_GAP, 2.1]];
+const reliefPts = [[U_REL, -RF1], [U_RELEND, -RF2], [U_RELEND, RF2], [U_REL, RF1]];
+function plugFills(v, T, withRelief) {
+  const m = pts => pts.map(([u, r]) => T(u, r));
+  shape(v, m(bodyPts), "s-body");
+  shape(v, m(ringPts), "s-ring");
+  if (!withRelief) return;
+  shape(v, m(reliefPts), "s-relief");
+  for (let i = 1; i < 5; i++) { const u = U_REL + i * 2.2, r = RF1 - (RF1 - RF2) * (u - U_REL) / FL; shape(v, m([[u, -r], [u, r]]), "s-thin", false); }
+}
+// in views 2, 4 and 5 the plug sits with its sleeve N proud of the rear face at jack height (z = FJ)
+const TP = (u, r) => [JX + r, u - SL + N + FJ];   // plan views
+const T4 = (u, r) => [u - SL + N + FJ, JY - r];   // section
+function cablePlan(v, wOuter, wInner, run) {
+  const a = P(v, JX, OUT), b = P(v, JX, OUT + 8), c = P(v, JX + 2, OUT + 13), e = P(v, JX + 14, OUT + 13), f = P(v, JX + run, OUT + 13);
+  const dd = `M${a} C${b} ${c} ${e} L${f}`;
+  el("path", { d: dd, class: "s-cable", "stroke-width": wOuter }, gS(v)); el("path", { d: dd, class: "s-cable-in", "stroke-width": wInner }, gS(v));
+}
+
+// view 1
+const T1 = (u, r) => [u, r];
+shape("plug", [[.6, -RS], [SL, -RS], [SL, RS], [.6, RS], [0, RS - .6], [0, -RS + .6]], "s-metal");
+plugFills("plug", T1, true);
+shape("plug", [[U_RING, -RD], [U_RING, RD]], "s-thin", false);
+shape("plug", [[-4, 0], [CAB_END + 3, 0]], "s-centre", false);
+shape("plug", [[CAB_END, -RC - 1.2], [CAB_END - .8, -1], [CAB_END + .8, 1], [CAB_END, RC + 1.2]], "s-break", false);
+txt("plug", SL / 2, 0, "METAL SLEEVE", "face-txt", "middle", 0, 132);
+txt("plug", SL + (BL - L) / 2, 0, "BLACK BODY", "face-txt", "middle", 0, 132);
+txt("plug", U_BUMP + L / 2, 0, "BUMP", "face-txt", "end", -6, 158);
+txt("plug", U_RING + RL / 2, 0, "LIGHT RING", "face-txt", "start", -4, 180);
+txt("plug", U_GAP + GAP / 2, 0, "TORN (IND.)", "unk-txt", "start", 34, 158);
+txt("plug", U_REL + FL / 2 + 2, 0, "STRAIN RELIEF", "face-txt", "middle", 0, 132);
+txt("plug", U_RELEND + 8, 0, "CABLE", "face-txt", "middle", 0, 132);
+txt("plug", U_GAP, -RD, "The bump is 0.05 proud of the body per side (D 11.3, C 11.2):", "note", "start", 40, -92);
+txt("plug", U_GAP, -RD, "real, but too small to see at this scale.", "note", "start", 40, -76);
+
+// view 2: the rear edge from above. z = 0 is the top of the rear face; its bottom edge is SLOPE further out.
+shape("top", [[0, SLOPE], [XR, SLOPE], [XR, 0], [0, 0]], "s-metal");                          // the sloping rear face, seen from above
+shape("top", [[0, 0], [XR, 0], [XR, -DECK], [0, -DECK]], "s-paper");                           // rear bar and raised corner: top level
+shape("top", [[CORNER, -RIDGE], [XR, -RIDGE], [XR, -DECK], [0, -DECK], [0, -AJT], [CORNER, -AJT]], "s-relief");   // trough and vent deck: lower
+shape("top", [[VENT1, SLOPE], [VENT2, SLOPE], [VENT2, 0], [VENT1, 0]], "s-body");
+for (let a = VENT1 + 1.2; a < VENT2 - 1.6; a += 2.4) shape("top", [[a, 0], [a + 1.6, SLOPE]], "s-fine", false);
+for (let a = CORNER + 3; a < XR - 3; a += 2.2) shape("top", [[a, -SLOTS], [a, -SLOTS - 2.4]], "s-fine", false);
+shape("top", [[CORNER - 11, -RIDGE + 3], [CORNER, -RIDGE + 3], [CORNER, -RIDGE - 7], [CORNER - 11, -RIDGE - 7]], "s-prov");
+shape("top", [[XR, SLOPE + 2], [XR - 1, -14], [XR + 1, -32], [XR, -DECK - 2]], "s-break", false);
+shape("top", [[-2, -DECK], [50, -DECK - .8], [110, -DECK + .8], [XR + 2, -DECK]], "s-break", false);
+cablePlan("top", 42, 37, 60);
+shape("top", [[JX - RS, FJ], [JX - RS, FJ + N], [JX + RS, FJ + N], [JX + RS, FJ]], "s-metal-line");
+shape("top", bodyPts.map(([u, r]) => TP(u, r)), "s-body");
+shape("top", ringPts.map(([u, r]) => TP(u, r)), "s-ring");
+shape("top", [[HD1, FJ], [HD1, HD_OUT], [HD2, HD_OUT], [HD2, FJ]], "s-relief");
+shape("top", [[HD1 + 5, HD_OUT], [HD1 + 6, HD_OUT + 4], [HD2 - 6, HD_OUT + 4], [HD2 - 5, HD_OUT]], "s-relief-line", false);
+shape("top", [[SCREW_X, 0], [SCREW_X, SLOPE]], "s-thin", false);
+txt("top", (HD1 + HD2) / 2, HD_OUT / 2, "HDMI", "face-txt", "middle", 0, 4);
+txt("top", 62, -RIDGE / 2, "REAR BAR · FLAT", "face-txt", "middle", 0, 4);
+txt("top", 100, -RIDGE - 7, "TROUGH · SLOPES DOWN FROM THE BAR", "face-txt", "middle", 0, 4);
+txt("top", 100, LOWZ, "LOWEST LINE · 14 FROM THE BAR · 10 DEEP", "face-txt", "middle", 0, 16);
+txt("top", 100, -AJT, "CLIMBS BACK TO 6.6 DEEP AT THE END OF THE RAISED CORNER, THEN THE TOP VENTS", "face-txt", "middle", 0, 16);
+txt("top", 132, -SLOTS, "slots (IND.)", "note", "middle", 0, -6);
+txt("top", 14, SLOPE, "VENT (ON THE REAR FACE)", "face-txt", "start", 0, -8);
+txt("top", CORNER / 2, -30, "RAISED CORNER", "face-txt", "middle", 0, 4);
+txt("top", CORNER / 2, -30, "flat, level with the bar", "note", "middle", 0, 20);
+txt("top", CORNER - 5.5, -RIDGE - 2, "hinge", "note", "middle", 0, -2); txt("top", CORNER - 5.5, -RIDGE - 2, "pocket", "note", "middle", 0, 11);
+txt("top", 126, -RIDGE / 2, "the rear face slopes: its bottom edge (t2) is 5 further out than its top (t1)", "note", "middle", 0, 4);
+
+// view 3
+shape("rear", [[3, 0], [XB, 0], [XB, THK], [3, THK], [0, THK - 3], [0, 3]], "s-paper");
+shape("rear", [[XB, -1.5], [XB - .8, 7], [XB + .8, 14], [XB, THK + 1.5]], "s-break", false);
+const loopArc = (inset, from, to) => { const r = (ST2 - ST1) / 2 - inset, cy = (ST1 + ST2) / 2, xe = 3 + inset + r;
+  return Array.from({ length: to - from + 1 }, (_, i) => [xe - r * Math.sin(Math.PI * (from + i) / 12), cy + r * Math.cos(Math.PI * (from + i) / 12)]); };
+shape("rear", [[XB - .6, ST2 - 1], ...loopArc(1, 0, 12), [XB - .6, ST1 + 1]], "s-fine", false);
+{ const hr = 1.9; let row = 0;
+  for (let yy = ST1 + 3.2; yy < ST2 - 2.4; yy += hr * 1.5, row++)
+    for (let xx = VENT1 + 3 + (row % 2 ? hr * .87 : 0); xx < VENT2 - 1; xx += hr * 1.74)
+      shape("rear", Array.from({ length: 6 }, (_, i) => [xx + hr * .86 * Math.cos(Math.PI / 6 + i * Math.PI / 3), yy + hr * .86 * Math.sin(Math.PI / 6 + i * Math.PI / 3)]), "s-hex");
+}
+shape("rear", circ(JX, JY, COL), "s-relief");
+shape("rear", circ(JX, JY, RS), "s-metal");
+shape("rear", circ(JX, JY, .8, 16), "s-pin");
+shape("rear", circ(SCREW_X, JY, 1.6, 24), "s-paper");
+shape("rear", [[SCREW_X - 1, JY], [SCREW_X + 1, JY]], "s-thin", false); shape("rear", [[SCREW_X, JY - 1], [SCREW_X, JY + 1]], "s-thin", false);
+const hdmiR = [[HD2, JY + 6.5], [HD1, JY + 6.5], [HD1, JY - 6.5], [HD2, JY - 6.5], [HD2, JY + 6.5]];
+shape("rear", hdmiR, "s-relief");
+txt("rear", (HD1 + HD2) / 2, JY, "HDMI", "face-txt", "middle", 0, 4);
+txt("rear", 30, THK, "KEYBOARD SIDE", "face-txt", "middle", 0, -12);
+txt("rear", 30, 0, "UNDERSIDE", "face-txt", "middle", 0, 24);
+
+// view 4: section. The top surface runs flat along the bar, down into the trough, then back up to the vent deck.
+const ease = t => (1 - Math.cos(Math.PI * t)) / 2;
+const troughPts = [
+  ...Array.from({ length: 9 }, (_, i) => [-RIDGE - AM * i / 8, THK - AN * ease(i / 8)]),
+  ...Array.from({ length: 8 }, (_, i) => [LOWZ - (AJT - RIDGE - AM) * (i + 1) / 8, THK - AN + (AN - AA) * ease((i + 1) / 8)]),
+];
+shape("sect", [[ZL, 0], [RIBZ - RIBW, 0], [RIBZ - RIBW + .8, -AC], [RIBZ - .8, -AC], [RIBZ, 0], [SLOPE, 0], [0, THK], ...troughPts, [ZL, THK - AA]], "s-relief");
+shape("sect", [[ZL, -5], [ZL - .8, 4], [ZL + .8, 11], [ZL, THK - AA + 1]], "s-break", false);
+const SOCK = SL - N;   // how much of the sleeve is inside the laptop
+shape("sect", [[FJ, JY - RS - .4], [FJ - SOCK - .6, JY - RS - .4], [FJ - SOCK - .6, JY + RS + .4], [FJ, JY + RS + .4]], "s-socket", false);
+shape("sect", [[.6, -RS], [SOCK, -RS], [SOCK, RS], [.6, RS]].map(([u, r]) => T4(u, r)), "s-hidden", false);
+shape("sect", [[FJ, JY - RS], [FJ + N, JY - RS], [FJ + N, JY + RS], [FJ, JY + RS]], "s-metal");
+plugFills("sect", T4, true);
+shape("sect", tornPts.map(([u, r]) => T4(u, r)), "s-prov");
+shape("sect", reliefPts.map(([u, r]) => T4(u, r)), "s-relief-line");
+shape("sect", [[[ZC, JY - RC], [ZC + 6, JY - RC]], [[ZC, JY + RC], [ZC + 6, JY + RC]]], "s-thin", false);
+shape("sect", [[ZC + 6, JY - RC - 1.2], [ZC + 5.4, JY - 1], [ZC + 6.6, JY + 1], [ZC + 6, JY + RC + 1.2]], "s-break", false);
+shape("sect", [[ZL - 8, JY], [ZC + 8, JY]], "s-centre", false);
+txt("sect", -30, 4.5, "LAPTOP", "face-txt", "middle", 0, 4);
+txt("sect", -9, THK, "REAR BAR", "face-txt", "middle", 0, -38);
+txt("sect", LOWZ, THK, "TROUGH", "face-txt", "middle", 0, -38);
+txt("sect", -54, THK - AA, "TOP VENTS", "face-txt", "middle", 0, 22);
+// sheet notes, beside view 4
+const NY = VIEWS.sect.box[1];
+el("text", { x: 850, y: NY + 26, class: "v-sub" }, gS("sect")).textContent = "COORDINATES";
+[["x  along the rear edge, from the vent corner", 0], ["y  up from the underside", 1], ["z  out from the top of the rear face, along the plug", 2]].forEach(([s, i]) =>
+  el("text", { x: 850, y: NY + 52 + i * 20, class: "coord" }, gS("sect")).textContent = s);
+["The rear face slopes: its bottom edge stands 5 further out than its", "top (AJb less AJt). It is drawn as a straight slope. M, N and Y are", "taken from the face at jack height, 2.7 out from the top edge.",
+ "", "About 3 of the metal sleeve stays outside the laptop, so the black", "body never touches the rear face. Only the sleeve holds the plug,", "which is why it rocks.",
+ "", "The plug body comes within 6.5 of the vent (V 8 + half of S, less", "half of C). Nothing may cover the vent.",
+ "", "The screw at T5 / R4 is 17.4 from the jack: a possible fixing point.",
+ "", "Red broken lines are drawn from a guess: the far side of the foot", "rib, the hinge pocket, the far raised corner and the torn cores."].forEach((s, i) =>
+  el("text", { x: 850, y: NY + 132 + i * 17, class: "note" }, gS("sect")).textContent = s);
+
+// view 5: the whole laptop from above
+const hullW = [[8, SLOPE], [AGW - 8, SLOPE], [AGW, SLOPE - 8], [AGW, FRONT + 10], [AGW - 10, FRONT], [10, FRONT], [0, FRONT + 10], [0, SLOPE - 8]];
+shape("whole", hullW, "s-paper");
+shape("whole", [[4, SLOPE], [AGW - 4, SLOPE], [AGW - 1.5, 0], [1.5, 0]], "s-metal");
+shape("whole", [[CORNER, -RIDGE], [AGW - CORNER, -RIDGE], [AGW - CORNER, -AJT], [AGW, -AJT], [AGW, FRONT + 10], [AGW - 10, FRONT], [10, FRONT], [0, FRONT + 10], [0, -AJT], [CORNER, -AJT]], "s-relief");
+for (const [a, b] of [[CORNER - 11, CORNER], [AGW - CORNER + 11, AGW - CORNER]]) shape("whole", [[a, -RIDGE + 3], [b, -RIDGE + 3], [b, -RIDGE - 7], [a, -RIDGE - 7]], "s-prov");
+for (let a = CORNER + 3; a < AGW - CORNER - 3; a += 2.4) shape("whole", [[a, -SLOTS], [a, -SLOTS - 2.6]], "s-fine", false);
+{ const hr = 8.5; for (let row = 0; row < 2; row++)
+    for (let xx = 18 + (row ? hr * .87 : 0); xx < AGW - 16; xx += hr * 1.74)
+      shape("whole", Array.from({ length: 6 }, (_, i) => [xx + hr * .8 * Math.cos(Math.PI / 6 + i * Math.PI / 3), -AJT - 13 - row * hr * 1.5 + hr * .8 * Math.sin(Math.PI / 6 + i * Math.PI / 3)]), "s-hex");
+}
+const kbRect = [[KBX, -KB1], [AGW - KBX, -KB1], [AGW - KBX, -KB2], [KBX, -KB2], [KBX, -KB1]];
+{ const rows = 6, cols = 16, kw = (AGW - 2 * KBX) / cols, kh = (KB2 - KB1) / rows;
+  for (let r = 0; r < rows; r++) for (let c = 0; c < cols; c++) {
+    const x0 = KBX + c * kw + .9, z0 = -KB1 - r * kh - .9;
+    shape("whole", [[x0, z0], [x0 + kw - 1.8, z0], [x0 + kw - 1.8, z0 - kh + 1.8], [x0, z0 - kh + 1.8]], "s-key");
+  } }
+const padRect = [[AGW / 2 - 52, -KB2 - 10], [AGW / 2 + 52, -KB2 - 10], [AGW / 2 + 52, FRONT + 14], [AGW / 2 - 52, FRONT + 14], [AGW / 2 - 52, -KB2 - 10]];
+shape("whole", [[VENT1, SLOPE], [VENT2, SLOPE], [VENT2, 0], [VENT1, 0]], "s-body");
+cablePlan("whole", 18, 15, 40);
+shape("whole", [[JX - RS, FJ], [JX - RS, FJ + N], [JX + RS, FJ + N], [JX + RS, FJ]], "s-metal-line");
+shape("whole", bodyPts.map(([u, r]) => TP(u, r)), "s-relief-line");
+shape("whole", ringPts.map(([u, r]) => TP(u, r)), "s-relief-line");
+shape("whole", [[HD1, FJ], [HD1, HD_OUT], [HD2, HD_OUT], [HD2, FJ]], "s-relief-line", false);
+txt("whole", AGW / 2 + 40, -RIDGE / 2, "REAR BAR · LEVEL WITH THE RAISED CORNERS", "face-txt", "middle", 0, 4);
+txt("whole", AGW / 2, LOWZ, "TROUGH · LOWEST HERE, 10 DEEP · WHERE THE LID HINGED", "face-txt", "middle", 0, -6);
+[["RAISED", 0], ["CORNER", 1]].forEach(([w, i]) => { txt("whole", CORNER / 2, -AJT + 12, w, "note", "middle", 0, i * 14); txt("whole", AGW - CORNER / 2, -AJT + 12, w, "note", "middle", 0, i * 14); });
+[[-SLOTS - 1, "SLOTS"], [-(AJT + KB1) / 2 - 2, "TOP VENTS · 6.6 DEEP"], [-(KB1 + KB2) / 2, "KEYBOARD"], [(-KB2 + FRONT) / 2, "PALM REST"]].forEach(([z, w]) => txt("whole", AGW, z, w, "face-txt", "start", 12, 4));
+txt("whole", JX + 40, OUT + 13, "CHARGER", "face-txt", "start", 10, 4);
+txt("whole", (HD1 + HD2) / 2, HD_OUT, "HDMI", "face-txt", "middle", 0, -10);
+txt("whole", AGW / 2, (-KB2 + FRONT) / 2 - 3, "TOUCHPAD", "face-txt", "middle", 0, 4);
+
+// ---------- views 6 and 7: the brace concept. A PROPOSED part, drawn on the measured laptop and plug. ----------
+// Proposed sizes (mm). None of these is final until the fit test.
+const BR = { plate: N - .2, bore: D / 2, rout: 8.2, yb: 4, armT: 2.4, hook: 5, zend: 55, xl: JX - 7.25, xr: JX + 26.25, xa: JX + 16.25, tie1: 12, tie2: 39, mouth: 3.3 };
+const ZP = FJ + BR.plate;                              // outer face of the spacer plate
+const zf = y => SLOPE * (1 - y / THK);                 // the sloping rear face
+const troughAt = z => z >= -RIDGE ? THK : THK - AN * ease((-RIDGE - z) / AM);
+const ZT = -RIDGE - BR.hook;                           // where the hook tip lands in the trough
+const ZB0 = FJ + N, ZR0 = ZB0 + BL, ZR1 = OUT, ZS0 = OUT + GAP, ZS1 = ZC;
+function braceFill(v, pts, cls = "s-brace") { shape(v, pts, "s-paper"); return shape(v, pts, cls); }
+function callout(v, a, b, n, dx = 0, dy = 0) {
+  const [px, py] = P(v, a, b); const g = el("g", { class: "callout" }, gS(v));
+  if (dx || dy) el("line", { x1: px, y1: py, x2: px + dx, y2: py + dy }, g);
+  el("circle", { cx: px + dx, cy: py + dy, r: 10 }, g);
+  el("text", { x: px + dx, y: py + dy + 4.5 }, g).textContent = n;
+}
+
+// view 6: section through the jack with the brace on
+const ZL6 = -50;
+shape("bsec", [[ZL6, 0], [SLOPE, 0], [0, THK], ...troughPts, [ZL6, THK - AA]], "s-relief");
+shape("bsec", [[ZL6, 0], [SLOPE, 0], [0, THK], ...troughPts, [ZL6, THK - AA]], "s-thin", false);
+shape("bsec", [[ZL6, -3], [ZL6 - .8, 5], [ZL6 + .8, 11], [ZL6, THK - AA + 2]], "s-break", false);
+shape("bsec", [[FJ, JY - RS - .4], [FJ - SOCK - .6, JY - RS - .4], [FJ - SOCK - .6, JY + RS + .4], [FJ, JY + RS + .4]], "s-socket", false);
+// spacer plate, top arm and hook: one piece
+const armUnder = Array.from({ length: 6 }, (_, i) => { const z = ZT + (-RIDGE - ZT) * i / 5; return [z, troughAt(z)]; });
+braceFill("bsec", [[zf(BR.yb), BR.yb], [ZP, BR.yb], [ZP, THK + BR.armT], [-RIDGE - 1.5, THK + BR.armT], [ZT - 1.9, troughAt(ZT) + BR.armT + .4], [ZT - 1.5, troughAt(ZT) + .6], ...armUnder, [0, THK]]);
+// shell walls, above and below the plug
+const shellOut = [[ZP, BR.rout], [BR.tie1, BR.rout], [BR.tie1, BR.rout - 1], [BR.tie1 + 3, BR.rout - 1], [BR.tie1 + 3, BR.rout], [BR.tie2, BR.rout], [BR.tie2, BR.rout - 1], [BR.tie2 + 3, BR.rout - 1], [BR.tie2 + 3, BR.rout], [44, BR.rout], [BR.zend, 6.6]];
+const shellIn = [[BR.zend, 5], [51, BR.mouth], [ZS1, BR.mouth], [ZS1, RF2 + .15], [ZS0, RF1 + .15], [ZS0, 5.35], [ZR0, 5.35], [ZR0, BR.bore], [ZP, BR.bore]];
+for (const sgn of [1, -1]) braceFill("bsec", [...shellOut, ...shellIn].map(([z, r]) => [z, JY + sgn * r]));
+// the plug inside it
+const T6 = (u, r) => [u - SL + N + FJ, JY - r];
+shape("bsec", [[.6, -RS], [SOCK, -RS], [SOCK, RS], [.6, RS]].map(([u, r]) => T6(u, r)), "s-hidden", false);
+shape("bsec", [[FJ, JY - RS], [ZB0, JY - RS], [ZB0, JY + RS], [FJ, JY + RS]], "s-metal-line");
+shape("bsec", bodyPts.map(([u, r]) => T6(u, r)), "s-ghost");
+shape("bsec", ringPts.map(([u, r]) => T6(u, r)), "s-ghost-ring");
+shape("bsec", tornPts.map(([u, r]) => T6(u, r)), "s-prov");
+shape("bsec", reliefPts.map(([u, r]) => T6(u, r)), "s-ghost");
+shape("bsec", [[[ZS1, JY - RC], [66, JY - RC]], [[ZS1, JY + RC], [66, JY + RC]]], "s-thin", false);
+shape("bsec", [[66, JY - RC - 1.2], [65.4, JY - 1], [66.6, JY + 1], [66, JY + RC + 1.2]], "s-break", false);
+shape("bsec", [[ZL6 - 4, JY], [70, JY]], "s-centre", false);
+txt("bsec", -32, 6, "LAPTOP", "face-txt", "middle", 0, 4);
+txt("bsec", BR.tie1 + 1.5, JY - BR.rout, "TIE", "face-txt", "middle", 0, 26); txt("bsec", BR.tie2 + 1.5, JY - BR.rout, "TIE", "face-txt", "middle", 0, 26);
+callout("bsec", ZP - 1.4, 19, "1", 34, -58); callout("bsec", 22, JY + 7, "2", 0, -52); callout("bsec", ZR0 + 1, JY + 5.8, "3", 6, -66);
+callout("bsec", ZS0 - 2, JY + 6.9, "4", 22, -52); callout("bsec", 53, JY + 6.2, "5", 30, -40); callout("bsec", -9, THK + 1.2, "6", 0, -44);
+
+// view 7: the same from above, with the add-on elbow
+const X0 = 70, X1 = 168, ZD = -28;
+shape("bplan", [[X0, SLOPE], [X1, SLOPE], [X1, 0], [X0, 0]], "s-metal");
+shape("bplan", [[X0, 0], [X1, 0], [X1, -RIDGE], [X0, -RIDGE]], "s-paper");
+shape("bplan", [[X0, -RIDGE], [X1, -RIDGE], [X1, ZD], [X0, ZD]], "s-relief");
+shape("bplan", [[X0, SLOPE], [VENT2, SLOPE], [VENT2, 0], [X0, 0]], "s-body");
+for (let a = X0 + 1.2; a < VENT2 - 1.6; a += 2.4) shape("bplan", [[a, 0], [a + 1.6, SLOPE]], "s-fine", false);
+shape("bplan", [[[X0, SLOPE], [X1, SLOPE]], [[X0, 0], [X1, 0]], [[X0, -RIDGE], [X1, -RIDGE]]], "s-thin", false);
+for (const a of [X0, X1]) shape("bplan", [[a, SLOPE + 2], [a - 1, -6], [a + 1, -18], [a, ZD - 2]], "s-break", false);
+shape("bplan", [[HD1, FJ], [HD1, HD_OUT], [HD2, HD_OUT], [HD2, FJ]], "s-relief-line");
+// add-on elbow first, so the brace sits on top of its socket
+{ const cx = JX + 20, cz = 57, ro = 26, ri = 14, arc = (r, a0, a1) => Array.from({ length: 13 }, (_, i) => { const a = (a0 + (a1 - a0) * i / 12) * Math.PI / 180; return [cx + r * Math.cos(a), cz + r * Math.sin(a)]; });
+  braceFill("bplan", [[JX - 9.8, 46], [JX - 9.8, 57], [JX - 6, 57], ...arc(ro, 180, 90), [JX + 34, cz + ro], [JX + 34, cz + ri], ...arc(ri, 90, 180), [JX + 9.8, 57], [JX + 9.8, 46]], "s-addon");
+  shape("bplan", [[[JX + 34, cz + ri + 2.5], [JX + 48, cz + ri + 2.5]], [[JX + 34, cz + ro - 2.5], [JX + 48, cz + ro - 2.5]]], "s-thin", false);
+  shape("bplan", [[JX + 48, cz + ri + 1], [JX + 47.4, cz + 18], [JX + 48.6, cz + 22], [JX + 48, cz + ro - 1]], "s-break", false);
+}
+braceFill("bplan", [[BR.xl, 0], [BR.xa, 0], [BR.xa, ZT - 1.5], [BR.xl, ZT - 1.5]], "s-brace-plan");
+braceFill("bplan", [[BR.xl, 0], [BR.xr, 0], [BR.xr, ZP], [BR.xl, ZP]], "s-brace-plan");
+braceFill("bplan", [[JX - BR.rout, ZP], [JX - BR.rout, 44], [JX - 6.6, BR.zend], [JX + 6.6, BR.zend], [JX + BR.rout, 44], [JX + BR.rout, ZP]], "s-brace-plan");
+for (const t of [BR.tie1, BR.tie2]) shape("bplan", [[JX - BR.rout, t], [JX + BR.rout, t], [JX + BR.rout, t + 3], [JX - BR.rout, t + 3]], "s-tie");
+for (const sgn of [1, -1]) shape("bplan", [[JX + sgn * BR.rout, ZR0 - .6], [JX + sgn * (BR.rout - 2.2), ZR0 - .6], [JX + sgn * (BR.rout - 2.2), ZR1 + .6], [JX + sgn * BR.rout, ZR1 + .6]], "s-window");
+shape("bplan", [[BR.xl, -RIDGE], [BR.xa, -RIDGE]], "s-hidden", false);
+shape("bplan", [[JX, ZT - 6], [JX, BR.zend + 4]], "s-centre", false);
+shape("bplan", [[SCREW_X, 0], [SCREW_X, ZP]], "s-hidden", false);
+txt("bplan", X0 + 2, SLOPE, "VENT", "face-txt", "start", 0, -8);
+txt("bplan", (HD1 + HD2) / 2, HD_OUT / 2 + FJ / 2, "HDMI", "face-txt", "middle", 0, 4);
+txt("bplan", X1 - 3, -RIDGE / 2, "REAR BAR", "face-txt", "end", 0, 4);
+txt("bplan", X1 - 3, (-RIDGE + ZD) / 2, "TROUGH", "face-txt", "end", 0, 4);
+txt("bplan", JX, ZT - 6, "SPLIT LINE · TWO HALVES", "face-txt", "middle", 0, 16);
+txt("bplan", JX + 50, 57 + 20, "ADD-ON ELBOW", "face-txt", "start", 6, 4);
+txt("bplan", JX - BR.rout, ZR0 + 1, "window", "note", "end", -6, 4);
+callout("bplan", SCREW_X, ZP / 2, "7", 22, 30); callout("bplan", JX + 12, 78, "8", -44, 6);
+callout("bplan", JX + 5, -10, "6", 0, 0); callout("bplan", JX + 22, ZP / 2, "1", 26, -22); callout("bplan", JX - 4, 26, "2", 0, 0);
+// keyed notes for the concept, beside view 7
+{ const bx = 800, by = VIEWS.bplan.box[1] + 120;
+  el("text", { x: bx, y: by - 34, class: "v-sub" }, gS("bplan")).textContent = "HOW THE BRACE WORKS";
+  const notes = [
+    ["1", "SPACER PLATE.", "Fills the 3 gap between the rear face and the plug body, and sits", "flat on the face. This is what stops the rocking."],
+    ["2", "CLAMP ON THE BODY.", "The bore is the size of the bump (11.3). Two cable ties pull the", "halves together onto the plug, so the brace stays with the plug."],
+    ["3", "WINDOWS AT THE LIGHT RING.", "The ring is narrower than the body, so it is left free and visible."],
+    ["4", "BRIDGE OVER THE TEAR.", "The torn 4.25 sits in a clear pocket. The strain relief is held in its", "own taper, so the cable's load goes into the brace, not the tear."],
+    ["5", "FLARED MOUTH.", "The cable leaves straight, with room to bend gently."],
+    ["6", "CLIP OVER THE REAR BAR.", "A flat arm lies on the bar and its tip drops about 3 into the trough.", "It springs up as the plug goes in, then holds the brace to the laptop."],
+    ["7", "SCREW LEFT CLEAR.", "The plate has a hole over the screw beside the jack."],
+    ["8", "ADD-ON ELBOW (OPTIONAL).", "A separate piece pushed onto the mouth and tied on. It turns the cable", "90° on a 20 radius and can point any way. Drawn towards the HDMI side,", "away from the hot air of the vent."],
+  ];
+  let y = by;
+  for (const [n, head, ...lines] of notes) {
+    const g = el("g", { class: "callout lg" }, gS("bplan")); el("circle", { cx: bx + 10, cy: y - 4, r: 10 }, g); el("text", { x: bx + 10, y: y + .5 }, g).textContent = n;
+    el("text", { x: bx + 30, y, class: "legend-head" }, gS("bplan")).textContent = head; y += 16;
+    for (const l of lines) { el("text", { x: bx + 30, y, class: "note" }, gS("bplan")).textContent = l; y += 15; }
+    y += 12;
+  }
+  el("text", { x: bx, y: y + 8, class: "v-sub" }, gS("bplan")).textContent = "HOW IT PRINTS";
+  ["Two halves, split down the plug's centre line. Each half lies on its", "split face, so nothing needs supports and the layers run along the", "clip arm, which lets it flex without snapping. Black PETG.",
+   "Fit test first: the plug clamp and the bar clip, tight / standard / loose."].forEach((l, i) => el("text", { x: bx, y: y + 30 + i * 15, class: "note" }, gS("bplan")).textContent = l);
+}
+
+// ---------- points & edges ----------
+const NAMES = {
+  P1: "tip of the sleeve, top", P2: "tip of the sleeve, bottom", P3: "where the sleeve meets the body", P4: "front face of the body, top", P5: "front face of the body, bottom",
+  P6: "where the bump meets the light ring", P7: "back of the light ring, top", P8: "back of the light ring, bottom", P9: "start of the strain relief", P10: "end of the strain relief",
+  P11: "cable, top", P12: "cable, bottom", P13: "where the bump starts",
+  p1: "tip face of the sleeve", p2: "metal sleeve surface", p3: "front face of the body (a straight step, no slant)", p4: "black body surface", p5: "light ring (narrower than the body)", p6: "torn gap, bare cores",
+  p7: "strain relief", p8: "cable", p9: "bump at the end of the body (the widest part)",
+  T1: "vent corner, top of the rear face", T2: "end of the vent nearest the jack", T3: "jack centre, on the rear edge", T4: "back of the light ring, plug in", T5: "screw beside the jack",
+  T6: "HDMI plug, corner nearest the jack", T7: "HDMI plug, outer corner", T8: "ridge at the front of the rear bar", T9: "where the rear bar meets the raised corner", T10: "inner front corner of the raised corner",
+  T11: "front of the raised corner, at the side edge", T12: "lowest line of the trough", T13: "vent corner, bottom of the rear face",
+  t1: "top edge of the rear face", t2: "bottom edge of the rear face (5 further out)", t3: "ridge at the front of the rear bar", t4: "plug body, plugged in", t5: "light ring, plugged in", t6: "HDMI plug body",
+  t7: "side of the laptop at the vent corner", t8: "raised corner, inner wall and front", t9: "lowest line of the trough",
+  R1: "vent corner, keyboard side", R2: "vent corner, underside", R3: "jack centre", R4: "screw centre", R5: "end of the vent nearest the jack", R6: "HDMI plug, edge nearest the jack",
+  R7: "strip, upper line above the jack", R8: "strip, lower line below the jack",
+  r1: "top edge (keyboard side)", r2: "underside edge", r3: "recessed strip, upper line", r4: "recessed strip, lower line", r5: "jack collar", r6: "end of the laptop at the vent corner",
+  r7: "jack hole", r8: "screw head", r9: "HDMI plug body",
+  S1: "top edge of the rear face", S2: "bottom edge of the rear face", S3: "ridge at the front of the rear bar", S4: "foot rib, edge nearest the rear", S5: "back of the light ring", S6: "collar, outer corner",
+  S7: "jack centre on the rear face", S8: "front face of the plug body, plug pushed home", S9: "lowest point of the trough", S10: "where the trough ends, level with the front of the raised corner",
+  s1: "rear face (slopes out towards the bottom)", s2: "top of the rear bar", s3: "underside behind the foot rib", s4: "trough and vent deck", s5: "foot rib (far side guessed)",
+  s6: "jack collar, flush with the strip", s7: "plug body, plugged in", s8: "light ring, plugged in", s9: "metal sleeve left showing",
+  W1: "vent corner (rear left)", W2: "far rear corner", W3: "far front corner", W4: "front corner on the vent side", W5: "where the rear bar meets the raised corner", W6: "inner front corner of the raised corner",
+  W7: "front of the raised corner, at the side edge", W8: "jack centre", W9: "top edge of the first row of keys",
+  w1: "top edge of the rear face", w2: "far side edge", w3: "front edge", w4: "side edge at the vent corner", w5: "ridge at the front of the rear bar", w6: "raised corner, inner wall and front", w7: "far raised corner (assumed the same)",
+  w8: "keyboard (position guessed)", w9: "touchpad (position guessed)", w10: "bottom edge of the rear face", w11: "lowest line of the trough",
+};
+const POINTS = [ // id, view, x, y, label dx, dy (px)
+  ["P1","plug",0,-RS,-12,-10],["P2","plug",0,RS,-12,20],["P3","plug",SL,-RS,-12,-10],["P4","plug",SL,-RB,10,-10],["P5","plug",SL,RB,10,22],
+  ["P13","plug",U_BUMP,-RD,-12,-12],["P6","plug",U_RING,-RD,-2,-28],["P7","plug",U_GAP,-RR+.4,12,-16],["P8","plug",U_GAP,RR-.4,12,22],["P9","plug",U_REL,-RF1,10,-10],
+  ["P10","plug",U_RELEND,-RF2,-4,-12],["P11","plug",U_RELEND+10,-RC,0,-12],["P12","plug",U_RELEND+10,RC,0,22],
+  ["T1","top",0,0,-12,6],["T13","top",0,SLOPE,-12,-8],["T2","top",VENT2,0,-8,20],["T3","top",JX,0,-34,30],["T4","top",JX,OUT,-40,-12],["T5","top",SCREW_X,0,-6,24],
+  ["T6","top",HD1,0,-8,24],["T7","top",HD2,HD_OUT,10,-6],["T8","top",XR-16,-RIDGE,8,-10],["T9","top",CORNER,-RIDGE,10,-10],["T10","top",CORNER,-AJT,10,-10],["T11","top",0,-AJT,-12,4],["T12","top",XR-16,LOWZ,8,-10],
+  ["R1","rear",3,THK,-2,-10],["R2","rear",3,0,-2,24],["R3","rear",JX,JY,22,-42],["R4","rear",SCREW_X,JY,-10,-22],["R5","rear",VENT2,JY,-8,34],
+  ["R6","rear",HD1,JY,12,-20],["R7","rear",JX,ST2,-12,-12],["R8","rear",JX,ST1,12,24],
+  ["S1","sect",0,THK,10,-12],["S2","sect",SLOPE,0,10,22],["S3","sect",-RIDGE,THK,-4,-14],["S9","sect",LOWZ,THK-AN,-4,24],["S10","sect",-AJT,THK-AA,-6,-14],["S4","sect",RIBZ,0,8,-10],["S5","sect",OUT,JY+RR-.4,12,-22],
+  ["S6","sect",FJ+COLP,JY+COL,18,-24],["S7","sect",FJ,JY,-44,-12],["S8","sect",FJ+N,JY-RB,14,30],
+  ["W1","whole",0,0,-12,4],["W2","whole",AGW,0,10,4],["W3","whole",AGW,FRONT,10,18],["W4","whole",0,FRONT,-12,18],["W5","whole",CORNER,-RIDGE,10,-8],
+  ["W6","whole",CORNER,-AJT,10,18],["W7","whole",0,-AJT,-12,4],["W8","whole",JX,0,-34,-22],["W9","whole",AGW/2,-KB1,8,-10],
+];
+const two = (a, b, r) => [[[a, -r], [b, -r]], [[a, r], [b, r]]];
+const EDGES = [ // id, view, polyline(s), tag x, y, dx, dy (px), style: "dash" hidden · "prov" guessed
+  ["p1","plug",[[.6,-RS],[0,-RS+.6],[0,RS-.6],[.6,RS]],0,0,-26,0],
+  ["p2","plug",two(.6,SL,RS),5,RS,0,22],
+  ["p3","plug",[[[SL,-RS],[SL,-RB]],[[SL,RS],[SL,RB]]],SL,RS+(RB-RS)/2,-26,0],
+  ["p4","plug",two(SL,U_BUMP,RB),SL+10,RB,0,22],
+  ["p9","plug",[[[U_BUMP,-RB],[U_BUMP,-RD],[U_RING,-RD]],[[U_BUMP,RB],[U_BUMP,RD],[U_RING,RD]]],U_BUMP+L/2,RD,-22,34],
+  ["p5","plug",[[U_RING,-RD],...ringPts,[U_RING,RD]],U_RING+RL/2,RR,10,52],
+  ["p6","plug",[...tornPts,tornPts[0]],U_GAP+GAP/2,2.3,30,54,"prov"],
+  ["p7","plug",[...reliefPts,reliefPts[0]],U_REL+9,RF1-.6,0,28],
+  ["p8","plug",two(U_RELEND,CAB_END,RC),U_RELEND+6,RC,-6,28],
+  ["t7","top",[[0,SLOPE],[0,-DECK]],0,-9,0,0],
+  ["t2","top",[[0,SLOPE],[XR,SLOPE]],XR-8,SLOPE,0,0],
+  ["t1","top",[[0,0],[XR,0]],XR-22,0,0,0],
+  ["t3","top",[[CORNER,-RIDGE],[XR-.5,-RIDGE]],80,-RIDGE,0,0],
+  ["t8","top",[[CORNER,-RIDGE],[CORNER,-AJT],[0,-AJT]],CORNER,-38,0,0],
+  ["t9","top",[[CORNER,LOWZ],[XR-.5,LOWZ]],150,LOWZ,0,0,"dash"],
+  ["t4","top",[[[JX-RB,FJ+N],[JX-RB,FJ+N+BL]],[[JX+RB,FJ+N],[JX+RB,FJ+N+BL]],[[JX-RB,FJ+N],[JX+RB,FJ+N]]],JX-RB,FJ+N+11,-28,0],
+  ["t5","top",[[JX-RB,FJ+N+BL],...ringPts.map(([u,r])=>TP(u,r)),[JX+RB,FJ+N+BL]],JX+RR,OUT-1,32,-4],
+  ["t6","top",[[HD1,FJ],[HD1,HD_OUT],[HD2,HD_OUT],[HD2,FJ]],HD2,14,28,0],
+  ["r6","rear",[[3,THK],[0,THK-3],[0,3],[3,0]],0,JY,0,0],
+  ["r1","rear",[[3,THK],[XB,THK]],128,THK,0,0],
+  ["r2","rear",[[3,0],[XB,0]],128,0,0,0],
+  ["r3","rear",[[XB-.6,ST2],...loopArc(0,0,6)],56,ST2,0,0],
+  ["r4","rear",[...loopArc(0,6,12),[XB-.6,ST1]],56,ST1,0,0],
+  ["r5","rear",circ(JX,JY,COL),JX,JY-COL,0,96],
+  ["r7","rear",circ(JX,JY,RS),JX-2.6,JY+2.6,64,-106],
+  ["r8","rear",circ(SCREW_X,JY,1.6,24),SCREW_X,JY-1.6,-10,104],
+  ["r9","rear",hdmiR,(HD1+HD2)/2,JY-6.5,0,0],
+  ["s1","sect",[[SLOPE,0],[0,THK]],SLOPE*.87,3,-24,0],
+  ["s2","sect",[[0,THK],[-RIDGE,THK]],-9,THK,0,0],
+  ["s3","sect",[[RIBZ,0],[SLOPE,0]],-20,0,0,0],
+  ["s4","sect",[[-RIDGE,THK],...troughPts.slice(1),[ZL,THK-AA]],-54,THK-AA,0,0],
+  ["s5","sect",[[ZL,0],[RIBZ-RIBW,0],[RIBZ-RIBW+.8,-AC],[RIBZ-.8,-AC],[RIBZ,0]],RIBZ-RIBW/2,-AC,0,0,"prov"],
+  ["s6","sect",[[FJ,JY-COL],[FJ+COLP,JY-COL],[FJ+COLP,JY+COL],[FJ,JY+COL]],FJ+COLP,JY-COL,-66,58],
+  ["s9","sect",[[[FJ,JY+RS],[FJ+N,JY+RS]],[[FJ,JY-RS],[FJ+N,JY-RS]]],FJ+N/2,JY-RS,44,78],
+  ["s7","sect",[[[FJ+N,JY+RB],[FJ+N+BL,JY+RB]],[[FJ+N,JY-RB],[FJ+N+BL,JY-RB]],[[FJ+N,JY-RB],[FJ+N,JY+RB]]],FJ+N+11,JY+RB,0,-22],
+  ["s8","sect",[[FJ+N+BL,JY+RB],...ringPts.map(([u,r])=>T4(u,r)),[FJ+N+BL,JY-RB]],OUT,JY-RR+.4,24,26],
+  ["w10","whole",[[8,SLOPE],[AGW-8,SLOPE]],300,SLOPE,0,0],
+  ["w1","whole",[[1.5,0],[AGW-1.5,0]],250,0,0,0],
+  ["w2","whole",[[AGW-8,SLOPE],[AGW,SLOPE-8],[AGW,FRONT+10],[AGW-10,FRONT]],AGW,-150,0,0],
+  ["w3","whole",[[AGW-10,FRONT],[10,FRONT]],250,FRONT,0,0],
+  ["w4","whole",[[10,FRONT],[0,FRONT+10],[0,SLOPE-8],[8,SLOPE]],0,-150,0,0],
+  ["w5","whole",[[CORNER,-RIDGE],[AGW-CORNER,-RIDGE]],110,-RIDGE,0,0],
+  ["w11","whole",[[CORNER,LOWZ],[AGW-CORNER,LOWZ]],300,LOWZ,0,0,"dash"],
+  ["w6","whole",[[CORNER,-RIDGE],[CORNER,-AJT],[0,-AJT]],CORNER,-34,26,0],
+  ["w7","whole",[[AGW-CORNER,-RIDGE],[AGW-CORNER,-AJT],[AGW,-AJT]],AGW-CORNER,-34,-26,0,"prov"],
+  ["w8","whole",kbRect,70,-KB1,0,0,"prov"],
+  ["w9","whole",padRect,AGW/2-30,-KB2-10,0,0,"prov"],
+];
+const OUTLINE = new Set("p1 p2 p3 p4 p5 p7 p8 p9 t2 t7 r1 r2 r6 s1 s2 s3 s4 w10 w2 w3 w4".split(" "));
+const VIEW_OF = {};
+const nodes = {};
+for (const [id, v, pts, lxp, lyp, ldx, ldy, style] of EDGES) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "edge" + (style ? " " + style : "") + (OUTLINE.has(id) ? " outline" : ""), "data-id": id }, LAY[v].edges);
+  const dd = d(v, pts, false);
+  el("path", { d: dd, class: "vis" }, g);
+  el("path", { d: dd, class: "hit" }, g);
+  const [px, py] = P(v, lxp, lyp); const tx = px + ldx, ty = py + ldy, w = 9 + 7.6 * id.length;
+  if (Math.abs(ldx) > 30 || Math.abs(ldy) > 30) el("line", { x1: px, y1: py, x2: tx, y2: ty, class: "lead" }, g);
+  const tg = el("g", { class: "tag" }, g);
+  el("rect", { x: tx - w / 2, y: ty - 9, width: w, height: 17 }, tg);
+  el("text", { x: tx, y: ty + 4 }, tg).textContent = id;
+  nodes[id] = g;
+}
+for (const [id, v, x, y, dx, dy] of POINTS) {
+  VIEW_OF[id] = v;
+  const g = el("g", { class: "pt", "data-id": id }, LAY[v].pts);
+  const [px, py] = P(v, x, y);
+  if (Math.abs(dx) > 16 || Math.abs(dy) > 24) el("line", { x1: px, y1: py, x2: px + dx * .85, y2: py + dy * .85 }, g);
+  el("circle", { cx: px, cy: py, r: 3.2 }, g);
+  el("circle", { cx: px, cy: py, r: 10, class: "hitc" }, g);
+  el("text", { x: px + dx, y: py + dy + 4, "text-anchor": dx >= 0 ? "start" : "end" }, g).textContent = id;
+  nodes[id] = g;
+}
+const VNAME = { plug: "View 1 · plug, side on", top: "View 2 · rear edge from above", rear: "View 3 · laptop rear face", sect: "View 4 · section through the jack", whole: "View 5 · whole laptop from above", bsec: "View 6 · brace concept, section", bplan: "View 7 · brace concept, from above" };
+
+// ---------- measurements ----------
+// v: value as measured · f: "ind" = measured but not confirmed · no v = not measured yet
+// dim: [view, "h" | "v", from, to, where the line sits, [where each extension line starts], [pill offset in px]]
+const GROUPS = [["plug", "Plug"], ["fit", "Plug in the laptop"], ["rear", "Rear face"], ["prof", "Rear bar, trough and corners"], ["whole", "Whole laptop · for the stand and the head"], ["brace", "Brace concept · proposed sizes"]];
+const YA = -RD - 4;   // dimension line above the plug in view 1
+const M = [
+  { k: "A", g: "plug", v: "7.5", t: "Metal sleeve outside diameter", how: "Across the bare metal tip.", refs: ["P1","P2","p2"], dim: ["plug","v",-RS,RS,6,[6,6]] },
+  { k: "B", g: "plug", v: "12.67", t: "Sleeve length, tip to the body", how: "From the tip of the metal sleeve to the front face of the black body.", refs: ["P1","P3","p2"], dim: ["plug","h",0,SL,YA,[-RS,-RB]] },
+  { k: "C", g: "plug", v: "11.2", t: "Body diameter", how: "Across the black body, anywhere before the bump.", refs: ["P4","P5","p4"], dim: ["plug","v",-RB,RB,SL+5,[SL+5,SL+5]] },
+  { k: "D", g: "plug", v: "11.3", t: "Bump diameter, just before the light ring", how: "The body ends in a short bump that is its widest part. The light ring comes straight after it.", refs: ["P13","P6","p9"], dim: ["plug","v",-RD,RD,U_BUMP+L/2,[U_BUMP+L/2,U_BUMP+L/2],[-56,0]] },
+  { k: "L", g: "plug", v: "2.5", t: "Bump length along the plug", how: "How long the bump is, from where it starts to the light ring. About 2.5, accepted as it is. It is part of the body, so it is inside E.", refs: ["P13","P6","p9"], dim: ["plug","h",U_BUMP,U_RING,YA,[-RD,-RD],[0,-24]] },
+  { k: "E", g: "plug", v: "23.5", t: "Body length, sleeve to light ring", how: "The whole black body including the bump: from its front face to where the clear light ring starts.", refs: ["P3","P4","P6","p4","p9"], dim: ["plug","h",SL,U_RING,YA,[-RB,-RD]] },
+  { k: "F", g: "plug", v: "10.3", t: "Light ring diameter", how: "Across the clear ring. It is narrower than the body and joined to it with no gap.", refs: ["P7","P8","p5"], dim: ["plug","v",-RR,RR,U_RING+RL/2,[U_RING+RL/2,U_RING+RL/2],[0,118]] },
+  { k: "G", g: "plug", v: "2", t: "Light ring length", how: "Along the plug: from the end of the bump to the back of the ring.", refs: ["P6","P7","p5"], dim: ["plug","h",U_RING,U_GAP,YA,[-RD,-RR],[0,-24]] },
+  { k: "H", g: "plug", v: "4.25", t: "Torn gap, cable pulled straight", how: "Cable held gently straight. From the back of the light ring to the start of the ribbed strain relief. The brace has to bridge this.", refs: ["P7","P9","p6"], dim: ["plug","h",U_GAP,U_REL,YA,[-RR,-RF1],[0,-24]] },
+  { k: "I", g: "plug", v: "10", t: "Strain relief diameter, thick end", how: "Across the ribbed strain relief at its widest, the end nearest the plug.", refs: ["P9","p7"], dim: ["plug","v",-RF1,RF1,U_REL+1.4,[U_REL+1.4,U_REL+1.4],[0,112]] },
+  { k: "AF", g: "plug", v: "7.95", t: "Strain relief diameter, thin end", how: "Across the strain relief where it becomes plain cable. The brace's cable channel has to pass this.", refs: ["P10","p7"], dim: ["plug","v",-RF2,RF2,U_RELEND-1,[U_RELEND-1,U_RELEND-1],[-62,0]] },
+  { k: "J", g: "plug", v: "14.2", t: "Strain relief length", how: "From its thick end to where it becomes plain cable.", refs: ["P9","P10","p7"], dim: ["plug","h",U_REL,U_RELEND,YA,[-RF1,-RF2]] },
+  { k: "K", g: "plug", v: "6", t: "Cable diameter", how: "Across the plain cable, away from the strain relief.", refs: ["P11","P12","p8"], dim: ["plug","v",-RC,RC,U_RELEND+5,[U_RELEND+5,U_RELEND+5],[52,0]] },
+  { k: "M", g: "fit", v: "28.4", t: "Rear face to the ring end, plug pushed home", how: "Hard to reach, so about 28.4, accepted as it is. It agrees with the parts: N 3 + E 23.5 + G 2 = 28.5. Taken from the rear face at the jack. This is how far the head stands out.", refs: ["S7","S5","s1","T4"], dim: ["sect","h",FJ,OUT,THK+8,[JY+COL,JY+RR]] },
+  { k: "N", g: "fit", v: "3", t: "Sleeve left showing, plug pushed home", how: "The metal sleeve does not go all the way in: about 3 stays outside (accepted as it is), so the black body stops short of the rear face.", refs: ["S8","s9","s1"], dim: ["sect","h",FJ,FJ+N,JY-RB-4,[JY-RS,JY-RB],[0,26]] },
+  { k: "O", g: "fit", v: "11.3", t: "Side-to-side play of the ring end", how: "Plug in. How far the light ring travels when pushed gently one way, then the other. 11.3, accepted as it is. This is the looseness the brace has to take out.", refs: ["T4","t5"], dim: ["top","h",JX-RR-3,JX+RR+3,OUT+3.5,[OUT,OUT],[0,-24]] },
+  { k: "P", g: "rear", v: "23", t: "Laptop thickness at the rear", how: "Underside to the top of the rear bar, right at the rear edge near the jack. Not over a rubber foot.", refs: ["R1","R2","r6","S1","S2"], dim: ["rear","v",0,THK,-4,[3,3]] },
+  { k: "Q", g: "rear", v: "18", t: "Height of the recessed strip", how: "Between the strip's upper and lower lines, near the jack. Drawn centred on the rear face; where it sits in the 23 is not measured.", refs: ["R7","R8","r3","r4"], dim: ["rear","v",ST1,ST2,JX+8,[JX,JX],[-44,0]] },
+  { k: "S", g: "rear", v: "8.1", t: "Jack collar outside diameter", how: "Across the round collar that surrounds the jack hole. It is smaller than the plug body (11.2).", refs: ["R3","r5"], dim: ["rear","h",JX-COL,JX+COL,-5,[JY,JY]] },
+  { k: "T", g: "rear", v: "0", t: "Collar proud of (+) or sunk into (−) the strip", how: "The collar's rim is flush with the flat surface around it, so the brace's face against the laptop can be flat there.", refs: ["S6","s6","s1"], dim: null },
+  { k: "U", g: "rear", v: "96.75", t: "Vent corner to jack centre", how: "Along the rear edge, from the laptop's corner beside the vent to the middle of the jack.", refs: ["T1","T3","t1","R3"], dim: ["top","h",0,JX,-DECK-3,[0,0]] },
+  { k: "V", g: "rear", v: "8", t: "Vent end to the jack collar", how: "The gap between the last vent opening and the collar. The plug body is wider than the collar, so only about 6.5 of this is clear of the body.", refs: ["R5","r5","T2"], dim: ["rear","h",VENT2,JX-COL,THK+4,[JY,JY]] },
+  { k: "W", g: "rear", v: "17.4", t: "Jack centre to screw centre", how: "The small screw between the jack and the HDMI port. Centre to centre.", refs: ["R3","R4","r8","T5"], dim: ["rear","h",JX,SCREW_X,-5,[JY,JY]] },
+  { k: "X", g: "rear", v: "43.8", t: "Jack centre to the HDMI plug", how: "HDMI cable plugged in. From the middle of the jack to the nearest side of the HDMI plug's body.", refs: ["R3","R6","r9","T6"], dim: ["rear","h",JX,HD1,-9,[JY,JY]] },
+  { k: "Y", g: "rear", v: "28", t: "HDMI plug sticks out of the rear face", how: "How far the HDMI plug's body stands out. About the same as the charger head (M 28.4).", refs: ["T6","T7","t6"], dim: ["top","v",FJ,HD_OUT,HD2+5,[HD2,HD2]] },
+  { k: "Z", g: "prof", v: "18.4", t: "Rear bar depth: top of the rear face to the ridge", how: "On top, from the rear edge forward to where the flat bar ends and the surface starts to slope down. This is the flat a clip could sit on.", refs: ["S1","S3","s2","t3"], dim: ["sect","h",-RIDGE,0,THK+4,[THK,THK]] },
+  { k: "AM", g: "prof", v: "14", t: "Ridge to the lowest line of the trough", how: "Behind the bar the surface slopes down with no step. Its lowest line is 14 forward of the bar.", refs: ["S3","S9","s4","t9"], dim: ["sect","h",LOWZ,-RIDGE,THK+4,[THK-AN,THK]] },
+  { k: "AN", g: "prof", v: "10", t: "Depth of the trough at its lowest", how: "How far the lowest line sits below the top of the rear bar.", refs: ["S9","S3","s4"], dim: ["sect","v",THK-AN,THK,LOWZ,[LOWZ,-RIDGE],[-50,0]] },
+  { k: "AA", g: "prof", v: "6.6", t: "Drop from the raised corner to the deck in front of it", how: "At the front end of the raised corner: from its flat top down to the deck between the corner and the top vents. The trough climbs back up to this level.", refs: ["S10","s4","T10","T11"], dim: ["sect","v",THK-AA,THK,-AJT-4,[-AJT,-RIDGE],[-50,0]] },
+  { k: "AI", g: "prof", v: "27.6", t: "Raised corner width", how: "Across the flat raised block at the rear corner: from the laptop's side edge to the block's inner wall.", refs: ["T11","T10","t8"], dim: ["top","h",0,CORNER,-AJT-3,[-AJT,-AJT],[0,22]] },
+  { k: "AJt", g: "prof", v: "46.1", t: "Raised corner depth, from the top of the rear face", how: "From the top edge of the rear face forward to the front of the raised corner.", refs: ["T1","T11","T10","t8","t1"], dim: ["top","v",-AJT,0,CORNER+6,[CORNER,CORNER]] },
+  { k: "AJb", g: "prof", v: "51.1", t: "Raised corner depth, from the bottom of the rear face", how: "The same, taken from the bottom edge of the rear face. It is 5 more than AJt because the rear face slopes outward towards the bottom.", refs: ["T13","T11","T10","t8","t2"], dim: ["top","v",-AJT,SLOPE,CORNER+16,[CORNER,0]] },
+  { k: "AL", g: "prof", v: "5", t: "Rear face slope: bottom edge beyond the top edge", how: "About 5: AJb less AJt. The rear face is drawn as a straight slope over the 23 thickness.", refs: ["S1","S2","s1","t1","t2"], dim: ["sect","h",0,SLOPE,-AC-9,[THK,0],[0,24]] },
+  { k: "R", g: "prof", v: "10.59", t: "Underside to the centre of the jack", how: "From the underside up to the middle of the jack hole.", refs: ["S7","s3","R3"], dim: ["sect","v",0,JY,ZL-5,[ZL,ZL]] },
+  { k: "AB", g: "prof", v: "48", t: "Rear face to the foot rib underneath", how: "On the underside, from the bottom of the rear face forward to the first raised rib.", refs: ["S2","S4","s3","s5"], dim: ["sect","h",RIBZ,SLOPE,-AC-4,[0,0]] },
+  { k: "AC", g: "prof", v: "4.25", t: "Foot rib height", how: "How far that rib stands off the underside. With the laptop on the desk this is also the gap under the rear edge.", refs: ["S4","s5"], dim: ["sect","v",-AC,0,RIBZ-RIBW-3,[RIBZ-RIBW,RIBZ-RIBW],[0,36]] },
+  { k: "AG", g: "whole", v: "356.2", t: "Overall width", how: "The size published for this model, accepted as it is. Not a caliper reading.", refs: ["W1","W2","w10"], dim: ["whole","h",0,AGW,FRONT-10,[FRONT,FRONT]] },
+  { k: "AH", g: "whole", v: "272.5", t: "Overall depth, rear face to front edge", how: "The size published for this model, accepted as it is. Not a caliper reading. Drawn from the bottom of the rear face, its furthest point.", refs: ["W4","w4","w10","w3"], dim: ["whole","v",FRONT,SLOPE,-12,[8,10]] },
+  { k: "AK", g: "whole", v: "80.67", t: "Rear face to the first row of keys", how: "From the top of the rear face forward to the top edge of the ESC and F-key row. The trough, the slots and the top vents sit in between.", refs: ["W9","w8","w1"], dim: ["whole","v",-KB1,0,AGW/2+50,[AGW/2+50,AGW/2+50]] },
+  { k: "BA", g: "brace", v: "2.8", f: "prop", t: "Spacer plate thickness at the jack", how: "Proposed. Fills the 3 of sleeve left showing (N), less 0.2 so the plug still seats. The fit test sets it.", refs: [], dim: ["bsec","h",FJ,ZP,JY-12,[JY-RS,JY-BR.rout],[0,26]] },
+  { k: "BB", g: "brace", v: "11.3", f: "prop", t: "Bore that grips the plug body", how: "Proposed. The size of the bump (D), so the halves clamp the body (C 11.2) when the ties are pulled. Tight, standard and loose versions in the fit test.", refs: [], dim: ["bsec","v",JY-BR.bore,JY+BR.bore,18,[18,18]] },
+  { k: "BC", g: "brace", v: "16.4", f: "prop", t: "Outside diameter around the plug", how: "Proposed. A 2.5 wall around the bore. It leaves 3.9 between the brace and the end of the vent.", refs: [], dim: ["bsec","v",JY-BR.rout,JY+BR.rout,26,[26,26]] },
+  { k: "BD", g: "brace", v: "52.3", f: "prop", t: "How far the brace stands out of the rear face", how: "Proposed. It has to reach past the plug (28.4), the tear (4.25) and the strain relief (14.2), plus a short mouth.", refs: [], dim: ["bsec","h",FJ,BR.zend,JY-13,[JY-COL,JY-6.6]] },
+  { k: "BE", g: "brace", v: "33.5", f: "prop", t: "Spacer plate width", how: "Proposed. Short on the vent side, long towards the screw and the HDMI plug. The width is what resists side-to-side rocking.", refs: [], dim: ["bplan","h",BR.xl,BR.xr,13,[ZP,ZP]] },
+  { k: "BF", g: "brace", v: "19", f: "prop", t: "Spacer plate height", how: "Proposed. From 4 above the underside up to the top of the rear bar, following the slope of the rear face.", refs: [], dim: ["bsec","v",BR.yb,THK,-6,[zf(BR.yb),0]] },
+  { k: "BG", g: "brace", v: "23.5", f: "prop", t: "Clip arm width", how: "Proposed. Two halves of about 7 and 16, split on the plug's centre line.", refs: [], dim: ["bplan","h",BR.xl,BR.xa,ZT-4.5,[ZT-1.5,ZT-1.5],[0,22]] },
+  { k: "BH", g: "brace", v: "2.4", f: "prop", t: "Clip arm thickness", how: "Proposed. Thin enough to spring over the bar, thick enough to hold.", refs: [], dim: ["bsec","v",THK,THK+BR.armT,-9,[-9,-9],[-52,0]] },
+  { k: "BI", g: "brace", v: "5", f: "prop", t: "Hook reach past the ridge", how: "Proposed. The tip lands about 5 past the front of the rear bar, where the trough has dropped about 3. That depends on the trough's real curve, so the bar clip is part of the fit test.", refs: [], dim: ["bsec","h",ZT,-RIDGE,THK+7,[troughAt(ZT),THK+BR.armT]] },
+  { k: "BJ", g: "brace", v: "3.9", f: "prop", t: "Gap left between the brace and the vent", how: "Worked out: V 8 plus half of S, less half of BC. The plate's vent-side edge is 4.8 from the vent.", refs: [], dim: ["bplan","h",VENT2,JX-BR.rout,22,[SLOPE,22],[0,-24]] },
+  { k: "BK", g: "brace", v: "6.6", f: "prop", t: "Cable bore at the mouth", how: "Proposed. The cable is 6 (K); the mouth then flares to 10.", refs: [], dim: ["bsec","v",JY-BR.mouth,JY+BR.mouth,52.6,[52.6,52.6],[46,0]] },
+];
+const BYK = Object.fromEntries(M.map(m => [m.k, m]));
+const ST = m => (!m.v || m.f) ? "unk" : "ok";
+const VAL = m => !m.v ? "TBD" : m.f === "ind" ? m.v + " (IND.)" : m.f === "prop" ? m.v + " (PROP.)" : m.v;
+const USED = {};
+for (const m of M) for (const r of m.refs) (USED[r] = USED[r] || []).push(m.k);
+
+// ---------- the card grid of this sheet ----------
+// Arrangements. A list of rows; a row holds cards side by side; an array inside a row is a stack of cards.
+// Related views stay together: rear edge with rear face, the two sections with each other.
+const S3 = ["plug", "top", "rear"], S2 = ["top", "rear"], SX = ["sect", "bsec"], SP = ["plug", "sect", "bsec"], PR = ["plug", "rear"];
+const WIDE = [["whole", S3, "bplan"], SX], SQUARE = [["whole", S3], [SX, "bplan"]], TWO_UP = [["plug"], ["top"], ["rear"], ["whole", "bplan"], ["sect"], ["bsec"]];
+const COLUMN = [["plug"], ["top"], ["rear"], ["sect"], ["whole"], ["bsec"], ["bplan"]];
+const BENTOS = [
+  [["whole", S3, SX, "bplan"]],
+  [["whole", S2, SP, "bplan"]],
+  [["whole", "top", "bplan"], ["plug", "rear", "sect", "bsec"]],
+  [["whole", S2, "bplan"], ["plug", "sect", "bsec"]],
+  [["whole", S2, SX, "bplan"], ["plug"]],
+  [["whole", S2, SX], ["plug", "bplan"]],
+  WIDE,
+  [["whole", S2], ["plug", "sect", "bsec", "bplan"]],
+  [["whole", "top"], [PR, SX, "bplan"]],
+  [["whole", S3], ["sect", "bsec", "bplan"]],
+  [["whole", "top"], PR, ["sect", "bsec", "bplan"]],
+  [["top", "bplan"], ["whole", PR], SX],
+  [["whole", "bplan"], [S3, SX]],
+  [["whole", "bplan"], ["top", PR], SX],
+  [["whole", S2], [SP, "bplan"]],
+  SQUARE,
+  [["plug"], ["whole", S2], [SX, "bplan"]],
+  [["top", "bplan"], ["whole", PR], ["sect"], ["bsec"]],
+  [["top"], ["whole", "bplan"], PR, SX],
+  [["top"], ["whole", "bplan"], ["plug"], ["rear"], SX],
+  [["plug"], ["top"], ["rear"], ["whole", "bplan"], SX],
+  TWO_UP,
+  COLUMN,
+];
+// when the grid is not being fitted to the screen (phones, very short windows): by width, drawings uncropped
+const NATURAL = [[1500, WIDE], [820, SQUARE], [340, TWO_UP], [0, COLUMN]];
+const SHARE = { whole: .24, top: .22, bplan: .15, bsec: .12, sect: .11, plug: .09, rear: .07 };   // the share of the grid each view deserves
+// ---------- dimension drawing ----------
+function drawDim(m) {
+  for (const L of Object.values(LAY)) L.dim.replaceChildren();
+  if (!m || !m.dim) return;
+  const [v, kind, a, b, at, ext, off = [0, 0]] = m.dim, gDim = LAY[v].dim;
+  gDim.setAttribute("class", "dim" + (ST(m) === "unk" ? " unk" : ""));
+  const L = (x1, y1, x2, y2, cls, marker) => { const [p1x, p1y] = P(v, x1, y1), [p2x, p2y] = P(v, x2, y2);
+    const l = el("line", { x1: p1x, y1: p1y, x2: p2x, y2: p2y }, gDim); if (cls) l.setAttribute("class", cls);
+    if (marker) { l.setAttribute("marker-start", "url(#arr)"); l.setAttribute("marker-end", "url(#arr)"); } };
+  let mx, my;
+  if (kind === "v") { L(ext[0], a, at, a, "ext"); L(ext[1], b, at, b, "ext"); L(at, a, at, b, null, true); [mx, my] = P(v, at, (a + b) / 2); }
+  else { L(a, ext[0], a, at, "ext"); L(b, ext[1], b, at, "ext"); L(a, at, b, at, null, true); [mx, my] = P(v, (a + b) / 2, at); }
+  mx += off[0]; my += off[1];
+  const label = m.k + " " + VAL(m);
+  const w = 16 + label.length * 8.6;
+  const pill = el("g", { class: "pill" }, gDim);
+  el("rect", { x: mx - w / 2, y: my - 12, width: w, height: 24 }, pill);
+  el("text", { x: mx, y: my + 5 }, pill).textContent = label;
+}
+
+// ---------- cards: a bento grid of view cards ----------
+// Each view is a card. The grid is solved from the drawings' own proportions, so the cards tile the sheet exactly
+// with even gutters. On a screen with room, the arrangement that best matches the free rectangle is chosen and
+// stretched to fill it: the drawings then fill their cards and run off the edges a little (what is cut off is
+// shown when the card is opened). Closed, a card shows the drawing alone. Open, it rolls out from its own cell
+// in every direction and shows each tag, note and caption.
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const DUR = 420;                    // ms, the same as the cards' CSS transition
+const CGAP = 14, SHADOW = 5;        // gutter between cards; room kept for the cards' offset shadow
+const BORDER = 2, HEAD = 34, CAPH = 22;   // px a card adds around its drawing: borders, title strip, caption line
+const LBL = 12.5;                   // size of the lettering inside the drawings, in drawing units
+const KMIN = .78, KMAX = 1.28;      // how far a card may be stretched away from its drawing's proportions
+const OPEN_MAX = 1.5;               // the largest an open drawing is shown, in px per drawing unit
+const PAN_BELOW = .48, PAN_AT = .6; // an open drawing that would come out smaller than this is shown larger and panned instead
+const padBox = (b, p) => [b.x - p, b.y - p, b.width + 2 * p, b.height + 2 * p];
+const unionBox = (a, b) => { const x = Math.min(a[0], b[0]), y = Math.min(a[1], b[1]); return [x, y, Math.max(a[0] + a[2], b[0] + b[2]) - x, Math.max(a[1] + a[3], b[1] + b[3]) - y]; };
+const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
+const px = n => n.toFixed(1) + "px";
+// the cards' easing, cubic-bezier(.2,.8,.2,1), so the drawing inside moves in step with its card
+const bez = p => {
+  if (p <= 0) return 0; if (p >= 1) return 1;
+  const B = (a, b, t) => 3 * (1 - t) * (1 - t) * t * a + 3 * (1 - t) * t * t * b + t * t * t;
+  let lo = 0, hi = 1; for (let i = 0; i < 22; i++) { const m = (lo + hi) / 2; B(.2, .2, m) < p ? lo = m : hi = m; }
+  return B(.8, 1, (lo + hi) / 2);
+};
+
+// The arrangements (BENTOS), the widths for the unfitted grid (NATURAL) and each view's share (SHARE) come with the sheet's content.
+// stretches tried when fitting an arrangement to the screen
+const KS = Array.from({ length: 21 }, (_, i) => Math.exp(Math.log(KMIN) + Math.log(KMAX / KMIN) * i / 20));
+
+let openV = null, ready = false, cur = null;
+
+// ----- the drawing inside a card -----
+function setVB(v, b) { const L = LAY[v]; L.vb = b; L.svg.setAttribute("viewBox", b.map(n => n.toFixed(1)).join(" ")); }
+function tweenVB(v, to, instant, dur = DUR) {
+  const L = LAY[v]; cancelAnimationFrame(L.raf);
+  if (instant || reduce || !L.vb || L.vb.every((n, i) => Math.abs(n - to[i]) < .5)) { setVB(v, to); return; }
+  const from = L.vb.slice(), t0 = performance.now();
+  const step = now => { const p = Math.min(1, (now - t0) / dur), e = bez(p); setVB(v, from.map((n, i) => n + (to[i] - n) * e)); if (p < 1) L.raf = requestAnimationFrame(step); };
+  L.raf = requestAnimationFrame(step);
+}
+function dimBox(v) { const g = LAY[v].dim; if (!g.childNodes.length) return null; const d = g.getBBox(); return d.width || d.height ? padBox(d, 14) : null; }
+// a closed card: the drawing is scaled to fill the card and held on its focus; what does not fit runs off the edge
+function cropBox(v, pw, ph) {
+  const L = LAY[v], B = L.core, F = FOCUS(v), D = dimBox(v);
+  let s = Math.max(pw / B[2], ph / B[3]);
+  if (D) s = Math.min(s, pw / D[2], ph / D[3]);   // a selected measurement is never cut off
+  const cw = pw / s, chh = ph / s;
+  const axis = (f, lo, span, size, dlo, dsize) => {
+    let c = size >= span ? lo + span / 2 : clamp(f, lo + size / 2, lo + span - size / 2);
+    if (D) c = clamp(c, dlo + dsize - size / 2, dlo + size / 2);
+    return c - size / 2;
+  };
+  return [axis(F[0], B[0], B[2], cw, D && D[0], D && D[2]), axis(F[1], B[1], B[3], chh, D && D[1], D && D[3]), cw, chh];
+}
+// under the pointer, a closed card steps back to show the whole drawing, cut-off parts included
+function peekBox(v, pw, ph) {
+  const B = LAY[v].core, s = Math.min(pw / B[2], ph / B[3]), w = pw / s, h = ph / s;
+  return [B[0] + B[2] / 2 - w / 2, B[1] + B[3] / 2 - h / 2, w, h];
+}
+function frame(v, peek, instant, dur) {   // set a closed card's drawing: cropped to fill, or whole while peeking
+  const L = LAY[v], c = L.cell, pw = c.w - BORDER, ph = c.h - cur.CH[v];
+  const vb = peek && !dimBox(v) ? peekBox(v, pw, ph) : cropBox(v, pw, ph);
+  letter(v, vb, pw / vb[2]); tweenVB(v, vb, instant, dur);
+}
+// an open card: the whole drawing with every tag, as large as the sheet column and the screen allow
+function capOpen(L, w) { const p = L.cd.cloneNode(true); p.className = "cd probe"; p.style.width = (w - BORDER) + "px"; bento.appendChild(p); const h = p.offsetHeight; p.remove(); return h; }
+function openRect(v, W, H) {
+  const L = LAY[v], c = L.cell, D = dimBox(v), Z = D ? unionBox(L.full, D) : L.full, az = Z[2] / Z[3];
+  const hmax = Math.max(360, viewH() - 24), wmin = Math.min(W, Math.max(c.w, 320));
+  let w = clamp(Z[2] * OPEN_MAX + BORDER, wmin, W), ch = HEAD + capOpen(L, w) + BORDER, h = ch + (w - BORDER) / az, pan = null;   // a small drawing is not blown up past OPEN_MAX
+  if (h > hmax) {
+    h = hmax;
+    for (let i = 0; i < 2; i++) { w = clamp((h - ch) * az + BORDER, wmin, W); ch = HEAD + capOpen(L, w) + BORDER; }
+  }
+  h = Math.max(h, c.h);
+  if (Math.min((w - BORDER) / Z[2], (h - ch) / Z[3]) < PAN_BELOW) {   // too small to read: full width, drawn larger, panned inside the card
+    w = W; ch = HEAD + capOpen(L, w) + BORDER; h = Math.max(c.h, Math.min(hmax, ch + Z[3] * PAN_AT));
+    pan = [Math.max(w - BORDER, Z[2] * PAN_AT), Math.max(h - ch, Z[3] * PAN_AT)];
+  }
+  const Hb = Math.max(H, h), x = clamp(c.x + c.w / 2 - w / 2, 0, W - w), y = clamp(c.y + c.h / 2 - h / 2, 0, Hb - h);
+  const pw = w - BORDER, ph = h - ch, [ew, eh] = pan || [pw, ph]; let [zx, zy, zw, zh] = Z;
+  if (zw / zh > ew / eh) { const nh = zw * eh / ew; zy -= (nh - zh) / 2; zh = nh; } else { const nw = zh * ew / eh; zx -= (nw - zw) / 2; zw = nw; }
+  return { x, y, w, h, pw, ph, pan, vb: [zx, zy, zw, zh] };
+}
+// a panned drawing is moved so the selected measurement, or else the view's focus, sits in the middle of the card
+function panTo(v, r, jump) {
+  const L = LAY[v], D = dimBox(v), [fx, fy] = D ? [D[0] + D[2] / 2, D[1] + D[3] / 2] : FOCUS(v);
+  L.cb.scrollTo({ left: (fx - r.vb[0]) * r.pan[0] / r.vb[2] - r.pw / 2, top: (fy - r.vb[1]) * r.pan[1] / r.vb[3] - r.ph / 2, behavior: jump || reduce ? "auto" : "smooth" });
+}
+// Lettering inside a drawing is kept on a closed card only where it can be read and is not cut by the card's edge.
+function letter(v, vb, scale) {
+  const show = LBL * scale >= 6, x0 = vb[0] + 3, y0 = vb[1] + 3, x1 = vb[0] + vb[2] - 3, y1 = vb[1] + vb[3] - 3;
+  for (const [t, b] of LAY[v].letters) t.classList.toggle("out", !(show && b.x >= x0 && b.y >= y0 && b.x + b.width <= x1 && b.y + b.height <= y1));
+}
+function measure() {   // two outlines of each drawing: with everything on it (open), and its linework alone (closed)
+  for (const L of Object.values(LAY)) {
+    const c = L.card.classList, was = c.contains("open"), ts = [...L.g.querySelectorAll(".face-txt, .unk-txt, .ok-txt")];
+    ts.forEach(t => t.classList.remove("out"));
+    c.add("open"); const f = L.g.getBBox();
+    c.remove("open"); const letters = ts.map(t => [t, t.getBBox()]);
+    c.add("bare"); const k = L.g.getBBox(); c.remove("bare");
+    c.toggle("open", was);
+    if (!f.width || !k.width) continue;
+    L.full = padBox(f, 16); L.core = padBox(k, 16); L.letters = letters;
+  }
+  ready = Object.values(LAY).every(L => L.full);
+  layout(true, true);
+}
+
+// ----- the grid -----
+// Every card's width is a * h + b for a shared row height h; h is solved so the row is exactly W wide.
+// k stretches every card away from its drawing's proportions by the same amount (k > 1 flatter, k < 1 taller).
+function solve(rows, W, k, AR, CH) {
+  const cells = {}; let y = 0;
+  for (const row of rows) {
+    let sa = 0, sb = 0;
+    const lin = row.map(n => {
+      let a, b;
+      if (!Array.isArray(n)) { a = AR[n] * k; b = BORDER - a * CH[n]; }
+      else { const s = n.reduce((t, v) => t + 1 / (AR[v] * k), 0), c = n.reduce((t, v) => t + CH[v], 0) + (n.length - 1) * CGAP; a = 1 / s; b = BORDER - c / s; }
+      sa += a; sb += b; return [a, b];
+    });
+    const h = (W - CGAP * (row.length - 1) - sb) / sa;
+    let x = 0;
+    for (let i = 0; i < row.length; i++) {
+      const n = row[i], w = lin[i][0] * h + lin[i][1];
+      if (!(w > BORDER + 1)) return null;
+      if (!Array.isArray(n)) cells[n] = { x, y, w, h };
+      else { let yy = y; for (const v of n) { const hv = CH[v] + (w - BORDER) / (AR[v] * k); cells[v] = { x, y: yy, w, h: hv }; yy += hv + CGAP; } }
+      x += w + CGAP;
+    }
+    y += h + CGAP;
+  }
+  return { cells, H: y - CGAP };
+}
+const roomy = (r, CH) => Object.entries(r.cells).every(([v, c]) => c.w - BORDER >= 150 && c.h - CH[v] >= 48);
+// Fit one arrangement to a height. A little cropping is cheap and more costs steeply; a grid that ends above the bottom
+// of the screen costs something (the page simply carries on below it); one that runs past the bottom costs a lot; and a
+// grid that gives a simple drawing the biggest card, or a busy one the smallest, costs too.
+function fitRows(rows, W, Ht, AR, CH) {
+  if (!Ht) { const r = solve(rows, W, 1, AR, CH); return r && { k: 1, score: 0, ...r }; }
+  let out = null;
+  const tryK = k => {
+    const r = solve(rows, W, k, AR, CH); if (!r || !roomy(r, CH)) return r;
+    const c = Math.abs(Math.log(k)), f = Math.log(r.H / Ht), area = Object.values(r.cells).reduce((t, q) => t + q.w * q.h, 0);
+    const odd = Object.entries(r.cells).reduce((t, [v, q]) => t + SHARE[v] * Math.abs(Math.log(q.w * q.h / area / SHARE[v])), 0);
+    const score = .5 * c + 6 * c * c + (f > 0 ? 5 * f : -2.4 * f) + .5 * odd;
+    if (!out || score < out.score) out = { k, score, ...r };
+    return r;
+  };
+  KS.forEach(tryK); tryK(1);
+  const tall = solve(rows, W, KMIN, AR, CH), flat = solve(rows, W, KMAX, AR, CH);
+  if (tall && flat && tall.H > Ht && flat.H < Ht) {   // an exact fit lies within reach
+    let lo = Math.log(KMIN), hi = Math.log(KMAX);
+    for (let i = 0; i < 26; i++) { const m = (lo + hi) / 2, r = solve(rows, W, Math.exp(m), AR, CH); if (!r) break; r.H > Ht ? lo = m : hi = m; }
+    tryK(Math.exp((lo + hi) / 2));
+  }
+  return out;
+}
+function pick(W, Ht) {
+  const AR = {}, CH = {};
+  for (const [v, L] of Object.entries(LAY)) { AR[v] = L.core[2] / L.core[3]; CH[v] = HEAD + BORDER; }
+  let best = null;
+  if (Ht) for (const rows of BENTOS) { const r = fitRows(rows, W, Ht, AR, CH); if (r && (!best || r.score < best.score)) best = { rows, ...r }; }
+  if (!best) {
+    Ht = 0;
+    for (const [minW, rows] of NATURAL) { if (W < minW) continue; const r = fitRows(rows, W, 0, AR, CH); if (r && (roomy(r, CH) || !minW)) { best = { rows, ...r }; break; } }
+  }
+  // each card then answers to the size it got: a large card carries a caption line under its title
+  const cap = {}, CH2 = {};
+  for (const v of Object.keys(LAY)) { const c = best.cells[v]; cap[v] = c.w - BORDER >= 300 && c.h - CH[v] >= 150; CH2[v] = HEAD + (cap[v] ? CAPH : 0) + BORDER; }
+  const r2 = fitRows(best.rows, W, Ht, AR, CH2);
+  return r2 ? { rows: best.rows, ...r2, cap, CH: CH2, W, Ht0: Ht } : { ...best, cap: {}, CH, W, Ht0: Ht };
+}
+// the free rectangle: from the top of the drawing column to the bottom of the screen
+const viewH = () => Math.min(innerHeight, (window.screen && screen.availHeight) || innerHeight);
+const sheetEl = bento.parentElement, asideEl = document.querySelector("aside"), wideMain = matchMedia("(min-width: 961px)");
+const toolbarEl = sheetEl.querySelector(".toolbar"), legendEl = sheetEl.querySelector(".legend");
+// what the drawing column carries around the grid: toolbar, legend, the grid's margins and the column's border
+const around = () => { const c = getComputedStyle(bento); return toolbarEl.offsetHeight + legendEl.offsetHeight + parseFloat(c.marginTop) + parseFloat(c.marginBottom) + 2; };
+function fitTarget(W) {
+  if (W < 480) return 0;
+  const h = Math.round(viewH() - (sheetEl.getBoundingClientRect().top + scrollY) - 12 - around() - SHADOW);
+  return h >= 300 ? h : 0;
+}
+function layout(instant, repick) {
+  const W = bento.clientWidth - SHADOW; if (W < 60 || !ready) return;
+  if (instant) bento.classList.add("no-anim");
+  const Ht = fitTarget(W);
+  if (repick || !cur || cur.W !== W || cur.Ht !== Ht) {
+    cur = pick(W, Ht); cur.Ht = Ht;
+    Object.assign(bento.dataset, { arrangement: JSON.stringify(cur.rows).replace(/"/g, ""), stretch: cur.k.toFixed(3), fitted: cur.Ht0 ? "yes" : "no" });
+  }
+  for (const [v, L] of Object.entries(LAY)) {
+    const c = L.cell = cur.cells[v];
+    L.card.classList.toggle("cap", !!cur.cap[v]);
+    if (v === openV) continue;
+    if (L.panned) { L.panned = false; L.cb.classList.remove("pan"); L.svg.style.width = L.svg.style.height = ""; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+    Object.assign(L.card.style, { left: px(c.x), top: px(c.y), width: px(c.w), height: px(c.h) });
+    frame(v, L.peek, instant);
+  }
+  let H = cur.H;
+  if (openV) {
+    const r = openRect(openV, W, H), L = LAY[openV]; H = Math.max(H, r.y + r.h);
+    Object.assign(L.card.style, { left: px(r.x), top: px(r.y), width: px(r.w), height: px(r.h) });
+    L.cb.classList.toggle("pan", !!r.pan); L.svg.style.width = r.pan ? px(r.pan[0]) : ""; L.svg.style.height = r.pan ? px(r.pan[1]) : "";
+    tweenVB(openV, r.vb, instant || !!r.pan);
+    if (r.pan) { panTo(openV, r, !L.panned || instant); L.panned = true; } else if (L.panned) { L.panned = false; L.cb.scrollLeft = L.cb.scrollTop = 0; }
+  }
+  bento.style.height = px(H + SHADOW);
+  // the schedule column ends level with the drawing column when the grid is fitted to the screen
+  const colH = cur.Ht0 && wideMain.matches ? px(cur.H + SHADOW + around()) : "";
+  asideEl.style.height = asideEl.style.maxHeight = colH;
+  if (instant) { bento.getBoundingClientRect(); bento.classList.remove("no-anim"); }
+}
+function syncButtons() {
+  document.querySelectorAll("[data-zoom]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.zoom === (openV || "all"))));
+  for (const [v, L] of Object.entries(LAY)) { const o = v === openV; L.cxl.textContent = o ? "Close" : "Open"; L.cx.setAttribute("aria-expanded", String(o)); L.cx.setAttribute("aria-label", (o ? "Close " : "Open ") + VNAME[v]); }
+}
+function settle(L) { clearTimeout(L.timer); L.card.classList.add("closing"); L.timer = setTimeout(() => L.card.classList.remove("closing"), DUR + 40); }
+let homeY = null, revealT = 0;   // where the page stood before a card was opened; it goes back there on close
+function reveal() {   // keep the open card on screen once it has finished growing
+  clearTimeout(revealT); const v = openV; if (!v) return;
+  revealT = setTimeout(() => { if (openV === v) LAY[v].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "nearest" }); }, reduce ? 0 : DUR + 20);
+}
+function openCard(v) {
+  if (openV === v) return;
+  if (openV) { const P0 = LAY[openV]; P0.card.classList.remove("open"); settle(P0); } else homeY = scrollY;
+  const L = LAY[v]; openV = v; clearTimeout(L.timer); L.peek = false;
+  L.card.classList.remove("closing"); L.card.classList.add("open"); syncButtons(); layout(); reveal();
+}
+function closeCard() {
+  if (!openV) return;
+  const L = LAY[openV], r = L.card.getBoundingClientRect(), seen = r.bottom > 0 && r.top < innerHeight; openV = null; clearTimeout(revealT);
+  L.card.classList.remove("open"); settle(L); syncButtons(); layout();
+  if (homeY !== null && seen && Math.abs(scrollY - homeY) > 4) scrollTo({ top: homeY, behavior: reduce ? "auto" : "smooth" });
+  homeY = null;
+}
+// a closed card under the pointer shows its whole drawing
+for (const [v, L] of Object.entries(LAY)) {
+  const peek = on => e => { if (e.pointerType !== "mouse" || !ready || !cur || L.peek === on) return; L.peek = on; if (v !== openV && !L.card.classList.contains("closing")) frame(v, on, false, 260); };
+  L.card.addEventListener("pointerenter", peek(true)); L.card.addEventListener("pointerleave", peek(false));
+}
+// how many measurements live on each view, on the card's title strip
+for (const [v, L] of Object.entries(LAY)) {
+  const ms = M.filter(m => (m.dim ? m.dim[0] : VIEW_OF[m.refs[0]]) === v), open = ms.filter(m => ST(m) === "unk"), prop = open.filter(m => m.f === "prop");
+  if (!ms.length) { L.cs.hidden = true; continue; }
+  L.cs.innerHTML = open.length ? `${open.length}<span class="w"> ${prop.length === open.length ? "PROP." : "OPEN"}</span>` : `${ms.length}<span class="w"> DIMS</span>`;
+  L.cs.classList.toggle("unk", open.length > 0);
+  L.cs.title = open.length ? `${open.length} of ${ms.length} measurements on this view are not confirmed` : `${ms.length} measurements on this view, all confirmed`;
+}
+let lastW = 0, lastH = 0;
+new ResizeObserver(() => { const w = bento.clientWidth; if (w !== lastW) { lastW = w; ready ? layout(true, true) : measure(); } }).observe(bento);   // also the first time the sheet becomes visible
+addEventListener("resize", () => { const h = viewH(); if (Math.abs(h - lastH) > 1) { lastH = h; layout(true, true); } });
+bento.classList.add("enter"); setTimeout(() => bento.classList.remove("enter"), 1100);
+document.querySelectorAll("[data-zoom]").forEach(b => b.addEventListener("click", () => b.dataset.zoom === "all" ? closeCard() : openCard(b.dataset.zoom)));
+const auto = document.getElementById("autozoom");
+document.getElementById("showlabels").addEventListener("change", e => bento.classList.toggle("labels-off", !e.target.checked));
+
+// ---------- selection ----------
+const detail = document.getElementById("detail");
+let current = null;
+function clearOn() { document.querySelectorAll(".on").forEach(n => n.classList.remove("on")); }
+function chipFor(id) {
+  const b = document.createElement("button");
+  b.className = "chip " + (BYK[id] ? "m-chip" : /^[a-z]/.test(id) ? "ed-chip" : "pt-chip");
+  b.textContent = id; b.addEventListener("click", () => BYK[id] ? selectM(id) : selectItem(id));
+  return b;
+}
+function renderDetail(html, chips, chipLabel) {
+  detail.innerHTML = html;
+  if (chips && chips.length) {
+    const lab = document.createElement("div"); lab.className = "meta"; lab.textContent = chipLabel; detail.appendChild(lab);
+    const wrap = document.createElement("div"); wrap.className = "chips"; chips.forEach(c => wrap.appendChild(chipFor(c))); detail.appendChild(wrap);
+  }
+}
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+function refit() { layout(); reveal(); }
+function selectM(k, opts = {}) {
+  const m = BYK[k]; if (!m) return;
+  current = k; clearOn(); bento.classList.add("has-sel");
+  m.refs.forEach(r => nodes[r]?.classList.add("on"));
+  drawDim(m);
+  const view = m.dim ? m.dim[0] : VIEW_OF[m.refs[0]];
+  if (auto.checked && view) openCard(view);
+  refit();
+  const st = ST(m);
+  renderDetail(`<div class="top"><div class="badge ${st}">${m.k}</div><div><h2>${esc(m.t)}</h2>
+    <div class="val ${st}">${!m.v ? "TBD · not measured yet" : m.v + " mm" + (m.f === "prop" ? " (PROP.) · proposed, not fit-tested" : m.f ? " (IND.) · not confirmed" : "")}</div></div></div>
+    <p>${esc(m.how)}</p><div class="meta">${VNAME[view] || ""}</div>`, m.refs, "Between");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", String(r.dataset.k === k)));
+  if (!opts.noScroll) document.querySelector(`.row[data-k="${k}"]`)?.scrollIntoView({ block: "nearest" });
+  if (opts.fromList && view && matchMedia("(max-width: 960px)").matches) LAY[view].card.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+  try { history.replaceState(null, "", "#" + k); } catch (e) {}
+}
+function selectItem(id) {
+  current = id; clearOn(); bento.classList.add("has-sel"); drawDim(null);
+  nodes[id]?.classList.add("on"); refit();
+  const used = USED[id] || [];
+  const kind = /^[a-z]/.test(id) ? "Edge" : "Point";
+  const name = NAMES[id] ? " · " + NAMES[id] : "";
+  renderDetail(`<div class="top"><div class="badge item">${id}</div><div><h2>${kind} ${id}${esc(name)}</h2>
+    <div class="meta">${VNAME[VIEW_OF[id]]}</div></div></div>
+    <p>${used.length ? "Used by these measurements:" : "No measurement uses this yet. If you measure to it, tell me which two points or edges you measured between."}</p>`,
+    used, "");
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+}
+function clearSel() {
+  current = null; clearOn(); bento.classList.remove("has-sel"); drawDim(null); refit();
+  const need = M.filter(m => ST(m) === "unk").length;
+  renderDetail(`<div class="top"><div class="badge item">mm</div><div><h2>Pick a measurement</h2>
+    <div class="meta">${M.length - need} confirmed · ${need} open</div></div></div>
+    <p>Choose one from the schedule to draw it on its view. Open a card to see its tags, then click any point or edge to see which measurements use it.</p>`);
+  document.querySelectorAll(".row").forEach(r => r.setAttribute("aria-current", "false"));
+}
+bento.addEventListener("click", e => {
+  const card = e.target.closest(".card"); if (!card) return;
+  const v = card.dataset.view;
+  if (e.target.closest(".cx")) { openV === v ? closeCard() : openCard(v); return; }
+  const g = e.target.closest(".pt, .edge");
+  if (g && openV === v) { selectItem(g.dataset.id); return; }
+  if (openV !== v) { openCard(v); return; }
+  if (!e.target.closest(".pill") && current) clearSel();
+});
+
+// ---------- index ----------
+const list = document.getElementById("list");
+let filter = "all";
+function renderList() {
+  list.replaceChildren();
+  for (const [gk, gname] of GROUPS) {
+    const items = M.filter(m => m.g === gk && (filter === "all" || filter === ST(m)));
+    if (!items.length) continue;
+    const h = document.createElement("div"); h.className = "group"; h.textContent = gname; list.appendChild(h);
+    for (const m of items) {
+      const b = document.createElement("button"); b.className = "row" + (ST(m) === "unk" ? " unk" : ""); b.dataset.k = m.k; b.setAttribute("role", "listitem");
+      b.setAttribute("aria-current", String(current === m.k));
+      b.innerHTML = `<span class="k">${m.k}</span><span class="d">${esc(m.t)}</span><span class="v">${VAL(m)}</span>`;
+      b.addEventListener("click", () => selectM(m.k, { fromList: true, noScroll: true }));
+      list.appendChild(b);
+    }
+  }
+  const need = M.filter(m => ST(m) === "unk").length;
+  document.getElementById("count").textContent = `${M.length - need}/${M.length} CONFIRMED`;
+}
+list.addEventListener("keydown", e => {
+  if (e.key !== "ArrowDown" && e.key !== "ArrowUp") return;
+  const rows = [...list.querySelectorAll(".row")]; const i = rows.indexOf(document.activeElement); if (i < 0) return;
+  e.preventDefault(); const n = rows[Math.max(0, Math.min(rows.length - 1, i + (e.key === "ArrowDown" ? 1 : -1)))];
+  n.focus(); selectM(n.dataset.k, { noScroll: true });
+});
+document.querySelectorAll(".filter button").forEach(b => b.addEventListener("click", () => {
+  filter = b.dataset.f; document.querySelectorAll(".filter button").forEach(x => x.setAttribute("aria-pressed", String(x === b))); renderList();
+}));
+document.addEventListener("keydown", e => { if (e.key === "Escape") { if (current) clearSel(); closeCard(); } });
+
+const themeBtn = document.getElementById("theme"), root = document.documentElement;
+const isDark = () => root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+const syncTheme = () => { const d = isDark(); themeBtn.textContent = d ? "Paper sheet" : "Dark sheet"; themeBtn.setAttribute("aria-pressed", String(d)); };
+themeBtn.addEventListener("click", () => { const next = isDark() ? "light" : "dark"; root.dataset.theme = next; try { localStorage.setItem("sheet-theme", next); } catch (e) {} syncTheme(); });
+try { const saved = localStorage.getItem("sheet-theme"); if (saved === "dark" || saved === "light") root.dataset.theme = saved; } catch (e) {}
+new MutationObserver(syncTheme).observe(root, { attributes: true, attributeFilter: ["data-theme"] });
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", syncTheme);
+syncTheme();
+renderList();
+measure(); syncButtons();
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => { measure(); });
+const start = (location.hash || "").slice(1);
+if (BYK[start]) selectM(start); else clearSel();
+})();
+</script>

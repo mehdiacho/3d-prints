@@ -1,0 +1,102 @@
+{
+ "plastic_tray": {
+  "vol_cm3": 107.3,
+  "petg_g": 136.2,
+  "size": [
+   210.0,
+   102.0,
+   34.5
+  ]
+ },
+ "bay": {
+  "vol_cm3": 30.4,
+  "petg_g": 38.7,
+  "size": [
+   200.0,
+   133.2,
+   54.0
+  ]
+ },
+ "peg": {
+  "vol_cm3": 0.5,
+  "petg_g": 0.7,
+  "size": [
+   7.8,
+   7.8,
+   19.0
+  ]
+ },
+ "splitter_trough": {
+  "vol_cm3": 58.5,
+  "petg_g": 74.3,
+  "size": [
+   120.0,
+   133.2,
+   44.0
+  ]
+ },
+ "spout": {
+  "vol_cm3": 1.2,
+  "petg_g": 1.6,
+  "size": [
+   14.0,
+   32.0,
+   13.4
+  ]
+ },
+ "plug": {
+  "vol_cm3": 0.5,
+  "petg_g": 0.6,
+  "size": [
+   19.0,
+   14.0,
+   8.6
+  ]
+ },
+ "catch_pan": {
+  "vol_cm3": 29.2,
+  "petg_g": 37.1,
+  "size": [
+   216.0,
+   109.2,
+   3.0
+  ]
+ },
+ "foot_adaptor": {
+  "vol_cm3": 3.1,
+  "petg_g": 4.0,
+  "size": [
+   20.0,
+   20.0,
+   25.0
+  ]
+ },
+ "foot": {
+  "vol_cm3": 3.1,
+  "petg_g": 3.9,
+  "size": [
+   25.8,
+   25.8,
+   16.0
+  ]
+ },
+ "clash_tray_vs_bay": 0.0,
+ "clash_tray_vs_bay_above": 0.0,
+ "clash_pan_vs_bay": 0.0,
+ "clash_pan_vs_tray_above_it": 0.0,
+ "clash_pan_vs_tray_below": 0.0,
+ "clash_pan_vs_bay_below": 0.0,
+ "clash_trough_vs_top_bay": 0.0,
+ "clash_pegs_vs_bay_below": 0.0,
+ "clash_pegs_vs_bay_above": -0.0,
+ "seat_top": 14.0,
+ "tray_top_in_bay": 43.5,
+ "room_above_tray": 10.5,
+ "pan_underside_to_tray_below": 12.4,
+ "clash_feet": 0.0,
+ "clash_adaptor_vs_bay": -0.0,
+ "stack_tap_height": 237.0,
+ "stack_splitter_height": 281.0,
+ "width_with_tubes": 133.2,
+ "spout_z": 48.5
+}

@@ -1,0 +1,163 @@
+{
+ "generated": null,
+ "repo": "mehdiacho/3d-prints",
+ "base": "https://raw.githubusercontent.com/mehdiacho/3d-prints/main/",
+ "jsdelivr": "https://cdn.jsdelivr.net/gh/mehdiacho/3d-prints@main/",
+ "count": 4,
+ "prints": [
+  {
+   "slug": "charger-brace",
+   "order": 1,
+   "title": "Laptop charger brace",
+   "status": "modelled as v1, ready for a test print",
+   "description": "Two printed halves that clamp the barrel plug of an Alienware m15 R7 charger and hook over the laptop's rear bar, so a knock on the cable loads the bar instead of the jack.",
+   "updated": null,
+   "thumbnail": "prints/charger-brace/renders/charger-brace-1.webp",
+   "model": "prints/charger-brace/web/charger-brace.glb",
+   "models": [
+    {
+     "name": "charger-brace",
+     "path": "prints/charger-brace/web/charger-brace.glb",
+     "bytes": 124100
+    }
+   ],
+   "blueprint": "prints/charger-brace/blueprint.html",
+   "pages": [
+    {
+     "title": "Blueprint",
+     "path": "prints/charger-brace/blueprint.html"
+    },
+    {
+     "title": "Part sheet",
+     "path": "prints/charger-brace/part-sheet.html"
+    },
+    {
+     "title": "Sheet 01, for paper",
+     "path": "prints/charger-brace/sheet-01-print.html"
+    }
+   ],
+   "stl_count": 6,
+   "readme": "prints/charger-brace/README.md"
+  },
+  {
+   "slug": "key-fob",
+   "order": 2,
+   "title": "Mazda flip key — replacement remote body",
+   "status": "v4 modelled, not yet printed",
+   "description": "A printed replacement body for a 2007 Mazda Atenza flip key. The original metal head — blade, rivet and folding mechanism — is reused; the printed part is the plastic shell that closes around its tab, in two halves glued together.",
+   "updated": null,
+   "thumbnail": "prints/key-fob/renders/mazda-flipkey-body-1.webp",
+   "model": "prints/key-fob/web/mazda-flipkey-body.glb",
+   "models": [
+    {
+     "name": "mazda-flipkey-body",
+     "path": "prints/key-fob/web/mazda-flipkey-body.glb",
+     "bytes": 191228
+    }
+   ],
+   "blueprint": "prints/key-fob/blueprint.html",
+   "pages": [
+    {
+     "title": "Blueprint",
+     "path": "prints/key-fob/blueprint.html"
+    },
+    {
+     "title": "Sheet 01, for paper",
+     "path": "prints/key-fob/sheet-01-print.html"
+    }
+   ],
+   "stl_count": 0,
+   "readme": "prints/key-fob/README.md"
+  },
+  {
+   "slug": "ice-tray-rack",
+   "order": 3,
+   "title": "Freezer ice tray rack",
+   "status": "modelled as v3, not printed and not fit-tested",
+   "description": "A stack of printed bays that hold rigid ice trays in a chest freezer and let you fill them where they stand, instead of carrying full trays across the kitchen.",
+   "updated": null,
+   "thumbnail": null,
+   "model": "prints/ice-tray-rack/web/rack-tap.glb",
+   "models": [
+    {
+     "name": "bay",
+     "path": "prints/ice-tray-rack/web/bay.glb",
+     "bytes": 360200
+    },
+    {
+     "name": "catch-pan",
+     "path": "prints/ice-tray-rack/web/catch-pan.glb",
+     "bytes": 16312
+    },
+    {
+     "name": "pegs-feet",
+     "path": "prints/ice-tray-rack/web/pegs-feet.glb",
+     "bytes": 143488
+    },
+    {
+     "name": "plastic-tray",
+     "path": "prints/ice-tray-rack/web/plastic-tray.glb",
+     "bytes": 136572
+    },
+    {
+     "name": "plug",
+     "path": "prints/ice-tray-rack/web/plug.glb",
+     "bytes": 6180
+    },
+    {
+     "name": "rack-cascade",
+     "path": "prints/ice-tray-rack/web/rack-cascade.glb",
+     "bytes": 714220
+    },
+    {
+     "name": "rack-splitter",
+     "path": "prints/ice-tray-rack/web/rack-splitter.glb",
+     "bytes": 713280
+    },
+    {
+     "name": "rack-tap",
+     "path": "prints/ice-tray-rack/web/rack-tap.glb",
+     "bytes": 714112
+    },
+    {
+     "name": "splitter",
+     "path": "prints/ice-tray-rack/web/splitter.glb",
+     "bytes": 91692
+    }
+   ],
+   "blueprint": "prints/ice-tray-rack/blueprint.html",
+   "pages": [
+    {
+     "title": "Blueprint",
+     "path": "prints/ice-tray-rack/blueprint.html"
+    },
+    {
+     "title": "Fill simulation",
+     "path": "prints/ice-tray-rack/simulation.html"
+    }
+   ],
+   "stl_count": 14,
+   "readme": "prints/ice-tray-rack/README.md"
+  },
+  {
+   "slug": "laptop-stand",
+   "order": 4,
+   "title": "Vertical laptop stand",
+   "status": "drawing only",
+   "description": "A pair of printed holders that stand an Alienware m15 R7 on edge — on the desk, or hooked over the desk's side edge so the laptop hangs beside it.",
+   "updated": null,
+   "thumbnail": null,
+   "model": null,
+   "models": [],
+   "blueprint": "prints/laptop-stand/blueprint.html",
+   "pages": [
+    {
+     "title": "Blueprint",
+     "path": "prints/laptop-stand/blueprint.html"
+    }
+   ],
+   "stl_count": 0,
+   "readme": "prints/laptop-stand/README.md"
+  }
+ ]
+}
